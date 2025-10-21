@@ -8,12 +8,18 @@
   <link rel="icon" type="image/png" sizes="192x192" href="assets/logo-192.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-180.png" />
   <link rel="manifest" href="site.webmanifest" />
+  <link rel="canonical" href="https://www.runnorway.no/" />
   <title>RunNorway – Finn alle løp i Norge. Ett sted. Én kalender.</title>
   <meta name="description" content="RunNorway. Finn alle løp i Norge. Ett sted. Én kalender. Samler løp, treninger og løypeinformasjon over hele Norge." />
+  <meta name="robots" content="index,follow" />
   <meta property="og:title" content="RunNorway – Finn alle løp i Norge. Ett sted. Én kalender." />
   <meta property="og:description" content="RunNorway samler løp, treninger og løypeinformasjon over hele Norge. Ett sted. Én kalender." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.runnorway.no/" />
   <meta property="og:image" content="assets/logo-512.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="RunNorway – Finn alle løp i Norge. Ett sted. Én kalender." />
+  <meta name="twitter:description" content="Finn alle løp i Norge på ett sted. Én kalender for hele landet." />
   <meta name="theme-color" content="#116D6B" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -25,14 +31,38 @@
     img[loading="lazy"]{ transition:filter 0.3s ease; filter: blur(5px); }
     img.lazyloaded{ filter: blur(0); }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "RunNorway",
+    "url": "https://www.runnorway.no/",
+    "logo": "https://www.runnorway.no/assets/logo-512.png",
+    "sameAs": []
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "RunNorway",
+    "url": "https://www.runnorway.no/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.runnorway.no/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
   <script>
+    // Lazy loading for images
     document.addEventListener('DOMContentLoaded',()=>{
       const imgs=document.querySelectorAll('img[loading="lazy"]');
       const io=new IntersectionObserver((entries,observer)=>{
         entries.forEach(entry=>{
           if(entry.isIntersecting){
             const img=entry.target;
-            img.src=img.dataset.src;
+            if(img.dataset.src){ img.src=img.dataset.src; }
             img.onload=()=>img.classList.add('lazyloaded');
             observer.unobserve(img);
           }
@@ -53,9 +83,9 @@
         <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
           <a href="#om" class="link-brand">Om oss</a>
           <a href="#arrangementer" class="link-brand">Arrangementer</a>
-          <a href="#løyper" class="link-brand">Løypekart</a>
-          <a href="#frivillig" class="link-brand">Frivillig</a>
-          <a href="#kontakt" class="rounded-full btn-brand px-4 py-2 text-white hover:bg-[#d6aa10]">Kontakt</a>
+          <a href="#partnere" class="link-brand">Partnere</a>
+          <a href="#kontakt" class="link-brand">Kontakt</a>
+          <a href="#personvern" class="link-brand">Personvern</a>
         </nav>
         <button id="menuBtn" class="md:hidden rounded-full p-2 hover:bg-slate-100" aria-label="Åpne meny" aria-expanded="false">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -66,15 +96,25 @@
       <div class="mx-auto max-w-7xl px-4 py-3 grid gap-3 text-sm font-medium">
         <a href="#om" class="py-2">Om oss</a>
         <a href="#arrangementer" class="py-2">Arrangementer</a>
-        <a href="#løyper" class="py-2">Løypekart</a>
-        <a href="#frivillig" class="py-2">Frivillig</a>
         <a href="#kontakt" class="py-2">Kontakt</a>
+        <a href="#personvern" class="py-2">Personvern</a>
       </div>
     </div>
   </header>
 
   <!-- Hero -->
   <section id="home" class="relative overflow-hidden bg-brand">
+    <div aria-hidden="true" class="absolute inset-0 opacity-20">
+      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#F3C316"/>
+            <stop offset="100%" stop-color="#ffffff"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,200 C240,120 480,280 720,200 C960,120 1200,40 1440,160 L1440,400 L0,400 Z" fill="url(#grad)"/>
+      </svg>
+    </div>
     <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-28 sm:py-36 text-center text-white">
       <img data-src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-20 mb-6" loading="lazy" />
       <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">Finn alle løp i Norge</h1>
@@ -86,6 +126,7 @@
     </div>
   </section>
 
+  <!-- Om -->
   <section id="om" class="py-16 sm:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold text-brand">Om RunNorway</h2>
@@ -93,35 +134,166 @@
     </div>
   </section>
 
+  <!-- Arrangementer -->
   <section id="arrangementer" class="py-16 bg-slate-50">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl sm:text-4xl font-bold mb-4">Kommende arrangementer</h2>
-      <div id="eventsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
+
+      <div class="rounded-2xl bg-white shadow p-4 sm:p-6">
+        <div class="grid gap-3 sm:grid-cols-4 items-end">
+          <label class="sm:col-span-2">
+            <span class="text-sm font-semibold">Søk</span>
+            <input id="q" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Søk på navn eller sted" />
+          </label>
+          <label>
+            <span class="text-sm font-semibold">Måned</span>
+            <select id="month" class="mt-1 w-full rounded-xl border px-3 py-2">
+              <option value="">Alle</option>
+            </select>
+          </label>
+          <label>
+            <span class="text-sm font-semibold">Region</span>
+            <select id="region" class="mt-1 w-full rounded-xl border px-3 py-2">
+              <option value="">Alle</option>
+            </select>
+          </label>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button id="resetFilters" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50">Nullstill</button>
+          <button id="togglePast" class="rounded-full btn-brand px-4 py-2 text-white font-semibold hover:bg-[#d6aa10]" aria-pressed="false">Vis tidligere løp</button>
+        </div>
+      </div>
+
+      <div id="eventsSummary" class="mt-4 text-slate-600"></div>
+      <div id="eventsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4" aria-live="polite"></div>
+      <p id="eventsEmpty" class="hidden text-slate-600">Ingen arrangementer matcher filtrene.</p>
+    </div>
+  </section>
+
+  <!-- Partnere -->
+  <section id="partnere" class="py-12">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl sm:text-3xl font-bold">Partnere</h2>
+      <p class="mt-2 text-slate-600">Takk til samarbeidspartnere som gjør løpeglede mulig.</p>
+      <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-6 items-center">
+        <div class="h-16 grid place-items-center rounded-xl bg-white shadow"><img data-src="assets/logo-192.png" alt="Partner 1" class="h-10 opacity-80" loading="lazy"></div>
+        <div class="h-16 grid place-items-center rounded-xl bg-white shadow"><img data-src="assets/logo-192.png" alt="Partner 2" class="h-10 opacity-80" loading="lazy"></div>
+        <div class="h-16 grid place-items-center rounded-xl bg-white shadow"><img data-src="assets/logo-192.png" alt="Partner 3" class="h-10 opacity-80" loading="lazy"></div>
+        <div class="h-16 grid place-items-center rounded-xl bg-white shadow"><img data-src="assets/logo-192.png" alt="Partner 4" class="h-10 opacity-80" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kontakt -->
+  <section id="kontakt" class="py-16">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold">Kontakt oss</h2>
+      <p class="mt-2 text-slate-700">Spørsmål om løp, samarbeid eller presse? Send oss en e‑post – vi svarer raskt.</p>
+      <div class="mt-6 flex flex-wrap items-center gap-4 text-slate-800">
+        <a class="rounded-full btn-brand px-6 py-3 text-white font-semibold hover:bg-[#d6aa10]" href="mailto:post@runnorway.no">post@runnorway.no</a>
+        <a class="rounded-full border px-6 py-3 font-semibold hover:bg-slate-50" href="https://www.instagram.com/" target="_blank" rel="noopener">Følg oss på Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Personvern -->
+  <section id="personvern" class="py-16 bg-slate-50">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold">Personvern</h2>
+      <p class="mt-4 text-slate-700">Vi samler kun inn opplysninger du selv sender inn via e‑post. Formålet er å svare på henvendelser og koordinere frivillige. Opplysninger lagres kun så lenge det er nødvendig for formålet og slettes deretter. Kontakt <a class="text-brand underline" href="mailto:post@runnorway.no">post@runnorway.no</a> for innsyn/sletting.</p>
     </div>
   </section>
 
   <footer class="py-10 bg-slate-900 text-white text-center">
-    <p>© <span id="year"></span> RunNorway • <a href="#personvern" class="underline text-brand">Personvern</a></p>
+    <p>© <span id="year"></span> RunNorway • <a href="#personvern" class="underline">Personvern</a></p>
   </footer>
 
-  <script id="events-seed" type="application/json">[{"title":"Bergen City Mile","date":"2025-04-12","location":"Bergen sentrum","distances":["5K","10K","Familie"],"image":"https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"}]</script>
+  <!-- Seed og logikk for arrangementer -->
+  <script id="events-seed" type="application/json">[
+    {"title":"Bergen City Mile","date":"2025-04-12","location":"Bergen sentrum","region":"Vestland","distances":["5K","10K","Familie"],"image":"https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Oslo FjordRun 10K","date":"2025-05-03","location":"Bygdøy, Oslo","region":"Oslo","distances":["10K"],"image":"https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Trondheim City Trail","date":"2025-05-18","location":"Bymarka, Trondheim","region":"Trøndelag","distances":["8K","16K"],"image":"https://images.unsplash.com/photo-1520975922203-b85e66f2aa64?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Stavanger Strand 5K","date":"2025-06-07","location":"Stavanger sentrum","region":"Rogaland","distances":["5K"],"image":"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Midnight Sun Half","date":"2025-06-21","location":"Tromsøya","region":"Troms og Finnmark","distances":["21K","10K"],"image":"https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"}
+  ]</script>
   <script>
-    async function loadEvents(){
-      let data;
-      try{const res=await fetch('arrangementer.json');if(!res.ok)throw new Error('no file');data=await res.json();}catch{data=JSON.parse(document.getElementById('events-seed').textContent);}
-      renderEvents(data);
+    function formatDate(iso){
+      const d = new Date(iso);
+      return d.toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
     }
-    function renderEvents(events){
-      const grid=document.getElementById('eventsGrid');
-      grid.innerHTML='';
-      for(const ev of events){
-        const el=document.createElement('article');
-        el.className='rounded-2xl bg-white shadow overflow-hidden';
-        el.innerHTML=`<img data-src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover" loading="lazy"/><div class='p-6'><h3 class='text-xl font-semibold'>${ev.title}</h3><p class='text-sm text-slate-600 mt-1'>${ev.date} • ${ev.location}</p><div class='mt-3'><a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-white text-sm font-semibold hover:bg-[#d6aa10]'>Meld deg på</a></div></div>`;
-        grid.appendChild(el);
+    const state={all:[],showPast:false,filters:{q:'',month:'',region:''}};
+    function monthKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
+    function renderFilters(){
+      const months=new Set();
+      const regions=new Set();
+      for(const ev of state.all){
+        const dd=new Date(ev.date); if(!isNaN(dd)) months.add(monthKey(dd));
+        if(ev.region) regions.add(ev.region);
+      }
+      const monthSel=document.getElementById('month');
+      const regionSel=document.getElementById('region');
+      for(const m of Array.from(months).sort()){
+        const o=document.createElement('option');
+        const [y,mm]=m.split('-');
+        const label=new Date(`${y}-${mm}-01`).toLocaleDateString('no-NO',{month:'long',year:'numeric'});
+        o.value=m; o.textContent=label; monthSel.appendChild(o);
+      }
+      for(const r of Array.from(regions).sort()){
+        const o=document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o);
       }
     }
-    document.addEventListener('DOMContentLoaded',()=>{loadEvents();document.getElementById('year').textContent=new Date().getFullYear();});
+    function applyFilters(){
+      const today=new Date(); today.setHours(0,0,0,0);
+      let list=[...state.all];
+      if(!state.showPast) list=list.filter(e=>new Date(e.date)>=today);
+      if(state.filters.q){
+        const q=state.filters.q.toLowerCase();
+        list=list.filter(e=>`${e.title} ${e.location}`.toLowerCase().includes(q));
+      }
+      if(state.filters.month){
+        list=list.filter(e=>monthKey(new Date(e.date))===state.filters.month);
+      }
+      if(state.filters.region){ list=list.filter(e=>e.region===state.filters.region); }
+      list.sort((a,b)=>new Date(a.date)-new Date(b.date));
+      renderEvents(list);
+      const sum=document.getElementById('eventsSummary');
+      sum.textContent=`Viser ${list.length} arrangementer`;
+    }
+    function renderEvents(items){
+      const grid=document.getElementById('eventsGrid');
+      const empty=document.getElementById('eventsEmpty');
+      grid.innerHTML='';
+      if(items.length===0){ empty.classList.remove('hidden'); return; }
+      empty.classList.add('hidden');
+      for(const ev of items){
+        const el=document.createElement('article');
+        el.className='rounded-2xl bg-white shadow overflow-hidden';
+        el.innerHTML=`<img data-src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover" loading="lazy"/>
+          <div class='p-6'><div class='text-xs uppercase tracking-wide text-slate-500'>${ev.region||''}</div>
+          <h3 class='text-xl font-semibold mt-1'>${ev.title}</h3>
+          <p class='text-sm text-slate-600 mt-1'>${formatDate(ev.date)} • ${ev.location}</p>
+          <p class='text-sm mt-2'>${(ev.distances||[]).join(', ')}</p>
+          <div class='mt-3 flex gap-3'>${ev.signup_url?`<a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-white text-sm font-semibold hover:bg-[#d6aa10]'>Meld deg på</a>`:''}${ev.details_url?`<a href='${ev.details_url}' class='rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50'>Les mer</a>`:''}</div></div>`;
+        grid.appendChild(el);
+      }
+      // trigger lazy images
+      const imgs=document.querySelectorAll('img[loading="lazy"][data-src]');
+      imgs.forEach(img=>{ img.src=img.dataset.src; img.onload=()=>img.classList.add('lazyloaded'); });
+    }
+    async function loadEvents(){
+      try{const r=await fetch('arrangementer.json'); if(!r.ok) throw 0; state.all=await r.json();}
+      catch{ state.all=JSON.parse(document.getElementById('events-seed').textContent); }
+      renderFilters(); applyFilters();
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+      loadEvents();
+      document.getElementById('year').textContent=new Date().getFullYear();
+      document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; applyFilters();});
+      document.getElementById('month').addEventListener('change',e=>{state.filters.month=e.target.value; applyFilters();});
+      document.getElementById('region').addEventListener('change',e=>{state.filters.region=e.target.value; applyFilters();});
+      document.getElementById('resetFilters').addEventListener('click',()=>{ state.filters={q:'',month:'',region:''}; document.getElementById('q').value=''; document.getElementById('month').value=''; document.getElementById('region').value=''; applyFilters();});
+      document.getElementById('togglePast').addEventListener('click',e=>{ state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast)); e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; applyFilters(); });
+    });
   </script>
 </body>
 </html>
