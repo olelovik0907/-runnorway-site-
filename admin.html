@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RunNorway – Admin (lag arrangementer.json)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body{ font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    :root{ --brand-teal:#116D6B; --brand-gold:#F3C316; }
+    .btn-brand{ background: var(--brand-gold); }
+    .btn-brand:hover{ background: #d6aa10; }
+    .chip{ @apply inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold mr-2 mb-2; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <h1 class="font-extrabold">RunNorway • Admin</h1>
+      <a href="/" class="text-sm underline">Til forsiden</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid lg:grid-cols-3 gap-6">
+      <!-- Skjema -->
+      <section class="lg:col-span-1 bg-white rounded-2xl shadow p-4 sm:p-6">
+        <h2 class="text-xl font-bold">Nytt løp</h2>
+        <p class="text-sm text-slate-600 mb-4">Fyll ut feltene og trykk «Legg til». Du kan laste inn eksisterende fil i panelet til høyre.</p>
+        <form id="form" class="grid gap-3">
+          <label class="grid gap-1">
+            <span class="text-sm font-semibold">Tittel *</span>
+            <input required id="title" class="rounded-xl border px-3 py-2" placeholder="Oslo FjordRun 10K" />
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="grid gap-1">
+              <span class="text-sm font-semibold">Dato *</span>
+              <input required id="date" type="date" class="rounded-xl border px-3 py-2" />
+            </label>
+            <label class="grid gap-1">
+              <span class="text-sm font-semibold">Region</span>
+              <select id="region" class="rounded-xl border px-3 py-2">
+                <option value="">Velg…</option>
+                <option>Oslo</option>
+                <option>Viken</option>
+                <option>Innlandet</option>
+                <option>Vestfold og Telemark</option>
+                <option>Agder</option>
+                <option>Rogaland</option>
+                <option>Vestland</option>
+                <option>Møre og Romsdal</option>
+                <option>Trøndelag</option>
+                <option>Nordland</option>
+                <option>Troms og Finnmark</option>
+              </select>
+            </label>
+          </div>
+          <label class="grid gap-1">
+            <span class="text-sm font-semibold">Sted *</span>
+            <input required id="location" class="rounded-xl border px-3 py-2" placeholder="Bygdøy, Oslo" />
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="grid gap-1">
+              <span class="text-sm font-semibold">Bilde-URL</span>
+              <input id="image" class="rounded-xl border px-3 py-2" placeholder="https://…" />
+            </label>
+            <label class="grid gap-1">
+              <span class="text-sm font-semibold">Påmelding-URL</span>
+              <input id="signup_url" class="rounded-xl border px-3 py-2" placeholder="https://…" />
+            </label>
+          </div>
+          <label class="grid gap-1">
+            <span class="text-sm font-semibold">Detaljer-URL</span>
+            <input id="details_url" class="rounded-xl border px-3 py-2" placeholder="oslo-fjordrun-10k.html eller https://…" />
+          </label>
+
+          <div class="grid grid-cols-2 gap-3">
+            <label class="grid gap-1">
+              <span class="text-sm font-semibold">Lat (valgfritt)</span>
+              <input id="lat" type="number" step="any" class="rounded-xl border px-3 py-2" placeholder="59.9139" />
+            </label>
+            <label class="grid gap-1">
+              <span class="text-sm font-semibold">Lng (valgfritt)</span>
+              <input id="lng" type="number" step="any" class="rounded-xl border px-3 py-2" placeholder="10.7522" />
+            </label>
+          </div>
+
+          <fieldset class="grid gap-2">
+            <legend class="text-sm font-semibold">Distanser</legend>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip"><input type="checkbox" value="5K" class="mr-2">5K</label>
+              <label class="chip"><input type="checkbox" value="10K" class="mr-2">10K</label>
+              <label class="chip"><input type="checkbox" value="21K" class="mr-2">21K</label>
+              <label class="chip"><input type="checkbox" value="42K" class="mr-2">42K</label>
+              <label class="chip"><input type="checkbox" value="Ultra" class="mr-2">Ultra</label>
+              <label class="chip"><input type="checkbox" value="Barn" class="mr-2">Barn</label>
+              <label class="chip"><input type="checkbox" value="Familie" class="mr-2">Familie</label>
+            </div>
+          </fieldset>
+
+          <div class="flex gap-3 pt-2">
+            <button id="add" class="btn-brand rounded-xl px-4 py-2 font-semibold text-white" type="submit">Legg til</button>
+            <button id="clear" class="rounded-xl px-4 py-2 font-semibold border" type="button">Tøm</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Liste og eksport -->
+      <section class="lg:col-span-2 grid gap-6">
+        <div class="bg-white rounded-2xl shadow p-4 sm:p-6">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h2 class="text-xl font-bold">Dine løp</h2>
+            <div class="flex gap-2">
+              <input id="importFile" type="file" accept="application/json" class="hidden" />
+              <button id="importBtn" class="rounded-xl border px-3 py-2 font-semibold">Last inn arrangementer.json</button>
+              <button id="downloadBtn" class="btn-brand rounded-xl px-3 py-2 font-semibold text-white">Last ned arrangementer.json</button>
+              <button id="copyBtn" class="rounded-xl border px-3 py-2 font-semibold">Kopier JSON</button>
+            </div>
+          </div>
+
+          <div class="mt-4 overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="text-left text-slate-500">
+                <tr>
+                  <th class="py-2 pr-4">Dato</th>
+                  <th class="py-2 pr-4">Tittel</th>
+                  <th class="py-2 pr-4">Sted</th>
+                  <th class="py-2 pr-4">Region</th>
+                  <th class="py-2 pr-4">Distanser</th>
+                  <th class="py-2 pr-4"></th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 sm:p-6">
+          <h2 class="text-xl font-bold">JSON (forhåndsvisning)</h2>
+          <p class="text-sm text-slate-600">Dette er innholdet som blir lagret i <code>arrangementer.json</code>.</p>
+          <textarea id="jsonOut" class="mt-3 w-full h-64 rounded-xl border p-3 font-mono text-xs"></textarea>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('form');
+    const rows = document.getElementById('rows');
+    const jsonOut = document.getElementById('jsonOut');
+    const importBtn = document.getElementById('importBtn');
+    const importFile = document.getElementById('importFile');
+
+    /** In-memory list */
+    let items = [];
+
+    function toEventFromForm(){
+      const title = document.getElementById('title').value.trim();
+      const date = document.getElementById('date').value;
+      const location = document.getElementById('location').value.trim();
+      const region = document.getElementById('region').value.trim();
+      const image = document.getElementById('image').value.trim();
+      const signup_url = document.getElementById('signup_url').value.trim();
+      const details_url = document.getElementById('details_url').value.trim();
+      const latStr = document.getElementById('lat').value.trim();
+      const lngStr = document.getElementById('lng').value.trim();
+      const lat = latStr? Number(latStr): undefined;
+      const lng = lngStr? Number(lngStr): undefined;
+      const dists = [...form.querySelectorAll('input[type="checkbox"]:checked')].map(c=>c.value);
+      if(!title || !date || !location) throw new Error('Fyll inn tittel, dato og sted.');
+      const ev = { title, date, location };
+      if(region) ev.region = region;
+      if(dists.length) ev.distances = dists;
+      if(image) ev.image = image;
+      if(signup_url) ev.signup_url = signup_url;
+      if(details_url) ev.details_url = details_url;
+      if(!Number.isNaN(lat)) ev.lat = lat;
+      if(!Number.isNaN(lng)) ev.lng = lng;
+      return ev;
+    }
+
+    function render(){
+      // sort by date
+      items.sort((a,b)=> new Date(a.date) - new Date(b.date));
+      rows.innerHTML = '';
+      for(const [i,ev] of items.entries()){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-2 pr-4 whitespace-nowrap">${ev.date}</td>
+          <td class="py-2 pr-4">${ev.title}</td>
+          <td class="py-2 pr-4">${ev.location}</td>
+          <td class="py-2 pr-4">${ev.region||''}</td>
+          <td class="py-2 pr-4">${(ev.distances||[]).join(', ')}</td>
+          <td class="py-2 pr-4 text-right">
+            <button data-i="${i}" class="text-red-600 hover:underline remove">Slett</button>
+          </td>`;
+        rows.appendChild(tr);
+      }
+      jsonOut.value = JSON.stringify(items, null, 2);
+    }
+
+    form.addEventListener('submit', e=>{
+      e.preventDefault();
+      try{
+        const ev = toEventFromForm();
+        items.push(ev);
+        render();
+        form.reset();
+      }catch(err){ alert(err.message); }
+    });
+
+    document.getElementById('clear').addEventListener('click', ()=> form.reset());
+
+    rows.addEventListener('click', e=>{
+      if(e.target.classList.contains('remove')){
+        const i = Number(e.target.getAttribute('data-i'));
+        items.splice(i,1); render();
+      }
+    });
+
+    // Import eksisterende JSON
+    importBtn.addEventListener('click', ()=> importFile.click());
+    importFile.addEventListener('change', ()=>{
+      const f = importFile.files[0]; if(!f) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const arr = JSON.parse(reader.result);
+          if(!Array.isArray(arr)) throw new Error('Filen må inneholde en JSON-liste.');
+          // Merge og fjern duplikater (tittel+dato)
+          const key = ev=> `${ev.title}__${ev.date}`;
+          const map = new Map(items.map(ev=>[key(ev), ev]));
+          for(const ev of arr){ map.set(key(ev), ev); }
+          items = [...map.values()];
+          render();
+        }catch(err){ alert('Kunne ikke lese filen: ' + err.message); }
+      };
+      reader.readAsText(f, 'utf-8');
+    });
+
+    // Last ned arrangementer.json
+    document.getElementById('downloadBtn').addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(items, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'arrangementer.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Kopier til utklippstavle
+    document.getElementById('copyBtn').addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(JSON.stringify(items, null, 2)); alert('Kopiert!'); }
+      catch{ alert('Kunne ikke kopiere – marker JSON og kopier manuelt.'); }
+    });
+
+    // Start med tom liste
+    render();
+  </script>
+</body>
+</html>
