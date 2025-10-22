@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RunNorway – Finn alle løp i Norge</title>
+  <title>RunNorway – Finn alle løp i Norge. Ett sted. Én kalender.</title>
 
   <meta name="theme-color" content="#116D6B" />
   <link rel="icon" href="assets/logo-32.png" />
@@ -53,7 +53,141 @@
   <section id="home" class="relative bg-[var(--brand)] text-white">
     <div class="max-w-7xl mx-auto px-4 py-28 sm:py-36 text-center">
       <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-24 mb-6" />
-      <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">Finn alle løp i Norge</h1>
-      <p class="mt-4 text-lg sm:text-xl text-white/90">Ett sted. Én kalender. Planlegg sesongen på minutter.</p>
+      <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">RunNorway</h1>
+      <p class="mt-4 text-lg sm:text-2xl font-medium text-white/95">Finn alle løp i Norge. Ett sted. Én kalender.</p>
+
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a href="#program" class="btn-accent px-6 py-3 rounded-full font-semibold">Se program</a>
+        <a href="admin.html" class="btn-ghost px-6 py-3 rounded-full font-semibold">Legg inn ditt løp</a>
+      </div>
+
+      <!-- NEDTELLING -->
+      <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-14">
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="d" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Dager</div>
+        </div>
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="h" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Timer</div>
+        </div>
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="m" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Min</div>
+        </div>
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="s" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Sek</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAM -->
+  <section id="program" class="py-16 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] text-center mb-8">Kommende arrangementer</h2>
+      <div id="eventsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <p id="eventsEmpty" class="hidden text-center mt-6 text-slate-600">Ingen arrangementer tilgjengelig.</p>
+    </div>
+  </section>
+
+  <!-- KART -->
+  <section id="kart" class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Løype og plassering</h2>
+      <div id="map" class="h-[500px] rounded-2xl border"></div>
+    </div>
+  </section>
+
+  <!-- VÆR -->
+  <section id="vaer" class="py-16 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Værmelding (Oslo)</h2>
+      <iframe src="https://www.pent.no/Oslo" width="100%" height="600" style="border:none; border-radius:10px;"></iframe>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-6 text-center">Ofte stilte spørsmål</h2>
+      <details class="card mb-3 p-4">
+        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hvordan legger jeg inn et løp?</summary>
+        <p class="mt-2 text-slate-600">Trykk på “Legg inn løp” øverst og fyll ut informasjonen.</p>
+      </details>
+      <details class="card mb-3 p-4">
+        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hva koster det?</summary>
+        <p class="mt-2 text-slate-600">Gratis for gratisløp. For betalte løp tar vi en liten avgift per deltaker.</p>
+      </details>
+      <details class="card mb-3 p-4">
+        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Viser dere vær?</summary>
+        <p class="mt-2 text-slate-600">Ja, vi viser værmelding fra Pent.no for hvert arrangement.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-10 text-center bg-[var(--brand)] text-white">
+    <p>© <span id="year"></span> RunNorway | <a href="mailto:post@runnorway.no" class="underline">post@runnorway.no</a></p>
+  </footer>
+
+  <!-- JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Nedtelling til hovedløp (endre dato her)
+    const target = new Date("2026-05-10T09:00:00+02:00");
+    function tick() {
+      const now = new Date();
+      let diff = Math.max(0, target - now);
+      const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+      const h = Math.floor(diff / 3600000); diff -= h * 3600000;
+      const m = Math.floor(diff / 60000); diff -= m * 60000;
+      const s = Math.floor(diff / 1000);
+      document.getElementById("d").textContent = d;
+      document.getElementById("h").textContent = h;
+      document.getElementById("m").textContent = m;
+      document.getElementById("s").textContent = s;
+    }
+    tick(); setInterval(tick, 1000);
+
+    // Demo-data
+    const events = [
+      { title: "Oslo City 10K", date: "2026-05-10", location: "Oslo" },
+      { title: "Bergen City Half", date: "2026-06-07", location: "Bergen" },
+      { title: "Trondheim Trail", date: "2026-06-21", location: "Trondheim" },
+    ];
+    const grid = document.getElementById("eventsGrid");
+    events.forEach(e => {
+      const el = document.createElement("div");
+      el.className = "card p-5";
+      el.innerHTML = `<h3 class="text-xl font-bold text-[var(--brand)]">${e.title}</h3>
+                      <p class="text-slate-600">${new Date(e.date).toLocaleDateString('no-NO')} – ${e.location}</p>`;
+      grid.appendChild(el);
+    });
+
+    // Kart
+    const map = L.map('map');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+    const geo = {
+      'Oslo': [59.9139, 10.7522],
+      'Bergen': [60.39299, 5.32415],
+      'Trondheim': [63.4305, 10.3951]
+    };
+    const pts = [];
+    events.forEach(e => {
+      const loc = geo[e.location];
+      if (loc) {
+        L.marker(loc).addTo(map).bindPopup(`<strong>${e.title}</strong><br>${e.location}`);
+        pts.push(loc);
+      }
+    });
+    if (pts.length) map.fitBounds(pts, { padding: [30, 30] }); else map.setView([64.5, 11.5], 5);
+  </script>
+</body>
+</html>
