@@ -21,7 +21,8 @@
 
   <!-- Stil -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="/assets/style.css"><!-- valgfri egen stil (kan fjernes) -->
+  <!-- Hvis denne gir svart bakgrunn: fjern linjen under -->
+  <link rel="stylesheet" href="/assets/style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
@@ -35,27 +36,10 @@
 
   <!-- Strukturert data -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "RunNorway",
-    "url": "https://www.runnorway.no/",
-    "logo": "https://www.runnorway.no/assets/logo-512.png",
-    "sameAs": []
-  }
+  {"@context":"https://schema.org","@type":"Organization","name":"RunNorway","url":"https://www.runnorway.no/","logo":"https://www.runnorway.no/assets/logo-512.png","sameAs":[]}
   </script>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "RunNorway",
-    "url": "https://www.runnorway.no/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://www.runnorway.no/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
+  {"@context":"https://schema.org","@type":"WebSite","name":"RunNorway","url":"https://www.runnorway.no/","potentialAction":{"@type":"SearchAction","target":"https://www.runnorway.no/?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
 </head>
 
@@ -89,25 +73,20 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <section id="home" class="relative overflow-hidden bg-cover bg-center" style="background-image: url('assets/Løper langs Atlanterhavsveien.png');">
-          <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stop-color="#F3C316"/>
-            <stop offset="100%" stop-color="#ffffff"/>
-          </linearGradient>
-        </defs>
-        <path d="M0,200 C240,120 480,280 720,200 C960,120 1200,40 1440,160 L1440,400 L0,400 Z" fill="url(#grad)"/>
-      </svg>
-    </div>
-    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-28 sm:py-36 text-center text-white">
-      <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-20 mb-6" loading="lazy" />
-      <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">Finn alle løp i Norge</h1>
-      <p class="mt-4 text-lg sm:text-xl text-slate-100/90">Ett sted. Én kalender. Planlegg sesongen på minutter.</p>
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href="#arrangementer" class="rounded-full btn-brand px-6 py-3 text-white font-semibold">Se arrangementer</a>
-        <a href="admin.html" class="rounded-full bg-white/90 px-6 py-3 text-slate-900 font-semibold hover:bg-white">Legg inn ditt løp</a>
+  <!-- Hero: fast høyde + cover + mørkt slør -->
+  <section id="home" class="relative">
+    <div class="h-[56vh] sm:h-[72vh] w-full bg-cover bg-center"
+         style="background-image:url('assets/hero.jpg');"></div>
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="absolute inset-0 flex items-center">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-white">
+        <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-20 mb-6" loading="lazy" />
+        <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">Finn alle løp i Norge</h1>
+        <p class="mt-4 text-lg sm:text-xl text-slate-100/90">Ett sted. Én kalender. Planlegg sesongen på minutter.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <a href="#arrangementer" class="rounded-full btn-brand px-6 py-3 text-white font-semibold">Se arrangementer</a>
+          <a href="admin.html" class="rounded-full bg-white/90 px-6 py-3 text-slate-900 font-semibold hover:bg-white">Legg inn ditt løp</a>
+        </div>
       </div>
     </div>
   </section>
@@ -174,17 +153,11 @@
     </div>
   </section>
 
-  <!-- Vær fast seksjon (kan stå eller fjernes – du har uansett "Se vær" per løp) -->
+  <!-- Vær fast seksjon (eksempel) -->
   <section id="vaer" class="py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">Værmelding (eksempel: Oslo)</h2>
-      <iframe
-        src="https://www.pent.no/Oslo"
-        width="100%"
-        height="600"
-        style="border:none; border-radius:10px;"
-        title="Vær fra Pent.no">
-      </iframe>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4">Værmelding (Oslo – eksempel)</h2>
+      <iframe src="https://www.pent.no/Oslo" width="100%" height="600" style="border:none; border-radius:10px;" title="Vær fra Pent.no"></iframe>
     </div>
   </section>
 
@@ -217,9 +190,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     // Mobile meny
-    document.getElementById('menuBtn').addEventListener('click', ()=>{
-      const m=document.getElementById('mobileMenu'); m.classList.toggle('hidden');
-    });
+    document.getElementById('menuBtn').addEventListener('click', ()=>{ document.getElementById('mobileMenu').classList.toggle('hidden'); });
+    document.getElementById('year').textContent=new Date().getFullYear();
 
     function formatDate(iso){ const d=new Date(iso); return d.toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'}); }
     const state={all:[],showPast:false,filters:{q:'',month:'',region:''}, view:'list', cal:new Date()};
@@ -227,7 +199,7 @@
 
     // Stedsoppslag for demo (kan byttes med lat/lng i JSON senere)
     const geo={
-      'Oslo': [59.9139,10.7522], 'Bygdøy, Oslo':[59.9036,10.6785], 'Bergen sentrum':[60.39299,5.32415],
+      'Oslo':[59.9139,10.7522], 'Bygdøy, Oslo':[59.9036,10.6785], 'Bergen sentrum':[60.39299,5.32415],
       'Bymarka, Trondheim':[63.401,10.276], 'Trondheim':[63.4305,10.3951], 'Stavanger sentrum':[58.9690,5.7331],
       'Tromsøya':[69.6492,18.9553]
     };
@@ -236,13 +208,9 @@
     function cityToPentUrl(location){
       if(!location) return null;
       let city = location.split(',')[0].trim();
-      const map = {
-        'Oslo':'Oslo','Bergen':'Bergen','Bergen sentrum':'Bergen','Stavanger':'Stavanger','Stavanger sentrum':'Stavanger',
-        'Trondheim':'Trondheim','Bymarka, Trondheim':'Trondheim','Tromsø':'Tromsø','Tromsøya':'Tromsø'
-      };
+      const map={ 'Bergen sentrum':'Bergen','Stavanger sentrum':'Stavanger','Bymarka, Trondheim':'Trondheim','Tromsøya':'Tromsø' };
       if(map[location]) city = map[location];
-      const slug = encodeURIComponent(city);
-      return `https://www.pent.no/${slug}`;
+      return `https://www.pent.no/${encodeURIComponent(city)}`;
     }
 
     // Filtre
@@ -370,24 +338,16 @@
     }
 
     document.addEventListener('DOMContentLoaded',()=>{
-      document.getElementById('year').textContent=new Date().getFullYear();
       loadEvents();
 
       // filter-handlers
       document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; setView(state.view);});
       document.getElementById('month').addEventListener('change',e=>{state.filters.month=e.target.value; setView(state.view);});
       document.getElementById('region').addEventListener('change',e=>{state.filters.region=e.target.value; setView(state.view);});
-      document.getElementById('resetFilters').addEventListener('click',()=>{
-        state.filters={q:'',month:'',region:''}; q.value=''; month.value=''; region.value=''; setView(state.view);
-      });
-      document.getElementById('togglePast').addEventListener('click',e=>{
-        state.showPast=!state.showPast;
-        e.currentTarget.setAttribute('aria-pressed', String(state.showPast));
-        e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp';
-        setView(state.view);
-      });
+      document.getElementById('resetFilters').addEventListener('click',()=>{ state.filters={q:'',month:'',region:''}; q.value=''; month.value=''; region.value=''; setView(state.view); });
+      document.getElementById('togglePast').addEventListener('click',e=>{ state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast)); e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; setView(state.view); });
 
-      // tab-handlers
+      // tabs
       document.getElementById('tab-list').addEventListener('click',()=>setView('list'));
       document.getElementById('tab-cal').addEventListener('click',()=>setView('cal'));
       document.getElementById('tab-map').addEventListener('click',()=>setView('map'));
