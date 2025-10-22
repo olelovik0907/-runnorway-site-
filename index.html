@@ -87,14 +87,12 @@
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Kommende arrangementer</h2>
 
-      <!-- Faner -->
       <div class="inline-flex rounded-2xl bg-white shadow p-1 mb-4" role="tablist" aria-label="Visning">
         <button id="tab-list" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="true" aria-controls="panel-list">Liste</button>
         <button id="tab-cal" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-cal">Kalender</button>
         <button id="tab-map" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-map">Kart</button>
       </div>
 
-      <!-- Filtre -->
       <div class="card p-4 sm:p-6">
         <div class="grid gap-3 sm:grid-cols-4 items-end">
           <label class="sm:col-span-2">
@@ -122,13 +120,11 @@
 
       <div id="eventsSummary" class="mt-4 text-slate-600"></div>
 
-      <!-- Panel: Liste -->
       <div id="panel-list" role="tabpanel" aria-labelledby="tab-list" class="mt-4">
         <div id="eventsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
         <p id="eventsEmpty" class="hidden text-slate-600">Ingen arrangementer matcher filtrene.</p>
       </div>
 
-      <!-- Panel: Kalender -->
       <div id="panel-cal" role="tabpanel" aria-labelledby="tab-cal" hidden class="mt-6">
         <div class="flex items-center justify-between mb-3">
           <button id="calPrev" class="rounded-full border px-3 py-2 font-semibold hover:bg-slate-50">Forrige</button>
@@ -138,7 +134,6 @@
         <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
       </div>
 
-      <!-- Panel: Kart -->
       <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden class="mt-6">
         <div id="map" class="w-full h-[520px] rounded-2xl overflow-hidden border"></div>
         <p class="mt-2 text-sm text-slate-600">Tips: klikk på markørene for info og påmeldingslenke.</p>
@@ -156,7 +151,7 @@
           <input id="resYear" class="rounded-xl border px-3 py-2" placeholder="År (valgfritt, f.eks. 2025)" />
           <button id="resSearch" class="btn-brand rounded-xl px-4 py-2 font-semibold">Søk resultater</button>
         </div>
-        <p class="text-slate-600 mt-3">Vi viser smarte søk (eksterne sider) så du raskt finner resultatene dine.</p>
+        <p class="text-slate-600 mt-3">Vi åpner smarte søk i nye faner, slik at du raskt finner resultatene dine.</p>
         <div id="resLinks" class="mt-4 grid gap-2"></div>
       </div>
     </div>
@@ -203,13 +198,11 @@
         <h3 id="modalTitle" class="text-xl font-bold text-[var(--brand)]">Løpsnavn</h3>
         <button id="modalClose" class="rounded-full border px-3 py-1">Lukk</button>
       </div>
-      <div id="modalBody" class="p-5 grid gap-5">
-        <!-- fylles av JS -->
-      </div>
+      <div id="modalBody" class="p-5 grid gap-5"></div>
     </div>
   </div>
 
-  <!-- Seed-data (brukes hvis arrangementer.json mangler) -->
+  <!-- Seed-data (brukes hvis EQ Timing ikke kan lastes i nettleser) -->
   <script id="events-seed" type="application/json">[
     {"title":"Bergen City Mile","date":"2026-04-12","location":"Bergen sentrum","region":"Vestland","distances":["5K","10K","Familie"],"image":"https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
     {"title":"Oslo FjordRun 10K","date":"2026-05-03","location":"Bygdøy, Oslo","region":"Oslo","distances":["10K"],"image":"https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
@@ -218,15 +211,11 @@
     {"title":"Midnight Sun Half","date":"2026-06-21","location":"Tromsøya","region":"Troms og Finnmark","distances":["21K","10K"],"image":"https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"}
   ]</script>
 
-  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // ------- Felles helpers -------
-    const fmtDate = iso => new Date(iso).toLocaleDateString('no-NO', {year:'numeric', month:'long', day:'numeric'});
-
-    // Pent-url fra sted
+    const fmtDate = iso => new Date(iso).toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
     function cityToPentUrl(location){
       if(!location) return null;
       let city = location.split(',')[0].trim();
@@ -234,54 +223,80 @@
       if(map[location]) city = map[location];
       return `https://www.pent.no/${encodeURIComponent(city)}`;
     }
+    const geo={'Oslo':[59.9139,10.7522],'Bygdøy, Oslo':[59.9036,10.6785],'Bergen sentrum':[60.39299,5.32415],'Bymarka, Trondheim':[63.401,10.276],'Trondheim':[63.4305,10.3951],'Stavanger sentrum':[58.9690,5.7331],'Tromsøya':[69.6492,18.9553]};
 
-    // Geo demo
-    const geo={'Oslo':[59.9139,10.7522],'Bygdøy, Oslo':[59.9036,10.6785],'Bergen sentrum':[60.39299,5.32415],
-               'Bymarka, Trondheim':[63.401,10.276],'Trondheim':[63.4305,10.3951],'Stavanger sentrum':[58.9690,5.7331],
-               'Tromsøya':[69.6492,18.9553]};
-
-    // ------- State -------
     const state={all:[],showPast:false,filters:{q:'',month:'',region:''},view:'list',cal:new Date(), nextTarget:null, nextEvent:null};
-
     function monthKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
 
-    // ------- Laste data -------
-    async function loadEvents(){
+    async function fetchEqTimingDirect(){
+      const url='https://api.eqtiming.com/api/v1/Events';
+      const ctrl=new AbortController();
+      const t=setTimeout(()=>ctrl.abort(), 8000);
       try{
-        const r=await fetch('arrangementer.json');
-        if(!r.ok) throw 0;
-        state.all = await r.json();
-      }catch{
-        state.all = JSON.parse(document.getElementById('events-seed').textContent);
+        const r=await fetch(url,{headers:{accept:'application/json'},mode:'cors',signal:ctrl.signal});
+        clearTimeout(t);
+        if(!r.ok) throw new Error('status '+r.status);
+        const data=await r.json();
+        const list = Array.isArray(data) ? data : Array.isArray(data?.Items) ? data.Items : [];
+        const onlyNO = list.filter(e => String(e.Country||'').toUpperCase()==='NO' || /Norge|Norway/i.test(e.Country||''));
+        const mapped = onlyNO.map(e=>{
+          const title = e.Name || e.EventName || e.Title || 'Uten navn';
+          const dateIso = String(e.StartDate || e.Date || e.StartTime || '').slice(0,10);
+          const city = e.City || e.Location || '';
+          const region = e.County || e.Region || '';
+          const lat = typeof e.Latitude === 'number' ? e.Latitude : undefined;
+          const lng = typeof e.Longitude === 'number' ? e.Longitude : undefined;
+          const signup = e.RegistrationUrl || e.SignupUrl || e.Url || '';
+          const website = e.Website || e.Homepage || e.Url || '';
+          return {
+            title, date:dateIso, location:city, region,
+            distances:Array.isArray(e.Distances)?e.Distances:[],
+            image:e.ImageUrl || e.LogoUrl || 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
+            signup_url:signup, details_url:website, lat, lng, _source:'eqtiming'
+          };
+        }).filter(e => e.date && !Number.isNaN(new Date(e.date)));
+        // sorter og dedupliser
+        const key=e=>`${e.title}|${e.date}`;
+        const seen=new Set();
+        const cleaned=[];
+        for(const e of mapped.sort((a,b)=>new Date(a.date)-new Date(b.date))){
+          const k=key(e); if(seen.has(k)) continue; seen.add(k); cleaned.push(e);
+        }
+        return cleaned;
+      }catch(err){
+        return null;
       }
-      initCountdownToNext();
-      renderFilters();
-      setView('list');
     }
 
-    // ------- Neste løp + nedtelling -------
+    async function loadEvents(){
+      let fromEq = await fetchEqTimingDirect();
+      if(Array.isArray(fromEq) && fromEq.length){
+        state.all = fromEq;
+      } else {
+        state.all = JSON.parse(document.getElementById('events-seed').textContent);
+      }
+      renderFilters();
+      setView('list');
+      initCountdownToNext();
+    }
+
     function initCountdownToNext(){
       const today=new Date(); today.setHours(0,0,0,0);
       const upcoming = state.all
-        .map(e=>({...e, _d:new Date(e.date)}))
+        .map(e=>({...e,_d:new Date(e.date)}))
         .filter(e=>!isNaN(e._d) && e._d>=today)
-        .sort((a,b)=>a._d - b._d);
-
+        .sort((a,b)=>a._d-b._d);
       state.nextEvent = upcoming[0] || null;
       const label = document.getElementById('nextRaceLabel');
-
       if(state.nextEvent){
-        state.nextTarget = new Date(state.nextEvent.date+'T09:00:00'); // sett klokkeslett hvis ønskelig
+        state.nextTarget = new Date(state.nextEvent.date+'T09:00:00');
         label.textContent = `Neste løp: ${state.nextEvent.title} — ${fmtDate(state.nextEvent.date)}`;
       } else {
-        // fallback: 60 dager frem
         const fallback = new Date(); fallback.setDate(fallback.getDate()+60);
         state.nextTarget = fallback;
         label.textContent = `Neste løp: annonseres snart`;
       }
-
-      tick(); clearInterval(window.__countInt__);
-      window.__countInt__ = setInterval(tick, 1000);
+      tick(); clearInterval(window.__countInt__); window.__countInt__=setInterval(tick,1000);
     }
 
     function tick(){
@@ -297,13 +312,9 @@
       document.getElementById("s").textContent=s;
     }
 
-    // ------- Filtre -------
     function renderFilters(){
-      const months=new Set(); const regions=new Set();
-      for(const ev of state.all){
-        const dd=new Date(ev.date); if(!isNaN(dd)) months.add(monthKey(dd));
-        if(ev.region) regions.add(ev.region);
-      }
+      const months=new Set(), regions=new Set();
+      for(const ev of state.all){ const dd=new Date(ev.date); if(!isNaN(dd)) months.add(monthKey(dd)); if(ev.region) regions.add(ev.region); }
       const monthSel=document.getElementById('month'); const regionSel=document.getElementById('region');
       monthSel.querySelectorAll('option:not([value=""])').forEach(o=>o.remove());
       regionSel.querySelectorAll('option:not([value=""])').forEach(o=>o.remove());
@@ -312,9 +323,7 @@
         o.value=m; o.textContent=new Date(`${y}-${mm}-01`).toLocaleDateString('no-NO',{month:'long',year:'numeric'});
         monthSel.appendChild(o);
       }
-      for(const r of Array.from(regions).sort()){
-        const o=document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o);
-      }
+      for(const r of Array.from(regions).sort()){ const o=document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o); }
     }
 
     function filtered(){
@@ -330,7 +339,6 @@
       return list.sort((a,b)=>new Date(a.date)-new Date(b.date));
     }
 
-    // ------- Liste / Kalender / Kart -------
     function renderList(){
       const items=filtered(); const grid=document.getElementById('eventsGrid'); const empty=document.getElementById('eventsEmpty');
       grid.innerHTML=''; document.getElementById('eventsSummary').textContent=`Viser ${items.length} arrangementer`;
@@ -346,7 +354,7 @@
             <p class="text-sm text-slate-600 mt-1">${fmtDate(ev.date)} • ${ev.location}</p>
             <p class="text-sm mt-2">${(ev.distances||[]).join(', ')}</p>
             <div class="mt-3 flex flex-wrap gap-3">
-              ${ev.signup_url?`<a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-sm font-semibold'>Delta</a>`:''}
+              ${ev.signup_url?`<a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-sm font-semibold' target="_blank" rel="noopener">Delta</a>`:''}
               <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick='openEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Les mer</button>
               <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick="showInlineWeather(${idx})">Se vær</button>
             </div>
@@ -357,7 +365,8 @@
     }
 
     function showInlineWeather(i){
-      const ev = filtered()[i]; if(!ev) return;
+      const items = filtered();
+      const ev = items[i]; if(!ev) return;
       const url = cityToPentUrl(ev.location);
       const box = document.getElementById(`inline-weather-${i}`);
       if(!url){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; }
@@ -419,13 +428,13 @@
       if(v==='map') renderMap();
     }
 
-    // ------- Resultater -------
+    // Resultater
     document.getElementById('resSearch')?.addEventListener('click', ()=>{
       const name = (document.getElementById('resName').value||'').trim();
       const year = (document.getElementById('resYear').value||'').trim();
       const q = encodeURIComponent([name, year].filter(Boolean).join(' '));
       const engines = [
-        {label:'Google (norske resultater)', url:`https://www.google.com/search?q=${q}+resultater+løp`},
+        {label:'Google (norsk)', url:`https://www.google.com/search?q=${q}+resultater+løp`},
         {label:'Bing', url:`https://www.bing.com/search?q=${q}+resultater+løp`},
         {label:'DuckDuckGo', url:`https://duckduckgo.com/?q=${q}+resultater+løp`}
       ];
@@ -437,7 +446,7 @@
       });
     });
 
-    // ------- Modal (detaljside for løp) -------
+    // Modal
     const modalBackdrop = document.getElementById('eventModalBackdrop');
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
@@ -447,13 +456,13 @@
     function openEvent(ev){
       modalTitle.textContent = ev.title;
       const pent = cityToPentUrl(ev.location);
-      const g = geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
+      const g = geo[ev.location] || geo[(ev.location||'').split(',')[0]] || (ev.lat&&ev.lng?[ev.lat,ev.lng]:null);
 
       modalBody.innerHTML = `
         <div class="grid lg:grid-cols-2 gap-5">
           <div>
             <div class="text-sm text-slate-600 mb-1">${ev.region||''}</div>
-            <div class="text-lg font-semibold">${fmtDate(ev.date)} • ${ev.location}</div>
+            <div class="text-lg font-semibold">${fmtDate(ev.date)} • ${ev.location||''}</div>
             <div class="mt-2 text-slate-700">${(ev.distances||[]).join(', ')}</div>
             <div class="mt-4 flex flex-wrap gap-3">
               ${ev.signup_url?`<a href="${ev.signup_url}" class="btn-brand rounded-full px-4 py-2 font-semibold" target="_blank" rel="noopener">Delta</a>`:''}
@@ -462,15 +471,10 @@
             ${pent ? `<h4 class="text-[var(--brand)] font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
                       <iframe src="${pent}" width="100%" height="420" style="border:none; border-radius:10px;"></iframe>` : ''}
           </div>
-          <div>
-            <div id="modalMap" class="h-[380px] rounded-2xl border"></div>
-          </div>
+          <div><div id="modalMap" class="h-[380px] rounded-2xl border"></div></div>
         </div>
       `;
-
       modalBackdrop.style.display='flex';
-
-      // Map inne i modal
       setTimeout(()=>{
         const m = L.map('modalMap');
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap'}).addTo(m);
@@ -478,18 +482,16 @@
       }, 50);
     }
 
-    // ------- Init -------
+    // Init
     document.addEventListener('DOMContentLoaded',()=>{
       loadEvents();
 
-      // filter-handlers
       document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; setView(state.view);});
       document.getElementById('month').addEventListener('change',e=>{state.filters.month=e.target.value; setView(state.view);});
       document.getElementById('region').addEventListener('change',e=>{state.filters.region=e.target.value; setView(state.view);});
       document.getElementById('resetFilters').addEventListener('click',()=>{ state.filters={q:'',month:'',region:''}; q.value=''; month.value=''; region.value=''; setView(state.view); });
       document.getElementById('togglePast').addEventListener('click',e=>{ state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast)); e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; setView(state.view); });
 
-      // tabs
       document.getElementById('tab-list').addEventListener('click',()=>setView('list'));
       document.getElementById('tab-cal').addEventListener('click',()=>setView('cal'));
       document.getElementById('tab-map').addEventListener('click',()=>setView('map'));
