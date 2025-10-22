@@ -5,93 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RunNorway – Finn alle løp i Norge</title>
 
-  <meta name="theme-color" content="#0B2E2A" />
+  <meta name="theme-color" content="#116D6B" />
   <link rel="icon" href="assets/logo-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-180.png" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
-    /* ---------- Aston-inspirert palett ---------- */
-    :root{
-      --amr-deep:   #0B2E2A; /* dyp racing green (bakgrunn) */
-      --amr-green:  #0E4C43; /* primær grønn */
-      --amr-teal:   #00A29A; /* turkis/teal highlight */
-      --amr-lime:   #B8FF2C; /* neon-lime accent */
-      --amr-ink:    #0A1012; /* nesten-sort/graphite */
-      --amr-slate:  #90B6B1; /* sekundær tekst på mørk */
-      --amr-border: rgba(255,255,255,0.08);
+    :root {
+      --brand: #116D6B;
+      --accent: #F3C316;
+      --ink: #0d1b1e;
     }
-
-    html, body{
-      background: var(--amr-deep);
-      color: #EAF4F3;
+    html, body {
+      background: #fff;
+      color: var(--ink);
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-
-    /* komponenter */
-    .btn-accent{
-      background: var(--amr-lime);
-      color: #0b1614;
-      transition: transform .08s ease, box-shadow .2s ease;
-      box-shadow: 0 8px 24px rgba(184,255,44,.25);
-    }
-    .btn-accent:hover{ transform: translateY(-1px); box-shadow: 0 10px 28px rgba(184,255,44,.35); }
-
-    .btn-ghost{
-      background: rgba(255,255,255,.08);
-      color: #EAF4F3;
-      border: 1px solid var(--amr-border);
-    }
-    .btn-ghost:hover{ background: rgba(255,255,255,.12); }
-
-    .panel{
-      background: rgba(11, 46, 42, 0.6);
-      backdrop-filter: blur(6px);
-      border: 1px solid var(--amr-border);
-      border-radius: 16px;
-    }
-
-    .card{
-      background: #0E3732;  /* litt lysere enn bakgrunn */
-      border: 1px solid var(--amr-border);
-      border-radius: 16px;
-    }
-
-    .grad-hero{
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(0,162,154,.25), transparent 60%),
-        radial-gradient(800px 400px at -10% 20%, rgba(184,255,44,.12), transparent 60%),
-        linear-gradient(180deg, #0D3A35 0%, #0B2E2A 65%);
-    }
-
-    .teal-line{
-      position: relative;
-      isolation: isolate;
-    }
-    .teal-line::after{
-      content:"";
-      position:absolute; inset: auto 0 -2px 0; height:2px;
-      background: linear-gradient(90deg, transparent, var(--amr-teal), transparent);
-      opacity:.8; filter: blur(.5px);
-    }
-
-    /* tilgjengelighet/typografi */
-    .muted{ color: var(--amr-slate); }
-    a.link { color: var(--amr-teal); }
-    a.link:hover { text-decoration: underline; }
+    .btn-accent { background: var(--accent); color:#0b1516; }
+    .btn-accent:hover { background:#d6aa10; }
+    .btn-ghost { background: rgba(255,255,255,.9); color: var(--brand); }
+    .btn-ghost:hover { background:#fff; }
+    .card { background:#fff; border:1px solid #e9eef3; border-radius:16px; }
   </style>
 </head>
 
 <body class="antialiased">
-  <!-- NAV -->
-  <header class="sticky top-0 z-50 backdrop-blur border-b border-[var(--amr-border)] bg-[rgba(11,46,42,.75)]">
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
     <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2 font-bold text-xl text-[var(--amr-lime)]">
+      <a href="#" class="flex items-center gap-2 font-bold text-xl text-[var(--brand)]">
         <img src="assets/logo-48.png" class="h-8 w-auto" alt="RunNorway" />
         RunNorway
       </a>
-      <nav class="hidden md:flex items-center gap-8 font-semibold text-[var(--amr-slate)]">
+      <nav class="hidden md:flex items-center gap-8 font-semibold text-[var(--brand)]">
         <a href="#program">Program</a>
         <a href="#kart">Løype</a>
         <a href="#vaer">Vær</a>
@@ -101,197 +49,11 @@
     </div>
   </header>
 
-  <!-- HERO (uten bilde, ren farge/gradient) -->
-  <section id="home" class="grad-hero teal-line">
+  <!-- HERO -->
+  <section id="home" class="relative bg-[var(--brand)] text-white">
     <div class="max-w-7xl mx-auto px-4 py-28 sm:py-36 text-center">
-      <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-24 mb-6 opacity-95" />
+      <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-24 mb-6" />
       <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">Finn alle løp i Norge</h1>
-      <p class="mt-4 text-lg sm:text-xl muted">Ett sted. Én kalender. Påmelding, vær, kart – alt samlet.</p>
+      <p class="mt-4 text-lg sm:text-xl text-white/90">Ett sted. Én kalender. Planlegg sesongen på minutter.</p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a href="#program" class="btn-accent px-6 py-3 rounded-full font-semibold">Se program</a>
-        <a href="admin.html" class="btn-ghost px-6 py-3 rounded-full font-semibold">Legg inn ditt løp</a>
-      </div>
-
-      <!-- Nedtelling -->
-      <div class="panel max-w-3xl mx-auto grid grid-cols-4 gap-3 text-center mt-12 p-4">
-        <div><div id="d" class="text-3xl font-extrabold text-[var(--amr-lime)]">0</div><div class="text-xs uppercase tracking-wide muted">Dager</div></div>
-        <div><div id="h" class="text-3xl font-extrabold text-[var(--amr-lime)]">0</div><div class="text-xs uppercase tracking-wide muted">Timer</div></div>
-        <div><div id="m" class="text-3xl font-extrabold text-[var(--amr-lime)]">0</div><div class="text-xs uppercase tracking-wide muted">Min</div></div>
-        <div><div id="s" class="text-3xl font-extrabold text-[var(--amr-lime)]">0</div><div class="text-xs uppercase tracking-wide muted">Sek</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROGRAM -->
-  <section id="program" class="py-16">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex items-end justify-between flex-wrap gap-4">
-        <h2 class="text-3xl sm:text-4xl font-bold" style="color:var(--amr-teal)">Kommende arrangementer</h2>
-        <div class="panel p-2 rounded-full">
-          <input id="q" placeholder="Søk navn/sted" class="bg-transparent px-3 py-2 rounded-full outline-none placeholder:opacity-60" />
-          <select id="region" class="bg-transparent px-3 py-2 rounded-full outline-none border-l border-[var(--amr-border)]">
-            <option value="">Alle regioner</option>
-          </select>
-          <button id="reset" class="btn-ghost px-4 py-2 rounded-full font-semibold">Nullstill</button>
-        </div>
-      </div>
-
-      <div id="eventsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"></div>
-      <p id="eventsEmpty" class="hidden text-center mt-6 muted">Ingen arrangementer tilgjengelig.</p>
-    </div>
-  </section>
-
-  <!-- KART -->
-  <section id="kart" class="py-16">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold" style="color:var(--amr-teal)">Løype og plassering</h2>
-      <p class="muted mt-2">Zoom inn på kartet og klikk markører for å se løp.</p>
-      <div id="map" class="h-[500px] rounded-2xl mt-4 border border-[var(--amr-border)]"></div>
-    </div>
-  </section>
-
-  <!-- VÆR -->
-  <section id="vaer" class="py-16">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold" style="color:var(--amr-teal)">Værmelding (Oslo)</h2>
-      <div class="card mt-4 overflow-hidden">
-        <iframe src="https://www.pent.no/Oslo" width="100%" height="520" style="border:0;"></iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="py-16">
-    <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold" style="color:var(--amr-teal)">Ofte stilte spørsmål</h2>
-      <div class="grid gap-3 mt-6">
-        <details class="card p-0 overflow-hidden">
-          <summary class="cursor-pointer list-none px-5 py-4 flex items-center justify-between">
-            <span class="font-semibold" style="color:var(--amr-teal)">Hvordan legger jeg inn et løp?</span>
-            <span class="muted">▼</span>
-          </summary>
-          <div class="px-5 pb-5 muted">Trykk “Legg inn løp” øverst og fyll ut informasjonen.</div>
-        </details>
-        <details class="card p-0 overflow-hidden">
-          <summary class="cursor-pointer list-none px-5 py-4 flex items-center justify-between">
-            <span class="font-semibold" style="color:var(--amr-teal)">Hva koster det?</span>
-            <span class="muted">▼</span>
-          </summary>
-          <div class="px-5 pb-5 muted">Gratis for gratisløp. For betalte løp tar vi en liten avgift per deltaker.</div>
-        </details>
-        <details class="card p-0 overflow-hidden">
-          <summary class="cursor-pointer list-none px-5 py-4 flex items-center justify-between">
-            <span class="font-semibold" style="color:var(--amr-teal)">Viser dere vær?</span>
-            <span class="muted">▼</span>
-          </summary>
-          <div class="px-5 pb-5 muted">Ja, vi viser værmelding fra Pent.no for hvert arrangement.</div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="py-10 border-t border-[var(--amr-border)]">
-    <div class="max-w-7xl mx-auto px-4 text-sm muted flex flex-wrap gap-3 justify-between">
-      <p>© <span id="year"></span> RunNorway</p>
-      <p><a class="link" href="mailto:post@runnorway.no">post@runnorway.no</a></p>
-    </div>
-  </footer>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- App JS -->
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Nedtelling (sett dato)
-    const target = new Date("2026-05-10T09:00:00+02:00");
-    function tick(){
-      const now = new Date(); let diff = Math.max(0, target-now);
-      const d=Math.floor(diff/86400000); diff-=d*86400000;
-      const h=Math.floor(diff/3600000);  diff-=h*3600000;
-      const m=Math.floor(diff/60000);    diff-=m*60000;
-      const s=Math.floor(diff/1000);
-      document.getElementById("d").textContent=d;
-      document.getElementById("h").textContent=h;
-      document.getElementById("m").textContent=m;
-      document.getElementById("s").textContent=s;
-    }
-    tick(); setInterval(tick,1000);
-
-    // Demo-arrangementer (bytt ut med din JSON når klar)
-    const events = [
-      { title:"Oslo City 10K",      date:"2026-05-10", location:"Oslo",      region:"Oslo" },
-      { title:"Bergen City Half",   date:"2026-06-07", location:"Bergen",    region:"Vestland" },
-      { title:"Trondheim Trail",    date:"2026-06-21", location:"Trondheim", region:"Trøndelag" }
-    ];
-
-    // Fyll regionfilter
-    const regions = Array.from(new Set(events.map(e=>e.region).filter(Boolean))).sort();
-    const regionSel = document.getElementById('region');
-    regions.forEach(r=>{ const o=document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o); });
-
-    function renderEvents(){
-      const q = (document.getElementById('q')?.value || '').toLowerCase();
-      const region = document.getElementById('region')?.value || '';
-      const grid = document.getElementById('eventsGrid');
-      const empty = document.getElementById('eventsEmpty');
-      grid.innerHTML='';
-
-      let list = events.slice();
-      if(q) list = list.filter(e => (e.title+' '+e.location).toLowerCase().includes(q));
-      if(region) list = list.filter(e => e.region===region);
-
-      if(!list.length){ empty.classList.remove('hidden'); return; } else empty.classList.add('hidden');
-
-      list.forEach(e=>{
-        const card = document.createElement('article');
-        card.className = 'card overflow-hidden p-5';
-        card.innerHTML = `
-          <div class="text-xs uppercase tracking-wide" style="color:var(--amr-slate)">${e.region||''}</div>
-          <h3 class="text-xl font-bold mt-1" style="color:var(--amr-teal)">${e.title}</h3>
-          <p class="muted mt-1">${new Date(e.date).toLocaleDateString('no-NO')} • ${e.location}</p>
-          <div class="mt-3 flex gap-3">
-            <a class="btn-accent rounded-full px-4 py-2 font-semibold" href="#">Meld deg på</a>
-            <button class="btn-ghost rounded-full px-4 py-2 font-semibold" onclick="openWeather('${e.location}')">Se vær</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-    document.getElementById('q')?.addEventListener('input', renderEvents);
-    document.getElementById('region')?.addEventListener('change', renderEvents);
-    document.getElementById('reset')?.addEventListener('click', ()=>{
-      if(document.getElementById('q')) document.getElementById('q').value='';
-      if(document.getElementById('region')) document.getElementById('region').value='';
-      renderEvents();
-    });
-    renderEvents();
-
-    // Pent-vær i ny fane
-    function openWeather(location){
-      const city = encodeURIComponent(location.split(',')[0].trim());
-      window.open(`https://www.pent.no/${city}`, '_blank', 'noopener');
-    }
-
-    // Kart
-    const map = L.map('map', { zoomControl: true, scrollWheelZoom: true });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {maxZoom:19, attribution:'© OpenStreetMap contributors'}
-    ).addTo(map);
-
-    const geodb = {'Oslo':[59.9139,10.7522], 'Bergen':[60.39299,5.32415], 'Trondheim':[63.4305,10.3951]};
-    const pts = [];
-    events.forEach(e=>{
-      const k=e.location.split(',')[0].trim();
-      const ll=geodb[k]; if(!ll) return;
-      pts.push(ll);
-      const m = L.marker(ll).addTo(map);
-      m.bindPopup(`<strong>${e.title}</strong><br>${new Date(e.date).toLocaleDateString('no-NO')} • ${e.location}`);
-    });
-    if(pts.length){ map.fitBounds(L.latLngBounds(pts), {padding:[30,30]}); } else { map.setView([64.5,11.5], 5); }
-  </script>
-</body>
-</html>
