@@ -1,0 +1,24 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4        # laster ned koden din
+      - uses: actions/setup-node@v4      # setter opp Node.js (verktøyet som kjører nettsiden)
+        with:
+          node-version: 20
+      - run: npm ci                      # installerer nødvendige pakker
+      - run: npm run build --if-present  # bygger nettsiden
+      - uses: amondnet/vercel-action@v25 # laster den opp til Vercel
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: .
+          prod: true
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
