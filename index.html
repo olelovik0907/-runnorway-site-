@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/logo-192.png" />
@@ -27,6 +29,27 @@
     :root{ --brand-teal:#116D6B; --brand-gold:#F3C316; }
     .btn-brand{background:var(--brand-gold);} .btn-brand:hover{background:#d6aa10;}
     .link-brand:hover{color:var(--brand-gold);} .text-brand{color:var(--brand-teal);} .bg-brand{background:var(--brand-teal);} .fill-brand{fill:var(--brand-gold);} 
+    <header class="header">
+  <div class="brand">RunNorway</div>
+  <nav class="nav">
+    <a href="/admin.html">Legg inn løp</a>
+    <a href="/#lop">Finn løp</a>
+    <a href="/#grupper">Løpegrupper</a>
+    <a href="/#sponsorer">Sponsorer</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Løp i hele Norge. Ett sted.</h1>
+    <p class="sub">Finn stevner, mosjonsløp og treningsgrupper nær deg. Arrangører kan legge ut løp på minutter.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="/#lop">Finn løp</a>
+      <a class="btn btn-ghost" href="/admin.html">Legg inn ditt løp</a>
+    </div>
+  </div>
+</section>
+
     body{ font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji','Segoe UI Emoji'; }
     img[loading="lazy"]{ transition:filter 0.3s ease; filter: blur(5px); }
     img.lazyloaded{ filter: blur(0); }
@@ -471,3 +494,26 @@
   </script>
 </body>
 </html>
+<section id="lop" class="section">
+  <h2>Utvalgte løp</h2>
+  <div class="card-grid">
+    <!-- her kan du vise kort for løp, eller la eksisterende innhold stå -->
+    <div class="card">Slik legger du inn løpet ditt og blir synlig for tusenvis av løpere.</div>
+    <div class="card">Værmelding fra VG Pent vises på løpssiden.</div>
+    <div class="card">Proff eksponering for sponsorer og klubber.</div>
+  </div>
+</section>
+
+<section id="grupper" class="section">
+  <h2>Løpegrupper</h2>
+  <p>Bli med i en gruppe i nærheten, eller registrer din gruppe.</p>
+</section>
+
+<section id="sponsorer" class="section">
+  <h2>Sponsorer</h2>
+  <p>Kontakt oss for pakkene våre. Synlig på forside, lister og løpssider.</p>
+</section>
+
+<footer>
+  © RunNorway. Alle rettigheter forbeholdt.
+</footer>
