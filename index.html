@@ -11,15 +11,19 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
   <style>
     :root { --brand:#116D6B; --accent:#F3C316; }
     html,body{ background:#fff; color:#0f172a; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
     .btn-brand{ background:var(--accent); color:#111827; }
     .btn-brand:hover{ background:#d6aa10; }
+    .btn-ghost{ background:rgba(255,255,255,.9); color:var(--brand); }
+    .btn-ghost:hover{ background:#fff; }
     .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; }
     .link-brand{ color:var(--brand); }
     .link-brand:hover{ text-decoration:underline; }
+    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:60; }
+    .modal{ background:#fff; width:min(960px,92vw); max-height:88vh; border-radius:16px; overflow:auto; }
+    .modal-header{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e7eb; z-index:1; }
   </style>
 </head>
 
@@ -32,12 +36,13 @@
         RunNorway
       </a>
       <nav class="hidden md:flex items-center gap-8 font-semibold link-brand">
-        <a href="#arrangementer">Arrangementer</a>
+        <a href="#arrangementer">Program</a>
+        <a href="#resultater">Resultater</a>
         <a href="#vaer">Vær</a>
         <a href="#kontakt">Kontakt</a>
         <a href="#faq">FAQ</a>
       </nav>
-      <a href="admin.html" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Legg inn løp</a>
+      <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
     </div>
   </header>
 
@@ -49,11 +54,14 @@
       <p class="mt-4 text-lg sm:text-2xl">Finn alle løp i Norge. Ett sted. Én kalender.</p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a href="#arrangementer" class="btn-brand px-6 py-3 rounded-full font-semibold">Se program</a>
-        <a href="admin.html" class="rounded-full bg-white/90 px-6 py-3 text-[var(--brand)] font-semibold hover:bg-white">Legg inn ditt løp</a>
+        <a href="#resultater" class="btn-ghost px-6 py-3 rounded-full font-semibold">Finn ditt resultat</a>
       </div>
 
-      <!-- Nedtelling -->
-      <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-14">
+      <!-- Neste løp + Nedtelling -->
+      <div class="max-w-3xl mx-auto mt-12">
+        <p id="nextRaceLabel" class="text-white/95 text-lg font-semibold"></p>
+      </div>
+      <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-3">
         <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
           <div id="d" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
           <div class="text-sm uppercase tracking-wide text-white mt-1">Dager</div>
@@ -138,8 +146,24 @@
     </div>
   </section>
 
+  <!-- Resultater -->
+  <section id="resultater" class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Finn ditt resultat</h2>
+      <div class="card p-4 sm:p-6">
+        <div class="grid sm:grid-cols-3 gap-3">
+          <input id="resName" class="rounded-xl border px-3 py-2" placeholder="Navn på løp eller deltaker" />
+          <input id="resYear" class="rounded-xl border px-3 py-2" placeholder="År (valgfritt, f.eks. 2025)" />
+          <button id="resSearch" class="btn-brand rounded-xl px-4 py-2 font-semibold">Søk resultater</button>
+        </div>
+        <p class="text-slate-600 mt-3">Vi viser smarte søk (eksterne sider) så du raskt finner resultatene dine.</p>
+        <div id="resLinks" class="mt-4 grid gap-2"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Vær fast seksjon (eksempel) -->
-  <section id="vaer" class="py-16">
+  <section id="vaer" class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Værmelding (Oslo – eksempel)</h2>
       <iframe src="https://www.pent.no/Oslo" width="100%" height="600" style="border:none; border-radius:10px;"></iframe>
@@ -147,19 +171,18 @@
   </section>
 
   <!-- Kontakt -->
-  <section id="kontakt" class="py-16 bg-slate-50">
+  <section id="kontakt" class="py-16">
     <div class="max-w-4xl mx-auto px-4 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)]">Kontakt oss</h2>
       <p class="mt-2 text-slate-700">Spørsmål om løp, samarbeid eller presse? Send oss e-post – vi svarer raskt.</p>
       <div class="mt-6 flex flex-wrap items-center gap-4 justify-center">
         <a class="btn-brand rounded-full px-6 py-3 font-semibold" href="mailto:post@runnorway.no">post@runnorway.no</a>
-        <a class="rounded-full border px-6 py-3 font-semibold hover:bg-slate-50" href="https://www.instagram.com/" target="_blank" rel="noopener">Følg oss på Instagram</a>
       </div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="py-16">
+  <section id="faq" class="py-16 bg-slate-50">
     <div class="max-w-4xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-6 text-center">Ofte stilte spørsmål</h2>
       <details class="card p-4">
@@ -172,6 +195,19 @@
   <footer class="py-10 bg-[var(--brand)] text-white text-center">
     <p>© <span id="year"></span> RunNorway</p>
   </footer>
+
+  <!-- Modal: Løpsdetaljer -->
+  <div id="eventModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header px-5 py-4 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-xl font-bold text-[var(--brand)]">Løpsnavn</h3>
+        <button id="modalClose" class="rounded-full border px-3 py-1">Lukk</button>
+      </div>
+      <div id="modalBody" class="p-5 grid gap-5">
+        <!-- fylles av JS -->
+      </div>
+    </div>
+  </div>
 
   <!-- Seed-data (brukes hvis arrangementer.json mangler) -->
   <script id="events-seed" type="application/json">[
@@ -187,26 +223,10 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Nedtelling – endre dato her
-    const target = new Date("2026-05-10T09:00:00+02:00");
-    function tick(){
-      const now=new Date(); let diff=Math.max(0,target-now);
-      const d=Math.floor(diff/86400000); diff-=d*86400000;
-      const h=Math.floor(diff/3600000);  diff-=h*3600000;
-      const m=Math.floor(diff/60000);    diff-=m*60000;
-      const s=Math.floor(diff/1000);
-      d>=0&&(document.getElementById("d").textContent=d);
-      document.getElementById("h").textContent=h;
-      document.getElementById("m").textContent=m;
-      document.getElementById("s").textContent=s;
-    }
-    tick(); setInterval(tick,1000);
+    // ------- Felles helpers -------
+    const fmtDate = iso => new Date(iso).toLocaleDateString('no-NO', {year:'numeric', month:'long', day:'numeric'});
 
-    // --- Data og state ---
-    const state={all:[],showPast:false,filters:{q:'',month:'',region:''},view:'list',cal:new Date()};
-    function monthKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
-
-    // Pent-url
+    // Pent-url fra sted
     function cityToPentUrl(location){
       if(!location) return null;
       let city = location.split(',')[0].trim();
@@ -216,66 +236,138 @@
     }
 
     // Geo demo
-    const geo={'Oslo':[59.9139,10.7522],'Bygdøy, Oslo':[59.9036,10.6785],'Bergen sentrum':[60.39299,5.32415],'Bymarka, Trondheim':[63.401,10.276],'Trondheim':[63.4305,10.3951],'Stavanger sentrum':[58.9690,5.7331],'Tromsøya':[69.6492,18.9553]};
+    const geo={'Oslo':[59.9139,10.7522],'Bygdøy, Oslo':[59.9036,10.6785],'Bergen sentrum':[60.39299,5.32415],
+               'Bymarka, Trondheim':[63.401,10.276],'Trondheim':[63.4305,10.3951],'Stavanger sentrum':[58.9690,5.7331],
+               'Tromsøya':[69.6492,18.9553]};
 
-    // Filtre
+    // ------- State -------
+    const state={all:[],showPast:false,filters:{q:'',month:'',region:''},view:'list',cal:new Date(), nextTarget:null, nextEvent:null};
+
+    function monthKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
+
+    // ------- Laste data -------
+    async function loadEvents(){
+      try{
+        const r=await fetch('arrangementer.json');
+        if(!r.ok) throw 0;
+        state.all = await r.json();
+      }catch{
+        state.all = JSON.parse(document.getElementById('events-seed').textContent);
+      }
+      initCountdownToNext();
+      renderFilters();
+      setView('list');
+    }
+
+    // ------- Neste løp + nedtelling -------
+    function initCountdownToNext(){
+      const today=new Date(); today.setHours(0,0,0,0);
+      const upcoming = state.all
+        .map(e=>({...e, _d:new Date(e.date)}))
+        .filter(e=>!isNaN(e._d) && e._d>=today)
+        .sort((a,b)=>a._d - b._d);
+
+      state.nextEvent = upcoming[0] || null;
+      const label = document.getElementById('nextRaceLabel');
+
+      if(state.nextEvent){
+        state.nextTarget = new Date(state.nextEvent.date+'T09:00:00'); // sett klokkeslett hvis ønskelig
+        label.textContent = `Neste løp: ${state.nextEvent.title} — ${fmtDate(state.nextEvent.date)}`;
+      } else {
+        // fallback: 60 dager frem
+        const fallback = new Date(); fallback.setDate(fallback.getDate()+60);
+        state.nextTarget = fallback;
+        label.textContent = `Neste løp: annonseres snart`;
+      }
+
+      tick(); clearInterval(window.__countInt__);
+      window.__countInt__ = setInterval(tick, 1000);
+    }
+
+    function tick(){
+      const target = state.nextTarget || new Date();
+      const now=new Date(); let diff=Math.max(0,target-now);
+      const d=Math.floor(diff/86400000); diff-=d*86400000;
+      const h=Math.floor(diff/3600000);  diff-=h*3600000;
+      const m=Math.floor(diff/60000);    diff-=m*60000;
+      const s=Math.floor(diff/1000);
+      document.getElementById("d").textContent=d;
+      document.getElementById("h").textContent=h;
+      document.getElementById("m").textContent=m;
+      document.getElementById("s").textContent=s;
+    }
+
+    // ------- Filtre -------
     function renderFilters(){
       const months=new Set(); const regions=new Set();
-      for(const ev of state.all){ const dd=new Date(ev.date); if(!isNaN(dd)) months.add(monthKey(dd)); if(ev.region) regions.add(ev.region); }
+      for(const ev of state.all){
+        const dd=new Date(ev.date); if(!isNaN(dd)) months.add(monthKey(dd));
+        if(ev.region) regions.add(ev.region);
+      }
       const monthSel=document.getElementById('month'); const regionSel=document.getElementById('region');
       monthSel.querySelectorAll('option:not([value=""])').forEach(o=>o.remove());
       regionSel.querySelectorAll('option:not([value=""])').forEach(o=>o.remove());
-      for(const m of Array.from(months).sort()){ const [y,mm]=m.split('-'); const o=document.createElement('option'); o.value=m; o.textContent=new Date(`${y}-${mm}-01`).toLocaleDateString('no-NO',{month:'long',year:'numeric'}); monthSel.appendChild(o); }
-      for(const r of Array.from(regions).sort()){ const o=document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o); }
+      for(const m of Array.from(months).sort()){
+        const [y,mm]=m.split('-'); const o=document.createElement('option');
+        o.value=m; o.textContent=new Date(`${y}-${mm}-01`).toLocaleDateString('no-NO',{month:'long',year:'numeric'});
+        monthSel.appendChild(o);
+      }
+      for(const r of Array.from(regions).sort()){
+        const o=document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o);
+      }
     }
 
     function filtered(){
       const today=new Date(); today.setHours(0,0,0,0);
       let list=[...state.all];
       if(!state.showPast) list=list.filter(e=>new Date(e.date)>=today);
-      if(state.filters.q){ const q=state.filters.q.toLowerCase(); list=list.filter(e=>`${e.title} ${e.location}`.toLowerCase().includes(q)); }
+      if(state.filters.q){
+        const q=state.filters.q.toLowerCase();
+        list=list.filter(e=>`${e.title} ${e.location}`.toLowerCase().includes(q));
+      }
       if(state.filters.month){ list=list.filter(e=>monthKey(new Date(e.date))===state.filters.month); }
       if(state.filters.region){ list=list.filter(e=>e.region===state.filters.region); }
       return list.sort((a,b)=>new Date(a.date)-new Date(b.date));
     }
 
-    // Liste
+    // ------- Liste / Kalender / Kart -------
     function renderList(){
       const items=filtered(); const grid=document.getElementById('eventsGrid'); const empty=document.getElementById('eventsEmpty');
       grid.innerHTML=''; document.getElementById('eventsSummary').textContent=`Viser ${items.length} arrangementer`;
       if(items.length===0){ empty.classList.remove('hidden'); return; } else empty.classList.add('hidden');
 
       items.forEach((ev, idx)=>{
-        const cardId=`card-${idx}`;
         const el=document.createElement('article'); el.className='card overflow-hidden';
-        el.innerHTML=`<img src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover"/>
-          <div class='p-6'>
-            <div class='text-xs uppercase tracking-wide text-slate-500'>${ev.region||''}</div>
-            <h3 class='text-xl font-semibold mt-1 link-brand'>${ev.title}</h3>
-            <p class='text-sm text-slate-600 mt-1'>${new Date(ev.date).toLocaleDateString('no-NO')} • ${ev.location}</p>
-            <p class='text-sm mt-2'>${(ev.distances||[]).join(', ')}</p>
-            <div class='mt-3 flex flex-wrap gap-3'>
-              ${ev.signup_url?`<a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-sm font-semibold'>Meld deg på</a>`:''}
-              ${ev.details_url?`<a href='${ev.details_url}' class='rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50'>Les mer</a>`:''}
-              <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick="showWeather('${cardId}','${(ev.location||'').replace(/'/g,'’')}')">Se vær</button>
+        el.innerHTML=`
+          <img src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover"/>
+          <div class="p-6">
+            <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
+            <h3 class="text-xl font-semibold mt-1 link-brand">${ev.title}</h3>
+            <p class="text-sm text-slate-600 mt-1">${fmtDate(ev.date)} • ${ev.location}</p>
+            <p class="text-sm mt-2">${(ev.distances||[]).join(', ')}</p>
+            <div class="mt-3 flex flex-wrap gap-3">
+              ${ev.signup_url?`<a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-sm font-semibold'>Delta</a>`:''}
+              <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick='openEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Les mer</button>
+              <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick="showInlineWeather(${idx})">Se vær</button>
             </div>
-            <div id='${cardId}-weather' class='mt-4 hidden'></div>
+            <div id='inline-weather-${idx}' class='mt-4 hidden'></div>
           </div>`;
-        el.id=cardId; grid.appendChild(el);
+        grid.appendChild(el);
       });
     }
 
-    function showWeather(cardId, location){
-      const box=document.getElementById(`${cardId}-weather`);
-      const url=cityToPentUrl(location);
-      if(!url){ box.innerHTML=`<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; box.classList.remove('hidden'); return; }
-      box.innerHTML=`<h4 class="text-lg font-semibold mb-2 link-brand">Værmelding (${location})</h4>
-        <iframe src="${url}" width="100%" height="520" style="border:none; border-radius:10px;" title="Vær fra Pent.no"></iframe>`;
-      box.classList.remove('hidden');
-      box.scrollIntoView({behavior:'smooth', block:'start'});
+    function showInlineWeather(i){
+      const ev = filtered()[i]; if(!ev) return;
+      const url = cityToPentUrl(ev.location);
+      const box = document.getElementById(`inline-weather-${i}`);
+      if(!url){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; }
+      else {
+        box.innerHTML = `<h4 class="text-lg font-semibold mb-2 link-brand">Værmelding (${ev.location})</h4>
+                         <iframe src="${url}" width="100%" height="520" style="border:none; border-radius:10px;"></iframe>`;
+      }
+      box.classList.remove('hidden'); box.scrollIntoView({behavior:'smooth', block:'start'});
     }
 
-    // Kalender
     function daysInMonth(y,m){ return new Date(y,m+1,0).getDate(); }
     function renderCalendar(){
       const current=new Date(state.cal.getFullYear(), state.cal.getMonth(), 1);
@@ -285,19 +377,18 @@
       const wk=['Man','Tir','Ons','Tor','Fre','Lør','Søn'];
       for(const w of wk){ const h=document.createElement('div'); h.className='text-xs font-semibold text-slate-500 text-center'; h.textContent=w; grid.appendChild(h); }
       const firstDow=(new Date(y,m,1).getDay()+6)%7; const dim=daysInMonth(y,m);
-      for(let i=0;i<firstDow;i++){ const d=document.createElement('div'); d.className='p-2'; grid.appendChild(d); }
+      for(let i=0;i<firstDow;i++){ grid.appendChild(document.createElement('div')); }
       const items=filtered();
       for(let day=1; day<=dim; day++){
         const cell=document.createElement('div'); cell.className='rounded-xl bg-white shadow p-2 min-h-[84px]';
         const label=document.createElement('div'); label.className='text-sm font-semibold'; label.textContent=String(day); cell.appendChild(label);
         const dateStr= new Date(y,m,day).toISOString().slice(0,10);
         const todays = items.filter(e=> e.date===dateStr || new Date(e.date).toDateString()===new Date(dateStr).toDateString());
-        for(const ev of todays){ const a=document.createElement('div'); a.className='mt-1 text-xs'; a.textContent=`${ev.title}`; cell.appendChild(a); }
+        for(const ev of todays){ const a=document.createElement('div'); a.className='mt-1 text-xs'; a.textContent=ev.title; cell.appendChild(a); }
         grid.appendChild(cell);
       }
     }
 
-    // Kart
     let map, markersLayer;
     function ensureMap(){
       if(map) return;
@@ -309,16 +400,14 @@
       const items=filtered(); const points=[];
       const lookup=loc=> geo[loc] || geo[(loc||'').split(',')[0]] || null;
       for(const ev of items){
-        const latlng = (ev.lat&&ev.lng)?[ev.lat,ev.lng]:lookup(ev.location);
+        const latlng=(ev.lat&&ev.lng)?[ev.lat,ev.lng]:lookup(ev.location);
         if(!latlng) continue; points.push(latlng);
-        const m=L.marker(latlng).addTo(markersLayer);
-        m.bindPopup(`<strong>${ev.title}</strong><br>${new Date(ev.date).toLocaleDateString('no-NO')} • ${ev.location}`);
+        L.marker(latlng).addTo(markersLayer).bindPopup(`<strong>${ev.title}</strong><br>${fmtDate(ev.date)} • ${ev.location}`);
       }
       if(points.length){ map.fitBounds(L.latLngBounds(points),{padding:[30,30]}); } else { map.setView([64.5,11.5],5); }
       setTimeout(()=>map.invalidateSize(),0);
     }
 
-    // Tabs
     function setView(v){
       state.view=v;
       ['list','cal','map'].forEach(id=>{
@@ -330,22 +419,77 @@
       if(v==='map') renderMap();
     }
 
-    // Init
-    async function loadEvents(){
-      try{ const r=await fetch('arrangementer.json'); if(!r.ok) throw 0; state.all=await r.json(); }
-      catch{ state.all=JSON.parse(document.getElementById('events-seed').textContent); }
-      renderFilters(); setView('list');
+    // ------- Resultater -------
+    document.getElementById('resSearch')?.addEventListener('click', ()=>{
+      const name = (document.getElementById('resName').value||'').trim();
+      const year = (document.getElementById('resYear').value||'').trim();
+      const q = encodeURIComponent([name, year].filter(Boolean).join(' '));
+      const engines = [
+        {label:'Google (norske resultater)', url:`https://www.google.com/search?q=${q}+resultater+løp`},
+        {label:'Bing', url:`https://www.bing.com/search?q=${q}+resultater+løp`},
+        {label:'DuckDuckGo', url:`https://duckduckgo.com/?q=${q}+resultater+løp`}
+      ];
+      const box = document.getElementById('resLinks'); box.innerHTML='';
+      engines.forEach(e=>{
+        const a=document.createElement('a'); a.href=e.url; a.target='_blank'; a.rel='noopener';
+        a.textContent=`Åpne i ${e.label}`; a.className='underline text-[var(--brand)]';
+        const p=document.createElement('p'); p.appendChild(a); box.appendChild(p);
+      });
+    });
+
+    // ------- Modal (detaljside for løp) -------
+    const modalBackdrop = document.getElementById('eventModalBackdrop');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    document.getElementById('modalClose').addEventListener('click', ()=> modalBackdrop.style.display='none');
+    modalBackdrop.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) modalBackdrop.style.display='none'; });
+
+    function openEvent(ev){
+      modalTitle.textContent = ev.title;
+      const pent = cityToPentUrl(ev.location);
+      const g = geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
+
+      modalBody.innerHTML = `
+        <div class="grid lg:grid-cols-2 gap-5">
+          <div>
+            <div class="text-sm text-slate-600 mb-1">${ev.region||''}</div>
+            <div class="text-lg font-semibold">${fmtDate(ev.date)} • ${ev.location}</div>
+            <div class="mt-2 text-slate-700">${(ev.distances||[]).join(', ')}</div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              ${ev.signup_url?`<a href="${ev.signup_url}" class="btn-brand rounded-full px-4 py-2 font-semibold" target="_blank" rel="noopener">Delta</a>`:''}
+              ${ev.details_url?`<a href="${ev.details_url}" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" target="_blank" rel="noopener">Nettside</a>`:''}
+            </div>
+            ${pent ? `<h4 class="text-[var(--brand)] font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
+                      <iframe src="${pent}" width="100%" height="420" style="border:none; border-radius:10px;"></iframe>` : ''}
+          </div>
+          <div>
+            <div id="modalMap" class="h-[380px] rounded-2xl border"></div>
+          </div>
+        </div>
+      `;
+
+      modalBackdrop.style.display='flex';
+
+      // Map inne i modal
+      setTimeout(()=>{
+        const m = L.map('modalMap');
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap'}).addTo(m);
+        if(g){ m.setView(g, 12); L.marker(g).addTo(m).bindPopup(ev.title); } else { m.setView([64.5,11.5],5); }
+      }, 50);
     }
 
+    // ------- Init -------
     document.addEventListener('DOMContentLoaded',()=>{
       loadEvents();
-      document.getElementById("year").textContent = new Date().getFullYear();
 
+      // filter-handlers
       document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; setView(state.view);});
       document.getElementById('month').addEventListener('change',e=>{state.filters.month=e.target.value; setView(state.view);});
       document.getElementById('region').addEventListener('change',e=>{state.filters.region=e.target.value; setView(state.view);});
       document.getElementById('resetFilters').addEventListener('click',()=>{ state.filters={q:'',month:'',region:''}; q.value=''; month.value=''; region.value=''; setView(state.view); });
       document.getElementById('togglePast').addEventListener('click',e=>{ state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast)); e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; setView(state.view); });
+
+      // tabs
       document.getElementById('tab-list').addEventListener('click',()=>setView('list'));
       document.getElementById('tab-cal').addEventListener('click',()=>setView('cal'));
       document.getElementById('tab-map').addEventListener('click',()=>setView('map'));
