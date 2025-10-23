@@ -344,6 +344,18 @@
 
     const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 
+    // TRYGT BILDE VED MANGLENDE image
+    function safeImageForEvent(ev) {
+      if (ev.image && String(ev.image).trim() !== "") return ev.image;
+      const url = ev.details_url || ev.signup_url || "";
+      try {
+        const domain = new URL(url).hostname;
+        if (domain) return `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
+      } catch(e){}
+      const text = encodeURIComponent(ev.title || "Løp");
+      return `https://placehold.co/600x400?text=${text}`;
+    }
+
     // EQ Timing
     async function fetchEqTimingDirect(){
       const url='https://api.eqtiming.com/api/v1/Events';
@@ -369,7 +381,7 @@
             id:`${title.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}-${dateIso}`,
             title, date:dateIso, location:city, region,
             distances:Array.isArray(e.Distances)?e.Distances:[],
-            image:e.ImageUrl || e.LogoUrl || 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
+            image:e.ImageUrl || e.LogoUrl || '',  // lar være tom så safeImageForEvent tar over
             signup_url:signup, details_url:website, lat, lng, premium:false, _source:'eqtiming'
           };
         }).filter(e => e.date && !Number.isNaN(new Date(e.date)));
@@ -495,7 +507,7 @@
         el.innerHTML=`
           <div class="relative">
             ${ev.premium ? `<div class="absolute top-3 left-3 badge-premium">Premium</div>`:''}
-            <img src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover"/>
+            <img src="${safeImageForEvent(ev)}" alt="${ev.title}" class="h-44 w-full object-cover"/>
           </div>
           <div class="p-6">
             <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
@@ -778,13 +790,11 @@
     function attemptRegister(ev){
       let p = loadProfile();
       if(!p || !p.name || !p.email){
-        // vis profil først
         openProfile();
         alert('Opprett/lagre profil først, så kan du melde deg på.');
         return;
       }
       p.registrations = p.registrations || [];
-      // hindre duplikat
       if(p.registrations.some(r=> r.id===ev.id)){
         alert('Du er allerede registrert på dette løpet i demoen.');
       } else {
