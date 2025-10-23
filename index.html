@@ -345,16 +345,73 @@
     const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 
     // TRYGT BILDE VED MANGLENDE image
-    function safeImageForEvent(ev) {
-      if (ev.image && String(ev.image).trim() !== "") return ev.image;
-      const url = ev.details_url || ev.signup_url || "";
-      try {
-        const domain = new URL(url).hostname;
-        if (domain) return `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
-      } catch(e){}
-      const text = encodeURIComponent(ev.title || "Løp");
-      return `https://placehold.co/600x400?text=${text}`;
-    }
+    // --- Bildekilder (korte, raske Unsplash-lenker som i seed-data) ---
+const CITY_IMAGES = {
+  'Oslo': 'https://images.unsplash.com/photo-1551462147-ff29053f1972?q=80&w=1200&auto=format&fit=crop',
+  'Bergen': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop',
+  'Trondheim': 'https://images.unsplash.com/photo-1520975922203-b85e66f2aa64?q=80&w=1200&auto=format&fit=crop',
+  'Stavanger': 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
+  'Tromsø': 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop'
+};
+
+const DIST_IMAGES = {
+  'trail': 'https://images.unsplash.com/photo-1520975922203-b85e66f2aa64?q=80&w=1200&auto=format&fit=crop',
+  'city':  'https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop',
+  '5k':    'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
+  '10k':   'https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop',
+  '21k':   'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop'
+};
+
+const SEASON_IMAGES = {
+  winter: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop',
+  spring: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
+  summer: 'https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop',
+  autumn: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop'
+};
+
+// NY: smartere bildevelger for arrangement
+function safeImageForEvent(ev) {
+  if (ev.image && String(ev.image).trim() !== "") return ev.image;
+
+  const title = (ev.title || '').toLowerCase();
+  const loc   = (ev.location || '').toLowerCase();
+  const reg   = (ev.region || '').toLowerCase();
+  const dists = Array.isArray(ev.distances) ? ev.distances.map(x=>String(x).toLowerCase()) : [];
+
+  const cityGuess =
+    /oslo/.test(loc) || /oslo/.test(reg) ? 'Oslo' :
+    /bergen/.test(loc) || /bergen/.test(reg) ? 'Bergen' :
+    /trondheim/.test(loc) || /trøndelag/.test(reg) ? 'Trondheim' :
+    /stavanger/.test(loc) || /rogaland/.test(reg) ? 'Stavanger' :
+    /tromsø/.test(loc) || /troms/.test(reg) ? 'Tromsø' : null;
+
+  if (cityGuess && CITY_IMAGES[cityGuess]) return CITY_IMAGES[cityGuess];
+
+  if (dists.some(x=>/trail|terreng|sti/.test(x)) || /trail|terreng|sti/.test(title)) {
+    return DIST_IMAGES.trail;
+  }
+  if (dists.some(x=>/21|halve|half/.test(x)) || /21k|half/.test(title)) {
+    return DIST_IMAGES['21k'];
+  }
+  if (dists.some(x=>/10/.test(x)) || /10k/.test(title)) {
+    return DIST_IMAGES['10k'];
+  }
+  if (dists.some(x=>/5/.test(x)) || /5k/.test(title)) {
+    return DIST_IMAGES['5k'];
+  }
+  if (/sentrum|city|downtown|by/.test(loc)) {
+    return DIST_IMAGES.city;
+  }
+
+  let month = 0;
+  try { month = new Date(ev.date).getMonth(); } catch(e) { month = 0; }
+  const season =
+    (month===11 || month<=1) ? 'winter' :
+    (month<=4) ? 'spring' :
+    (month<=7) ? 'summer' : 'autumn';
+  return SEASON_IMAGES[season];
+}
+
 
     // EQ Timing
     async function fetchEqTimingDirect(){
