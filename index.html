@@ -24,6 +24,10 @@
     .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:60; }
     .modal{ background:#fff; width:min(960px,92vw); max-height:88vh; border-radius:16px; overflow:auto; }
     .modal-header{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e7eb; z-index:1; }
+    .pill{ border:1px solid #e5e7eb; border-radius:9999px; padding:.5rem .9rem; font-weight:600; }
+    .badge-premium{ background:rgba(243,195,22,.18); color:#7a5a00; border:1px solid rgba(243,195,22,.5); border-radius:9999px; padding:.15rem .5rem; font-size:.72rem; font-weight:700; }
+    .icon-btn{ display:inline-flex; align-items:center; gap:.4rem; }
+    .heart{ width:18px; height:18px; display:inline-block; vertical-align:-2px; }
   </style>
 </head>
 
@@ -42,7 +46,10 @@
         <a href="#kontakt">Kontakt</a>
         <a href="#faq">FAQ</a>
       </nav>
-      <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
+      <div class="flex items-center gap-2">
+        <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
+        <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
+      </div>
     </div>
   </header>
 
@@ -94,7 +101,7 @@
       </div>
 
       <div class="card p-4 sm:p-6">
-        <div class="grid gap-3 sm:grid-cols-4 items-end">
+        <div class="grid gap-3 sm:grid-cols-5 items-end">
           <label class="sm:col-span-2">
             <span class="text-sm font-semibold">Søk</span>
             <input id="q" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Søk på navn eller sted"/>
@@ -111,10 +118,23 @@
               <option value="">Alle</option>
             </select>
           </label>
+          <label>
+            <span class="text-sm font-semibold">Sorter</span>
+            <select id="sort" class="mt-1 w-full rounded-xl border px-3 py-2">
+              <option value="date">Dato</option>
+              <option value="name">Navn</option>
+              <option value="premium">Premium først</option>
+            </select>
+          </label>
         </div>
         <div class="mt-4 flex flex-wrap gap-3">
-          <button id="resetFilters" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50">Nullstill</button>
-          <button id="togglePast" class="rounded-full btn-brand px-4 py-2 font-semibold" aria-pressed="false">Vis tidligere løp</button>
+          <button id="resetFilters" class="pill hover:bg-slate-50">Nullstill</button>
+          <button id="togglePast" class="pill btn-brand" aria-pressed="false">Vis tidligere løp</button>
+          <button id="quick5k" class="pill">5K</button>
+          <button id="quick10k" class="pill">10K</button>
+          <button id="quick21k" class="pill">21K</button>
+          <button id="exportCsv" class="pill">Eksporter CSV</button>
+          <button id="openFavorites" class="pill icon-btn"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritter</button>
         </div>
       </div>
 
@@ -151,13 +171,13 @@
           <input id="resYear" class="rounded-xl border px-3 py-2" placeholder="År (valgfritt, f.eks. 2025)" />
           <button id="resSearch" class="btn-brand rounded-xl px-4 py-2 font-semibold">Søk resultater</button>
         </div>
-        <p class="text-slate-600 mt-3">Vi åpner smarte søk i nye faner, slik at du raskt finner resultatene dine.</p>
+        <p class="text-slate-600 mt-3">Vi åpner smarte søk i nye faner.</p>
         <div id="resLinks" class="mt-4 grid gap-2"></div>
       </div>
     </div>
   </section>
 
-  <!-- Vær fast seksjon (eksempel) -->
+  <!-- Vær fast seksjon -->
   <section id="vaer" class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Værmelding (Oslo – eksempel)</h2>
@@ -169,7 +189,7 @@
   <section id="kontakt" class="py-16">
     <div class="max-w-4xl mx-auto px-4 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)]">Kontakt oss</h2>
-      <p class="mt-2 text-slate-700">Spørsmål om løp, samarbeid eller presse? Send oss e-post – vi svarer raskt.</p>
+      <p class="mt-2 text-slate-700">Spørsmål om løp, samarbeid eller presse? Send oss e-post.</p>
       <div class="mt-6 flex flex-wrap items-center gap-4 justify-center">
         <a class="btn-brand rounded-full px-6 py-3 font-semibold" href="mailto:post@runnorway.no">post@runnorway.no</a>
       </div>
@@ -182,13 +202,18 @@
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-6 text-center">Ofte stilte spørsmål</h2>
       <details class="card p-4">
         <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hvordan melder jeg på?</summary>
-        <p class="mt-2 text-slate-700">Trykk inn på det løpet du vil delta på og trykk så «Delta».</p>
+        <p class="mt-2 text-slate-700">Trykk inn på løpet du vil delta på og velg «Delta».</p>
       </details>
     </div>
   </section>
 
   <footer class="py-10 bg-[var(--brand)] text-white text-center">
-    <p>© <span id="year"></span> RunNorway</p>
+    <form id="newsletter" class="max-w-xl mx-auto px-4 flex gap-2 justify-center">
+      <input id="newsletterEmail" type="email" required placeholder="din@epost.no" class="w-full max-w-xs px-3 py-2 rounded-lg text-slate-900" />
+      <button class="btn-brand rounded-lg px-4 py-2 font-semibold" type="submit">Meld meg på</button>
+    </form>
+    <p id="newsletterMsg" class="mt-2 text-white/90"></p>
+    <p class="mt-4">© <span id="year"></span> RunNorway</p>
   </footer>
 
   <!-- Modal: Løpsdetaljer -->
@@ -196,13 +221,56 @@
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 id="modalTitle" class="text-xl font-bold text-[var(--brand)]">Løpsnavn</h3>
-        <button id="modalClose" class="rounded-full border px-3 py-1">Lukk</button>
+        <div class="flex items-center gap-2">
+          <button id="modalShare" class="rounded-full border px-3 py-1 icon-btn">Del</button>
+          <button id="modalFav" class="rounded-full border px-3 py-1 icon-btn"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt</button>
+          <button id="modalClose" class="rounded-full border px-3 py-1">Lukk</button>
+        </div>
       </div>
       <div id="modalBody" class="p-5 grid gap-5"></div>
     </div>
   </div>
 
-  <!-- Seed-data (brukes hvis EQ Timing ikke kan lastes i nettleser) -->
+  <!-- Modal: Favoritter -->
+  <div id="favoritesModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header px-5 py-4 flex items-center justify-between">
+        <h3 class="text-xl font-bold text-[var(--brand)]">Dine favoritter</h3>
+        <button id="favoritesClose" class="rounded-full border px-3 py-1">Lukk</button>
+      </div>
+      <div id="favoritesBody" class="p-5 grid gap-4"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Registrer løp (wizard light) -->
+  <div id="registerModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header px-5 py-4 flex items-center justify-between">
+        <h3 class="text-xl font-bold text-[var(--brand)]">Registrer løp</h3>
+        <button id="registerClose" class="rounded-full border px-3 py-1">Lukk</button>
+      </div>
+      <div class="p-5 grid gap-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label><span class="text-sm font-semibold">Løpsnavn</span><input id="reg_name" class="mt-1 w-full rounded-xl border px-3 py-2" /></label>
+          <label><span class="text-sm font-semibold">Arrangør</span><input id="reg_org" class="mt-1 w-full rounded-xl border px-3 py-2" /></label>
+          <label><span class="text-sm font-semibold">Dato</span><input id="reg_date" type="date" class="mt-1 w-full rounded-xl border px-3 py-2" /></label>
+          <label><span class="text-sm font-semibold">Region</span><input id="reg_region" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="f.eks. Oslo, Vestland" /></label>
+          <label class="sm:col-span-2"><span class="text-sm font-semibold">Sted</span><input id="reg_loc" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="f.eks. Bygdøy, Oslo" /></label>
+          <label><span class="text-sm font-semibold">Distanser</span><input id="reg_dist" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="5K, 10K, 21K" /></label>
+          <label><span class="text-sm font-semibold">Påmeldingslenke</span><input id="reg_signup" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="https://..." /></label>
+          <label><span class="text-sm font-semibold">Nettside</span><input id="reg_website" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="https://..." /></label>
+          <label class="flex items-center gap-2 mt-2"><input id="reg_premium" type="checkbox" class="rounded"/><span>Fremhev som premium</span></label>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button id="reg_saveDraft" class="pill">Lagre utkast</button>
+          <button id="reg_publish" class="pill btn-brand">Publiser</button>
+        </div>
+        <p class="text-sm text-slate-600">Data lagres lokalt i nettleseren for demo. I produksjon kan dette sendes til et API eller GitHub-workflow.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seed-data (fallback) -->
   <script id="events-seed" type="application/json">[
     {"title":"Bergen City Mile","date":"2026-04-12","location":"Bergen sentrum","region":"Vestland","distances":["5K","10K","Familie"],"image":"https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
     {"title":"Oslo FjordRun 10K","date":"2026-05-03","location":"Bygdøy, Oslo","region":"Oslo","distances":["10K"],"image":"https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
@@ -225,7 +293,10 @@
     }
     const geo={'Oslo':[59.9139,10.7522],'Bygdøy, Oslo':[59.9036,10.6785],'Bergen sentrum':[60.39299,5.32415],'Bymarka, Trondheim':[63.401,10.276],'Trondheim':[63.4305,10.3951],'Stavanger sentrum':[58.9690,5.7331],'Tromsøya':[69.6492,18.9553]};
 
-    const state={all:[],showPast:false,filters:{q:'',month:'',region:''},view:'list',cal:new Date(), nextTarget:null, nextEvent:null};
+    const LS_EVENTS='rn_events_v1';
+    const LS_FAVS='rn_favs_v1';
+    const state={all:[],showPast:false,filters:{q:'',month:'',region:'',sort:'date'},view:'list',cal:new Date(), nextTarget:null, nextEvent:null, currentModalEvent:null};
+
     function monthKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
 
     async function fetchEqTimingDirect(){
@@ -249,35 +320,58 @@
           const signup = e.RegistrationUrl || e.SignupUrl || e.Url || '';
           const website = e.Website || e.Homepage || e.Url || '';
           return {
+            id:`${title.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}-${dateIso}`,
             title, date:dateIso, location:city, region,
             distances:Array.isArray(e.Distances)?e.Distances:[],
             image:e.ImageUrl || e.LogoUrl || 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
-            signup_url:signup, details_url:website, lat, lng, _source:'eqtiming'
+            signup_url:signup, details_url:website, lat, lng, premium:false, _source:'eqtiming'
           };
         }).filter(e => e.date && !Number.isNaN(new Date(e.date)));
-        // sorter og dedupliser
         const key=e=>`${e.title}|${e.date}`;
-        const seen=new Set();
-        const cleaned=[];
+        const seen=new Set(); const cleaned=[];
         for(const e of mapped.sort((a,b)=>new Date(a.date)-new Date(b.date))){
           const k=key(e); if(seen.has(k)) continue; seen.add(k); cleaned.push(e);
         }
         return cleaned;
-      }catch(err){
-        return null;
-      }
+      }catch(err){ return null; }
+    }
+
+    function loadLocalEvents(){
+      try{
+        const raw=localStorage.getItem(LS_EVENTS);
+        if(!raw) return [];
+        const arr=JSON.parse(raw);
+        return Array.isArray(arr)?arr:[];
+      }catch(e){ return []; }
+    }
+    function saveLocalEvents(arr){
+      try{ localStorage.setItem(LS_EVENTS, JSON.stringify(arr)); }catch(e){}
     }
 
     async function loadEvents(){
+      const local = loadLocalEvents();
       let fromEq = await fetchEqTimingDirect();
       if(Array.isArray(fromEq) && fromEq.length){
-        state.all = fromEq;
+        state.all = dedupe([...local, ...fromEq]);
       } else {
-        state.all = JSON.parse(document.getElementById('events-seed').textContent);
+        const seed = JSON.parse(document.getElementById('events-seed').textContent);
+        state.all = dedupe([...local, ...seed]);
       }
       renderFilters();
       setView('list');
       initCountdownToNext();
+    }
+
+    function dedupe(list){
+      const out=[], seen=new Set();
+      for(const e of list){
+        const id = e.id || `${e.title}-${e.date}`;
+        const key = id.toLowerCase();
+        if(seen.has(key)) continue;
+        seen.add(key);
+        out.push({...e, id});
+      }
+      return out;
     }
 
     function initCountdownToNext(){
@@ -336,7 +430,10 @@
       }
       if(state.filters.month){ list=list.filter(e=>monthKey(new Date(e.date))===state.filters.month); }
       if(state.filters.region){ list=list.filter(e=>e.region===state.filters.region); }
-      return list.sort((a,b)=>new Date(a.date)-new Date(b.date));
+      if(state.filters.sort==='name'){ list.sort((a,b)=>a.title.localeCompare(b.title)); }
+      else if(state.filters.sort==='premium'){ list.sort((a,b)=> (b.premium?1:0) - (a.premium?0:1) || new Date(a.date)-new Date(b.date)); }
+      else { list.sort((a,b)=>new Date(a.date)-new Date(b.date)); }
+      return list;
     }
 
     function renderList(){
@@ -345,9 +442,13 @@
       if(items.length===0){ empty.classList.remove('hidden'); return; } else empty.classList.add('hidden');
 
       items.forEach((ev, idx)=>{
+        const fav = isFav(ev.id);
         const el=document.createElement('article'); el.className='card overflow-hidden';
         el.innerHTML=`
-          <img src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover"/>
+          <div class="relative">
+            ${ev.premium ? `<div class="absolute top-3 left-3 badge-premium">Premium</div>`:''}
+            <img src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover"/>
+          </div>
           <div class="p-6">
             <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
             <h3 class="text-xl font-semibold mt-1 link-brand">${ev.title}</h3>
@@ -356,7 +457,11 @@
             <div class="mt-3 flex flex-wrap gap-3">
               ${ev.signup_url?`<a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-sm font-semibold' target="_blank" rel="noopener">Delta</a>`:''}
               <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick='openEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Les mer</button>
-              <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick="showInlineWeather(${idx})">Se vær</button>
+              <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50 icon-btn" onclick='shareEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Del</button>
+              <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50 icon-btn" data-favid="${ev.id}" onclick='toggleFav("${ev.id}")'>
+                <svg class="heart" viewBox="0 0 24 24" fill="${fav?'#ef4444':'none'}" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt
+              </button>
+              <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50" onclick="showInlineWeather(${idx})">Se vær</button>
             </div>
             <div id='inline-weather-${idx}' class='mt-4 hidden'></div>
           </div>`;
@@ -371,7 +476,7 @@
       const box = document.getElementById(`inline-weather-${i}`);
       if(!url){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; }
       else {
-        box.innerHTML = `<h4 class="text-lg font-semibold mb-2 link-brand">Værmelding (${ev.location})</h4>
+        box.innerHTML = `<h4 class="text-[var(--brand)] font-bold mb-2">Værmelding (${ev.location})</h4>
                          <iframe src="${url}" width="100%" height="520" style="border:none; border-radius:10px;"></iframe>`;
       }
       box.classList.remove('hidden'); box.scrollIntoView({behavior:'smooth', block:'start'});
@@ -428,6 +533,54 @@
       if(v==='map') renderMap();
     }
 
+    // Favoritter
+    function getFavs(){
+      try{ return JSON.parse(localStorage.getItem(LS_FAVS)||'[]'); }catch(e){ return []; }
+    }
+    function isFav(id){ return getFavs().includes(id); }
+    function toggleFav(id){
+      let favs = getFavs();
+      if(favs.includes(id)) favs=favs.filter(x=>x!==id); else favs.push(id);
+      localStorage.setItem(LS_FAVS, JSON.stringify(favs));
+      // oppdater hjerter i liste
+      document.querySelectorAll(`[data-favid="${CSS.escape(id)}"] svg`).forEach(svg=>{ svg.setAttribute('fill', favs.includes(id)? '#ef4444' : 'none'); });
+      renderFavoritesBody();
+    }
+
+    function renderFavoritesBody(){
+      const body=document.getElementById('favoritesBody');
+      const favs=getFavs();
+      const map=new Map(state.all.map(e=>[e.id,e]));
+      const items=favs.map(id=>map.get(id)).filter(Boolean).sort((a,b)=>new Date(a.date)-new Date(b.date));
+      body.innerHTML='';
+      if(!items.length){ body.innerHTML='<p class="text-slate-600">Ingen favoritter ennå.</p>'; return; }
+      items.forEach(ev=>{
+        const row=document.createElement('div'); row.className='card p-4 flex items-center justify-between gap-4';
+        row.innerHTML=`
+          <div>
+            <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
+            <div class="font-semibold">${ev.title}</div>
+            <div class="text-sm text-slate-600">${fmtDate(ev.date)} • ${ev.location}</div>
+          </div>
+          <div class="flex gap-2">
+            ${ev.signup_url?`<a href="${ev.signup_url}" target="_blank" rel="noopener" class="btn-brand rounded-full px-3 py-2 text-sm font-semibold">Delta</a>`:''}
+            <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50" onclick="toggleFav('${ev.id}')">Fjern</button>
+          </div>
+        `;
+        body.appendChild(row);
+      });
+    }
+
+    // Deling
+    async function shareEvent(ev){
+      const text = `${ev.title} — ${fmtDate(ev.date)} • ${ev.location}`;
+      const url = ev.signup_url || ev.details_url || location.href;
+      try{
+        if(navigator.share){ await navigator.share({title:ev.title, text, url}); }
+        else { await navigator.clipboard.writeText(url); alert('Lenke kopiert'); }
+      }catch(e){}
+    }
+
     // Resultater
     document.getElementById('resSearch')?.addEventListener('click', ()=>{
       const name = (document.getElementById('resName').value||'').trim();
@@ -446,14 +599,18 @@
       });
     });
 
-    // Modal
+    // Modal for løp
     const modalBackdrop = document.getElementById('eventModalBackdrop');
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
+    const modalFav = document.getElementById('modalFav');
+    const modalShareBtn = document.getElementById('modalShare');
+
     document.getElementById('modalClose').addEventListener('click', ()=> modalBackdrop.style.display='none');
     modalBackdrop.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) modalBackdrop.style.display='none'; });
 
     function openEvent(ev){
+      state.currentModalEvent = ev;
       modalTitle.textContent = ev.title;
       const pent = cityToPentUrl(ev.location);
       const g = geo[ev.location] || geo[(ev.location||'').split(',')[0]] || (ev.lat&&ev.lng?[ev.lat,ev.lng]:null);
@@ -461,6 +618,7 @@
       modalBody.innerHTML = `
         <div class="grid lg:grid-cols-2 gap-5">
           <div>
+            ${ev.premium ? `<div class="badge-premium mb-2 inline-block">Premium</div>`:''}
             <div class="text-sm text-slate-600 mb-1">${ev.region||''}</div>
             <div class="text-lg font-semibold">${fmtDate(ev.date)} • ${ev.location||''}</div>
             <div class="mt-2 text-slate-700">${(ev.distances||[]).join(', ')}</div>
@@ -475,12 +633,84 @@
         </div>
       `;
       modalBackdrop.style.display='flex';
+      modalFav.onclick = ()=> toggleFav(ev.id);
+      modalShareBtn.onclick = ()=> shareEvent(ev);
       setTimeout(()=>{
         const m = L.map('modalMap');
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap'}).addTo(m);
         if(g){ m.setView(g, 12); L.marker(g).addTo(m).bindPopup(ev.title); } else { m.setView([64.5,11.5],5); }
       }, 50);
     }
+
+    // Favoritter modal
+    const favModal=document.getElementById('favoritesModal');
+    document.getElementById('openFavorites').addEventListener('click', ()=>{ renderFavoritesBody(); favModal.style.display='flex'; });
+    document.getElementById('favoritesClose').addEventListener('click', ()=> favModal.style.display='none');
+    favModal.addEventListener('click', e=>{ if(e.target===favModal) favModal.style.display='none'; });
+
+    // Registrer-løp modal
+    const regModal=document.getElementById('registerModal');
+    document.getElementById('openRegister').addEventListener('click', ()=> regModal.style.display='flex');
+    document.getElementById('registerClose').addEventListener('click', ()=> regModal.style.display='none');
+    regModal.addEventListener('click', e=>{ if(e.target===regModal) regModal.style.display='none'; });
+
+    function readReg(){
+      return {
+        title: document.getElementById('reg_name').value.trim(),
+        org: document.getElementById('reg_org').value.trim(),
+        date: document.getElementById('reg_date').value,
+        region: document.getElementById('reg_region').value.trim(),
+        location: document.getElementById('reg_loc').value.trim(),
+        distances: document.getElementById('reg_dist').value.split(',').map(s=>s.trim()).filter(Boolean),
+        signup_url: document.getElementById('reg_signup').value.trim(),
+        details_url: document.getElementById('reg_website').value.trim(),
+        premium: document.getElementById('reg_premium').checked,
+        image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop'
+      };
+    }
+    function saveReg(publish){
+      const ev=readReg();
+      if(!ev.title || !ev.date){ alert('Løpsnavn og dato må fylles ut.'); return; }
+      ev.id = `${ev.title}-${ev.date}`.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      const all = dedupe([...loadLocalEvents().filter(e=>e.id!==ev.id), ev]);
+      saveLocalEvents(all);
+      state.all = dedupe([...all, ...state.all.filter(x=>x._source==='eqtiming')]);
+      setView(state.view);
+      regModal.style.display='none';
+      alert(publish ? 'Løpet er publisert' : 'Utkast lagret');
+      // nullstill felter
+      ['reg_name','reg_org','reg_date','reg_region','reg_loc','reg_dist','reg_signup','reg_website'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('reg_premium').checked=false;
+    }
+    document.getElementById('reg_saveDraft').addEventListener('click', ()=> saveReg(false));
+    document.getElementById('reg_publish').addEventListener('click', ()=> saveReg(true));
+
+    // Newsletter dummy
+    document.getElementById('newsletter').addEventListener('submit', e=>{
+      e.preventDefault();
+      const email=document.getElementById('newsletterEmail').value.trim();
+      if(!email){ return; }
+      document.getElementById('newsletterMsg').textContent='Takk for påmeldingen. Vi sender kun relevante oppdateringer.';
+      e.target.reset();
+    });
+
+    // Eksport CSV av filtrert liste
+    document.getElementById('exportCsv').addEventListener('click', ()=>{
+      const items=filtered();
+      const rows=[['Tittel','Dato','Sted','Region','Distanser','Påmelding','Nettside','Premium']];
+      for(const e of items){
+        rows.push([e.title, e.date, e.location||'', e.region||'', (e.distances||[]).join(' '), e.signup_url||'', e.details_url||'', e.premium?'ja':'nei']);
+      }
+      const csv = rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a'); a.href=url; a.download='runnorway-eksport.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // Quick distance chips (enkel klient-side filter på tekstfelt)
+    document.getElementById('quick5k').addEventListener('click', ()=>{ state.filters.q='5k'; document.getElementById('q').value='5k'; setView(state.view); });
+    document.getElementById('quick10k').addEventListener('click', ()=>{ state.filters.q='10k'; document.getElementById('q').value='10k'; setView(state.view); });
+    document.getElementById('quick21k').addEventListener('click', ()=>{ state.filters.q='21'; document.getElementById('q').value='21'; setView(state.view); });
 
     // Init
     document.addEventListener('DOMContentLoaded',()=>{
@@ -489,14 +719,29 @@
       document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; setView(state.view);});
       document.getElementById('month').addEventListener('change',e=>{state.filters.month=e.target.value; setView(state.view);});
       document.getElementById('region').addEventListener('change',e=>{state.filters.region=e.target.value; setView(state.view);});
-      document.getElementById('resetFilters').addEventListener('click',()=>{ state.filters={q:'',month:'',region:''}; q.value=''; month.value=''; region.value=''; setView(state.view); });
-      document.getElementById('togglePast').addEventListener('click',e=>{ state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast)); e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; setView(state.view); });
+      document.getElementById('sort').addEventListener('change',e=>{state.filters.sort=e.target.value; setView(state.view);});
+      document.getElementById('resetFilters').addEventListener('click',()=>{
+        state.filters={q:'',month:'',region:'',sort:'date'};
+        q.value=''; month.value=''; region.value=''; sort.value='date'; setView(state.view);
+      });
+      document.getElementById('togglePast').addEventListener('click',e=>{
+        state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast));
+        e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; setView(state.view);
+      });
 
       document.getElementById('tab-list').addEventListener('click',()=>setView('list'));
       document.getElementById('tab-cal').addEventListener('click',()=>setView('cal'));
       document.getElementById('tab-map').addEventListener('click',()=>setView('map'));
       document.getElementById('calPrev').addEventListener('click',()=>{ state.cal.setMonth(state.cal.getMonth()-1); renderCalendar(); });
       document.getElementById('calNext').addEventListener('click',()=>{ state.cal.setMonth(state.cal.getMonth()+1); renderCalendar(); });
+    });
+
+    // Tilgjengelighet: lukk med ESC
+    document.addEventListener('keydown', e=>{
+      if(e.key==='Escape'){
+        [document.getElementById('eventModalBackdrop'), document.getElementById('favoritesModal'), document.getElementById('registerModal')]
+          .forEach(m=>{ if(m && m.style.display==='flex') m.style.display='none'; });
+      }
     });
   </script>
 </body>
