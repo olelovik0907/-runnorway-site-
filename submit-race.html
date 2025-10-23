@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send inn ditt løp | Run Norway</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #0073e6;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    section {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #0073e6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background: #005bb5;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9em;
+      padding: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Run Norway</h1>
+    <p>Send inn ditt løp</p>
+  </header>
+
+  <section id="submit-race">
+    <h2>Skjema for arrangører</h2>
+    <p>Fyll ut skjemaet nedenfor for å sende inn informasjon om ditt løp. Vi ser over og publiserer det fortløpende.</p>
+
+    <!-- 🔹 BYTT UT action-lenken med din egen Google Forms "formResponse"-lenke -->
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLSeXXXXXX/formResponse" method="POST" target="_blank">
+
+      <!-- 🔹 BYTT UT entry-kodene (entry.111111 osv.) med dine faktiske Google Forms ID-er -->
+      <label for="navn">Navn på arrangement:</label>
+      <input id="navn" name="entry.1111111111" type="text" required>
+
+      <label for="sted">Sted:</label>
+      <input id="sted" name="entry.2222222222" type="text" required>
+
+      <label for="dato">Dato:</label>
+      <input id="dato" name="entry.3333333333" type="date" required>
+
+      <label for="distanse">Distanser:</label>
+      <input id="distanse" name="entry.4444444444" type="text" placeholder="5 km, 10 km, halvmaraton">
+
+      <label for="paamelding">Påmeldingslenke:</label>
+      <input id="paamelding" name="entry.5555555555" type="url" placeholder="https://...">
+
+      <label for="bilde">Bilde eller logo (lenke):</label>
+      <input id="bilde" name="entry.6666666666" type="url" placeholder="https://...">
+
+      <label for="info">Tilleggsinformasjon:</label>
+      <textarea id="info" name="entry.7777777777" rows="4" placeholder="Skriv litt om løpet..."></textarea>
+
+      <button type="submit">Send inn løp</button>
+    </form>
+  </section>
+
+  <footer>
+    &copy; 2025 Run Norway — Vi samler norske løp på ett sted.
+  </footer>
+
+</body>
+</html>
+“La til løpsskjema”
