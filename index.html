@@ -22,12 +22,18 @@
     .link-brand{ color:var(--brand); }
     .link-brand:hover{ text-decoration:underline; }
     .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:60; }
-    .modal{ background:#fff; width:min(960px,92vw); max-height:88vh; border-radius:16px; overflow:auto; }
+    .modal{ background:#fff; width:min(1000px,92vw); max-height:88vh; border-radius:16px; overflow:auto; }
     .modal-header{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e7eb; z-index:1; }
     .pill{ border:1px solid #e5e7eb; border-radius:9999px; padding:.5rem .9rem; font-weight:600; }
     .badge-premium{ background:rgba(243,195,22,.18); color:#7a5a00; border:1px solid rgba(243,195,22,.5); border-radius:9999px; padding:.15rem .5rem; font-size:.72rem; font-weight:700; }
     .icon-btn{ display:inline-flex; align-items:center; gap:.4rem; }
     .heart{ width:18px; height:18px; display:inline-block; vertical-align:-2px; }
+    .tab-active{ background:#f3f4f6; }
+    .field{ display:block }
+    .field > span{ display:block; font-size:.85rem; font-weight:600; color:#334155 }
+    .field > input, .field > select, .field > textarea{ margin-top:.25rem; width:100%; border:1px solid #e5e7eb; border-radius:12px; padding:.55rem .75rem }
+    .grid-fit{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px }
+    .chip{ display:inline-flex; align-items:center; gap:.4rem; border:1px solid #e5e7eb; border-radius:9999px; padding:.25rem .6rem; font-size:.82rem }
   </style>
 </head>
 
@@ -48,6 +54,7 @@
       </nav>
       <div class="flex items-center gap-2">
         <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
+        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Profil</button>
         <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
       </div>
     </div>
@@ -62,9 +69,9 @@
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a href="#arrangementer" class="btn-brand px-6 py-3 rounded-full font-semibold">Se program</a>
         <a href="#resultater" class="btn-ghost px-6 py-3 rounded-full font-semibold">Finn ditt resultat</a>
+        <button id="openProfileHero" class="btn-ghost px-6 py-3 rounded-full font-semibold">Opprett profil</button>
       </div>
 
-      <!-- Neste løp + Nedtelling -->
       <div class="max-w-3xl mx-auto mt-12">
         <p id="nextRaceLabel" class="text-white/95 text-lg font-semibold"></p>
       </div>
@@ -95,35 +102,41 @@
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Kommende arrangementer</h2>
 
       <div class="inline-flex rounded-2xl bg-white shadow p-1 mb-4" role="tablist" aria-label="Visning">
-        <button id="tab-list" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="true" aria-controls="panel-list">Liste</button>
+        <button id="tab-list" class="px-4 py-2 rounded-xl font-semibold tab-active" role="tab" aria-selected="true" aria-controls="panel-list">Liste</button>
         <button id="tab-cal" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-cal">Kalender</button>
         <button id="tab-map" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-map">Kart</button>
       </div>
 
       <div class="card p-4 sm:p-6">
-        <div class="grid gap-3 sm:grid-cols-5 items-end">
-          <label class="sm:col-span-2">
-            <span class="text-sm font-semibold">Søk</span>
-            <input id="q" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Søk på navn eller sted"/>
+        <div class="grid gap-3 sm:grid-cols-6 items-end">
+          <label class="sm:col-span-2 field">
+            <span>Søk</span>
+            <input id="q" placeholder="Søk på navn eller sted"/>
           </label>
-          <label>
-            <span class="text-sm font-semibold">Måned</span>
-            <select id="month" class="mt-1 w-full rounded-xl border px-3 py-2">
-              <option value="">Alle</option>
-            </select>
+          <label class="field">
+            <span>Måned</span>
+            <select id="month"><option value="">Alle</option></select>
           </label>
-          <label>
-            <span class="text-sm font-semibold">Region</span>
-            <select id="region" class="mt-1 w-full rounded-xl border px-3 py-2">
-              <option value="">Alle</option>
-            </select>
+          <label class="field">
+            <span>Region</span>
+            <select id="region"><option value="">Alle</option></select>
           </label>
-          <label>
-            <span class="text-sm font-semibold">Sorter</span>
-            <select id="sort" class="mt-1 w-full rounded-xl border px-3 py-2">
+          <label class="field">
+            <span>Sorter</span>
+            <select id="sort">
               <option value="date">Dato</option>
               <option value="name">Navn</option>
               <option value="premium">Premium først</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Distanse</span>
+            <select id="distance">
+              <option value="">Alle</option>
+              <option value="5">5K</option>
+              <option value="10">10K</option>
+              <option value="21">21K</option>
+              <option value="42">42K</option>
             </select>
           </label>
         </div>
@@ -135,6 +148,7 @@
           <button id="quick21k" class="pill">21K</button>
           <button id="exportCsv" class="pill">Eksporter CSV</button>
           <button id="openFavorites" class="pill icon-btn"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritter</button>
+          <button id="openProfileFilters" class="pill">Profil</button>
         </div>
       </div>
 
@@ -202,7 +216,7 @@
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-6 text-center">Ofte stilte spørsmål</h2>
       <details class="card p-4">
         <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hvordan melder jeg på?</summary>
-        <p class="mt-2 text-slate-700">Trykk inn på løpet du vil delta på og velg «Delta».</p>
+        <p class="mt-2 text-slate-700">Åpne ønsket løp, logg inn eller opprett profil og bekreft påmelding. Om arrangør har ekstern løsning, sendes du videre og påmeldingen markeres i profilen din.</p>
       </details>
     </div>
   </section>
@@ -224,6 +238,7 @@
         <div class="flex items-center gap-2">
           <button id="modalShare" class="rounded-full border px-3 py-1 icon-btn">Del</button>
           <button id="modalFav" class="rounded-full border px-3 py-1 icon-btn"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt</button>
+          <button id="modalEnroll" class="btn-brand rounded-full px-3 py-1 font-semibold">Meld meg på</button>
           <button id="modalClose" class="rounded-full border px-3 py-1">Lukk</button>
         </div>
       </div>
@@ -251,21 +266,81 @@
       </div>
       <div class="p-5 grid gap-4">
         <div class="grid sm:grid-cols-2 gap-4">
-          <label><span class="text-sm font-semibold">Løpsnavn</span><input id="reg_name" class="mt-1 w-full rounded-xl border px-3 py-2" /></label>
-          <label><span class="text-sm font-semibold">Arrangør</span><input id="reg_org" class="mt-1 w-full rounded-xl border px-3 py-2" /></label>
-          <label><span class="text-sm font-semibold">Dato</span><input id="reg_date" type="date" class="mt-1 w-full rounded-xl border px-3 py-2" /></label>
-          <label><span class="text-sm font-semibold">Region</span><input id="reg_region" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="f.eks. Oslo, Vestland" /></label>
-          <label class="sm:col-span-2"><span class="text-sm font-semibold">Sted</span><input id="reg_loc" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="f.eks. Bygdøy, Oslo" /></label>
-          <label><span class="text-sm font-semibold">Distanser</span><input id="reg_dist" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="5K, 10K, 21K" /></label>
-          <label><span class="text-sm font-semibold">Påmeldingslenke</span><input id="reg_signup" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="https://..." /></label>
-          <label><span class="text-sm font-semibold">Nettside</span><input id="reg_website" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="https://..." /></label>
+          <label class="field"><span>Løpsnavn</span><input id="reg_name" /></label>
+          <label class="field"><span>Arrangør</span><input id="reg_org" /></label>
+          <label class="field"><span>Dato</span><input id="reg_date" type="date" /></label>
+          <label class="field"><span>Region</span><input id="reg_region" placeholder="f.eks. Oslo, Vestland" /></label>
+          <label class="field sm:col-span-2"><span>Sted</span><input id="reg_loc" placeholder="f.eks. Bygdøy, Oslo" /></label>
+          <label class="field"><span>Distanser</span><input id="reg_dist" placeholder="5K, 10K, 21K" /></label>
+          <label class="field"><span>Påmeldingslenke</span><input id="reg_signup" placeholder="https://..." /></label>
+          <label class="field"><span>Nettside</span><input id="reg_website" placeholder="https://..." /></label>
           <label class="flex items-center gap-2 mt-2"><input id="reg_premium" type="checkbox" class="rounded"/><span>Fremhev som premium</span></label>
         </div>
         <div class="flex justify-end gap-2">
           <button id="reg_saveDraft" class="pill">Lagre utkast</button>
           <button id="reg_publish" class="pill btn-brand">Publiser</button>
         </div>
-        <p class="text-sm text-slate-600">Data lagres lokalt i nettleseren for demo. I produksjon kan dette sendes til et API eller GitHub-workflow.</p>
+        <p class="text-sm text-slate-600">Data lagres lokalt for demo. I produksjon kan dette sendes til API eller GitHub-workflow.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Profil -->
+  <div id="profileModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <h3 class="text-xl font-bold text-[var(--brand)]">Din profil</h3>
+          <span id="profileStatus" class="text-sm text-slate-500"></span>
+        </div>
+        <button id="profileClose" class="rounded-full border px-3 py-1">Lukk</button>
+      </div>
+
+      <div class="p-5 grid gap-6">
+        <div class="grid lg:grid-cols-2 gap-6">
+          <section class="card p-4">
+            <h4 class="font-semibold text-[var(--brand)]">Grunninfo</h4>
+            <div class="mt-3 grid-fit">
+              <label class="field"><span>Fornavn</span><input id="pf_first" /></label>
+              <label class="field"><span>Etternavn</span><input id="pf_last" /></label>
+              <label class="field"><span>E-post</span><input id="pf_email" type="email" /></label>
+              <label class="field"><span>Fødselsår</span><input id="pf_birth" type="number" min="1930" max="2030" /></label>
+              <label class="field"><span>Kjønn</span>
+                <select id="pf_gender"><option value="">Velg</option><option>M</option><option>F</option><option>Annet</option></select>
+              </label>
+            </div>
+            <div class="mt-3 grid-fit">
+              <label class="field"><span>Klubb</span><input id="pf_club" placeholder="navn på klubb (valgfritt)" /></label>
+              <label class="field"><span>Treningsgruppe</span><input id="pf_group" placeholder="navn på gruppe (valgfritt)" /></label>
+            </div>
+          </section>
+
+          <section class="card p-4">
+            <h4 class="font-semibold text-[var(--brand)]">Sko og utstyr</h4>
+            <div class="mt-3 flex gap-2">
+              <input id="gearInput" class="flex-1 rounded-xl border px-3 py-2" placeholder="Legg til modell, f.eks. Nike Pegasus 41" />
+              <button id="gearAdd" class="pill">Legg til</button>
+            </div>
+            <div id="gearList" class="mt-3 flex flex-wrap gap-2"></div>
+          </section>
+        </div>
+
+        <section class="card p-4">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-[var(--brand)]">Mine løp</h4>
+            <div class="text-sm text-slate-600">Status kan settes til Påmeldt eller Fullført</div>
+          </div>
+          <div id="myRaces" class="mt-3 grid gap-3"></div>
+        </section>
+
+        <div class="flex justify-between items-center">
+          <div id="profileMsg" class="text-sm text-slate-600"></div>
+          <div class="flex gap-2">
+            <button id="profileExport" class="pill">Eksporter profil (JSON)</button>
+            <button id="profileDelete" class="pill">Slett profil</button>
+            <button id="profileSave" class="pill btn-brand">Lagre</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -295,7 +370,10 @@
 
     const LS_EVENTS='rn_events_v1';
     const LS_FAVS='rn_favs_v1';
-    const state={all:[],showPast:false,filters:{q:'',month:'',region:'',sort:'date'},view:'list',cal:new Date(), nextTarget:null, nextEvent:null, currentModalEvent:null};
+    const LS_PROFILE='rn_profile_v1';
+    const LS_MY_RACES='rn_myraces_v1';
+
+    const state={all:[],showPast:false,filters:{q:'',month:'',region:'',sort:'date',distance:''},view:'list',cal:new Date(), nextTarget:null, nextEvent:null, currentModalEvent:null};
 
     function monthKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
 
@@ -348,401 +426,18 @@
       try{ localStorage.setItem(LS_EVENTS, JSON.stringify(arr)); }catch(e){}
     }
 
+    function getProfile(){
+      try{ return JSON.parse(localStorage.getItem(LS_PROFILE)||'null'); }catch(e){ return null; }
+    }
+    function saveProfile(p){
+      localStorage.setItem(LS_PROFILE, JSON.stringify(p));
+    }
+    function getMyRaces(){
+      try{ return JSON.parse(localStorage.getItem(LS_MY_RACES)||'[]'); }catch(e){ return []; }
+    }
+    function saveMyRaces(arr){
+      localStorage.setItem(LS_MY_RACES, JSON.stringify(arr));
+    }
+
     async function loadEvents(){
-      const local = loadLocalEvents();
-      let fromEq = await fetchEqTimingDirect();
-      if(Array.isArray(fromEq) && fromEq.length){
-        state.all = dedupe([...local, ...fromEq]);
-      } else {
-        const seed = JSON.parse(document.getElementById('events-seed').textContent);
-        state.all = dedupe([...local, ...seed]);
-      }
-      renderFilters();
-      setView('list');
-      initCountdownToNext();
-    }
-
-    function dedupe(list){
-      const out=[], seen=new Set();
-      for(const e of list){
-        const id = e.id || `${e.title}-${e.date}`;
-        const key = id.toLowerCase();
-        if(seen.has(key)) continue;
-        seen.add(key);
-        out.push({...e, id});
-      }
-      return out;
-    }
-
-    function initCountdownToNext(){
-      const today=new Date(); today.setHours(0,0,0,0);
-      const upcoming = state.all
-        .map(e=>({...e,_d:new Date(e.date)}))
-        .filter(e=>!isNaN(e._d) && e._d>=today)
-        .sort((a,b)=>a._d-b._d);
-      state.nextEvent = upcoming[0] || null;
-      const label = document.getElementById('nextRaceLabel');
-      if(state.nextEvent){
-        state.nextTarget = new Date(state.nextEvent.date+'T09:00:00');
-        label.textContent = `Neste løp: ${state.nextEvent.title} — ${fmtDate(state.nextEvent.date)}`;
-      } else {
-        const fallback = new Date(); fallback.setDate(fallback.getDate()+60);
-        state.nextTarget = fallback;
-        label.textContent = `Neste løp: annonseres snart`;
-      }
-      tick(); clearInterval(window.__countInt__); window.__countInt__=setInterval(tick,1000);
-    }
-
-    function tick(){
-      const target = state.nextTarget || new Date();
-      const now=new Date(); let diff=Math.max(0,target-now);
-      const d=Math.floor(diff/86400000); diff-=d*86400000;
-      const h=Math.floor(diff/3600000);  diff-=h*3600000;
-      const m=Math.floor(diff/60000);    diff-=m*60000;
-      const s=Math.floor(diff/1000);
-      document.getElementById("d").textContent=d;
-      document.getElementById("h").textContent=h;
-      document.getElementById("m").textContent=m;
-      document.getElementById("s").textContent=s;
-    }
-
-    function renderFilters(){
-      const months=new Set(), regions=new Set();
-      for(const ev of state.all){ const dd=new Date(ev.date); if(!isNaN(dd)) months.add(monthKey(dd)); if(ev.region) regions.add(ev.region); }
-      const monthSel=document.getElementById('month'); const regionSel=document.getElementById('region');
-      monthSel.querySelectorAll('option:not([value=""])').forEach(o=>o.remove());
-      regionSel.querySelectorAll('option:not([value=""])').forEach(o=>o.remove());
-      for(const m of Array.from(months).sort()){
-        const [y,mm]=m.split('-'); const o=document.createElement('option');
-        o.value=m; o.textContent=new Date(`${y}-${mm}-01`).toLocaleDateString('no-NO',{month:'long',year:'numeric'});
-        monthSel.appendChild(o);
-      }
-      for(const r of Array.from(regions).sort()){ const o=document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o); }
-    }
-
-    function filtered(){
-      const today=new Date(); today.setHours(0,0,0,0);
-      let list=[...state.all];
-      if(!state.showPast) list=list.filter(e=>new Date(e.date)>=today);
-      if(state.filters.q){
-        const q=state.filters.q.toLowerCase();
-        list=list.filter(e=>`${e.title} ${e.location}`.toLowerCase().includes(q));
-      }
-      if(state.filters.month){ list=list.filter(e=>monthKey(new Date(e.date))===state.filters.month); }
-      if(state.filters.region){ list=list.filter(e=>e.region===state.filters.region); }
-      if(state.filters.sort==='name'){ list.sort((a,b)=>a.title.localeCompare(b.title)); }
-      else if(state.filters.sort==='premium'){ list.sort((a,b)=> (b.premium?1:0) - (a.premium?0:1) || new Date(a.date)-new Date(b.date)); }
-      else { list.sort((a,b)=>new Date(a.date)-new Date(b.date)); }
-      return list;
-    }
-
-    function renderList(){
-      const items=filtered(); const grid=document.getElementById('eventsGrid'); const empty=document.getElementById('eventsEmpty');
-      grid.innerHTML=''; document.getElementById('eventsSummary').textContent=`Viser ${items.length} arrangementer`;
-      if(items.length===0){ empty.classList.remove('hidden'); return; } else empty.classList.add('hidden');
-
-      items.forEach((ev, idx)=>{
-        const fav = isFav(ev.id);
-        const el=document.createElement('article'); el.className='card overflow-hidden';
-        el.innerHTML=`
-          <div class="relative">
-            ${ev.premium ? `<div class="absolute top-3 left-3 badge-premium">Premium</div>`:''}
-            <img src="${ev.image}" alt="${ev.title}" class="h-44 w-full object-cover"/>
-          </div>
-          <div class="p-6">
-            <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
-            <h3 class="text-xl font-semibold mt-1 link-brand">${ev.title}</h3>
-            <p class="text-sm text-slate-600 mt-1">${fmtDate(ev.date)} • ${ev.location}</p>
-            <p class="text-sm mt-2">${(ev.distances||[]).join(', ')}</p>
-            <div class="mt-3 flex flex-wrap gap-3">
-              ${ev.signup_url?`<a href='${ev.signup_url}' class='btn-brand rounded-full px-4 py-2 text-sm font-semibold' target="_blank" rel="noopener">Delta</a>`:''}
-              <button class="rounded-full border px-4 py-2 text-sm font-semibold hover:bg-slate-50" onclick='openEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Les mer</button>
-              <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50 icon-btn" onclick='shareEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Del</button>
-              <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50 icon-btn" data-favid="${ev.id}" onclick='toggleFav("${ev.id}")'>
-                <svg class="heart" viewBox="0 0 24 24" fill="${fav?'#ef4444':'none'}" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt
-              </button>
-              <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50" onclick="showInlineWeather(${idx})">Se vær</button>
-            </div>
-            <div id='inline-weather-${idx}' class='mt-4 hidden'></div>
-          </div>`;
-        grid.appendChild(el);
-      });
-    }
-
-    function showInlineWeather(i){
-      const items = filtered();
-      const ev = items[i]; if(!ev) return;
-      const url = cityToPentUrl(ev.location);
-      const box = document.getElementById(`inline-weather-${i}`);
-      if(!url){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; }
-      else {
-        box.innerHTML = `<h4 class="text-[var(--brand)] font-bold mb-2">Værmelding (${ev.location})</h4>
-                         <iframe src="${url}" width="100%" height="520" style="border:none; border-radius:10px;"></iframe>`;
-      }
-      box.classList.remove('hidden'); box.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-
-    function daysInMonth(y,m){ return new Date(y,m+1,0).getDate(); }
-    function renderCalendar(){
-      const current=new Date(state.cal.getFullYear(), state.cal.getMonth(), 1);
-      const y=current.getFullYear(), m=current.getMonth();
-      document.getElementById('calTitle').textContent=current.toLocaleDateString('no-NO',{month:'long',year:'numeric'});
-      const grid=document.getElementById('calendarGrid'); grid.innerHTML='';
-      const wk=['Man','Tir','Ons','Tor','Fre','Lør','Søn'];
-      for(const w of wk){ const h=document.createElement('div'); h.className='text-xs font-semibold text-slate-500 text-center'; h.textContent=w; grid.appendChild(h); }
-      const firstDow=(new Date(y,m,1).getDay()+6)%7; const dim=daysInMonth(y,m);
-      for(let i=0;i<firstDow;i++){ grid.appendChild(document.createElement('div')); }
-      const items=filtered();
-      for(let day=1; day<=dim; day++){
-        const cell=document.createElement('div'); cell.className='rounded-xl bg-white shadow p-2 min-h-[84px]';
-        const label=document.createElement('div'); label.className='text-sm font-semibold'; label.textContent=String(day); cell.appendChild(label);
-        const dateStr= new Date(y,m,day).toISOString().slice(0,10);
-        const todays = items.filter(e=> e.date===dateStr || new Date(e.date).toDateString()===new Date(dateStr).toDateString());
-        for(const ev of todays){ const a=document.createElement('div'); a.className='mt-1 text-xs'; a.textContent=ev.title; cell.appendChild(a); }
-        grid.appendChild(cell);
-      }
-    }
-
-    let map, markersLayer;
-    function ensureMap(){
-      if(map) return;
-      map=L.map('map'); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
-      markersLayer=L.layerGroup().addTo(map);
-    }
-    function renderMap(){
-      ensureMap(); markersLayer.clearLayers();
-      const items=filtered(); const points=[];
-      const lookup=loc=> geo[loc] || geo[(loc||'').split(',')[0]] || null;
-      for(const ev of items){
-        const latlng=(ev.lat&&ev.lng)?[ev.lat,ev.lng]:lookup(ev.location);
-        if(!latlng) continue; points.push(latlng);
-        L.marker(latlng).addTo(markersLayer).bindPopup(`<strong>${ev.title}</strong><br>${fmtDate(ev.date)} • ${ev.location}`);
-      }
-      if(points.length){ map.fitBounds(L.latLngBounds(points),{padding:[30,30]}); } else { map.setView([64.5,11.5],5); }
-      setTimeout(()=>map.invalidateSize(),0);
-    }
-
-    function setView(v){
-      state.view=v;
-      ['list','cal','map'].forEach(id=>{
-        document.getElementById(`tab-${id}`).setAttribute('aria-selected', String(id===v));
-        document.getElementById(`panel-${id}`).hidden = id!==v;
-      });
-      if(v==='list') renderList();
-      if(v==='cal') renderCalendar();
-      if(v==='map') renderMap();
-    }
-
-    // Favoritter
-    function getFavs(){
-      try{ return JSON.parse(localStorage.getItem(LS_FAVS)||'[]'); }catch(e){ return []; }
-    }
-    function isFav(id){ return getFavs().includes(id); }
-    function toggleFav(id){
-      let favs = getFavs();
-      if(favs.includes(id)) favs=favs.filter(x=>x!==id); else favs.push(id);
-      localStorage.setItem(LS_FAVS, JSON.stringify(favs));
-      // oppdater hjerter i liste
-      document.querySelectorAll(`[data-favid="${CSS.escape(id)}"] svg`).forEach(svg=>{ svg.setAttribute('fill', favs.includes(id)? '#ef4444' : 'none'); });
-      renderFavoritesBody();
-    }
-
-    function renderFavoritesBody(){
-      const body=document.getElementById('favoritesBody');
-      const favs=getFavs();
-      const map=new Map(state.all.map(e=>[e.id,e]));
-      const items=favs.map(id=>map.get(id)).filter(Boolean).sort((a,b)=>new Date(a.date)-new Date(b.date));
-      body.innerHTML='';
-      if(!items.length){ body.innerHTML='<p class="text-slate-600">Ingen favoritter ennå.</p>'; return; }
-      items.forEach(ev=>{
-        const row=document.createElement('div'); row.className='card p-4 flex items-center justify-between gap-4';
-        row.innerHTML=`
-          <div>
-            <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
-            <div class="font-semibold">${ev.title}</div>
-            <div class="text-sm text-slate-600">${fmtDate(ev.date)} • ${ev.location}</div>
-          </div>
-          <div class="flex gap-2">
-            ${ev.signup_url?`<a href="${ev.signup_url}" target="_blank" rel="noopener" class="btn-brand rounded-full px-3 py-2 text-sm font-semibold">Delta</a>`:''}
-            <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50" onclick="toggleFav('${ev.id}')">Fjern</button>
-          </div>
-        `;
-        body.appendChild(row);
-      });
-    }
-
-    // Deling
-    async function shareEvent(ev){
-      const text = `${ev.title} — ${fmtDate(ev.date)} • ${ev.location}`;
-      const url = ev.signup_url || ev.details_url || location.href;
-      try{
-        if(navigator.share){ await navigator.share({title:ev.title, text, url}); }
-        else { await navigator.clipboard.writeText(url); alert('Lenke kopiert'); }
-      }catch(e){}
-    }
-
-    // Resultater
-    document.getElementById('resSearch')?.addEventListener('click', ()=>{
-      const name = (document.getElementById('resName').value||'').trim();
-      const year = (document.getElementById('resYear').value||'').trim();
-      const q = encodeURIComponent([name, year].filter(Boolean).join(' '));
-      const engines = [
-        {label:'Google (norsk)', url:`https://www.google.com/search?q=${q}+resultater+løp`},
-        {label:'Bing', url:`https://www.bing.com/search?q=${q}+resultater+løp`},
-        {label:'DuckDuckGo', url:`https://duckduckgo.com/?q=${q}+resultater+løp`}
-      ];
-      const box = document.getElementById('resLinks'); box.innerHTML='';
-      engines.forEach(e=>{
-        const a=document.createElement('a'); a.href=e.url; a.target='_blank'; a.rel='noopener';
-        a.textContent=`Åpne i ${e.label}`; a.className='underline text-[var(--brand)]';
-        const p=document.createElement('p'); p.appendChild(a); box.appendChild(p);
-      });
-    });
-
-    // Modal for løp
-    const modalBackdrop = document.getElementById('eventModalBackdrop');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    const modalFav = document.getElementById('modalFav');
-    const modalShareBtn = document.getElementById('modalShare');
-
-    document.getElementById('modalClose').addEventListener('click', ()=> modalBackdrop.style.display='none');
-    modalBackdrop.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) modalBackdrop.style.display='none'; });
-
-    function openEvent(ev){
-      state.currentModalEvent = ev;
-      modalTitle.textContent = ev.title;
-      const pent = cityToPentUrl(ev.location);
-      const g = geo[ev.location] || geo[(ev.location||'').split(',')[0]] || (ev.lat&&ev.lng?[ev.lat,ev.lng]:null);
-
-      modalBody.innerHTML = `
-        <div class="grid lg:grid-cols-2 gap-5">
-          <div>
-            ${ev.premium ? `<div class="badge-premium mb-2 inline-block">Premium</div>`:''}
-            <div class="text-sm text-slate-600 mb-1">${ev.region||''}</div>
-            <div class="text-lg font-semibold">${fmtDate(ev.date)} • ${ev.location||''}</div>
-            <div class="mt-2 text-slate-700">${(ev.distances||[]).join(', ')}</div>
-            <div class="mt-4 flex flex-wrap gap-3">
-              ${ev.signup_url?`<a href="${ev.signup_url}" class="btn-brand rounded-full px-4 py-2 font-semibold" target="_blank" rel="noopener">Delta</a>`:''}
-              ${ev.details_url?`<a href="${ev.details_url}" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" target="_blank" rel="noopener">Nettside</a>`:''}
-            </div>
-            ${pent ? `<h4 class="text-[var(--brand)] font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
-                      <iframe src="${pent}" width="100%" height="420" style="border:none; border-radius:10px;"></iframe>` : ''}
-          </div>
-          <div><div id="modalMap" class="h-[380px] rounded-2xl border"></div></div>
-        </div>
-      `;
-      modalBackdrop.style.display='flex';
-      modalFav.onclick = ()=> toggleFav(ev.id);
-      modalShareBtn.onclick = ()=> shareEvent(ev);
-      setTimeout(()=>{
-        const m = L.map('modalMap');
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap'}).addTo(m);
-        if(g){ m.setView(g, 12); L.marker(g).addTo(m).bindPopup(ev.title); } else { m.setView([64.5,11.5],5); }
-      }, 50);
-    }
-
-    // Favoritter modal
-    const favModal=document.getElementById('favoritesModal');
-    document.getElementById('openFavorites').addEventListener('click', ()=>{ renderFavoritesBody(); favModal.style.display='flex'; });
-    document.getElementById('favoritesClose').addEventListener('click', ()=> favModal.style.display='none');
-    favModal.addEventListener('click', e=>{ if(e.target===favModal) favModal.style.display='none'; });
-
-    // Registrer-løp modal
-    const regModal=document.getElementById('registerModal');
-    document.getElementById('openRegister').addEventListener('click', ()=> regModal.style.display='flex');
-    document.getElementById('registerClose').addEventListener('click', ()=> regModal.style.display='none');
-    regModal.addEventListener('click', e=>{ if(e.target===regModal) regModal.style.display='none'; });
-
-    function readReg(){
-      return {
-        title: document.getElementById('reg_name').value.trim(),
-        org: document.getElementById('reg_org').value.trim(),
-        date: document.getElementById('reg_date').value,
-        region: document.getElementById('reg_region').value.trim(),
-        location: document.getElementById('reg_loc').value.trim(),
-        distances: document.getElementById('reg_dist').value.split(',').map(s=>s.trim()).filter(Boolean),
-        signup_url: document.getElementById('reg_signup').value.trim(),
-        details_url: document.getElementById('reg_website').value.trim(),
-        premium: document.getElementById('reg_premium').checked,
-        image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop'
-      };
-    }
-    function saveReg(publish){
-      const ev=readReg();
-      if(!ev.title || !ev.date){ alert('Løpsnavn og dato må fylles ut.'); return; }
-      ev.id = `${ev.title}-${ev.date}`.toLowerCase().replace(/[^a-z0-9]+/g,'-');
-      const all = dedupe([...loadLocalEvents().filter(e=>e.id!==ev.id), ev]);
-      saveLocalEvents(all);
-      state.all = dedupe([...all, ...state.all.filter(x=>x._source==='eqtiming')]);
-      setView(state.view);
-      regModal.style.display='none';
-      alert(publish ? 'Løpet er publisert' : 'Utkast lagret');
-      // nullstill felter
-      ['reg_name','reg_org','reg_date','reg_region','reg_loc','reg_dist','reg_signup','reg_website'].forEach(id=>document.getElementById(id).value='');
-      document.getElementById('reg_premium').checked=false;
-    }
-    document.getElementById('reg_saveDraft').addEventListener('click', ()=> saveReg(false));
-    document.getElementById('reg_publish').addEventListener('click', ()=> saveReg(true));
-
-    // Newsletter dummy
-    document.getElementById('newsletter').addEventListener('submit', e=>{
-      e.preventDefault();
-      const email=document.getElementById('newsletterEmail').value.trim();
-      if(!email){ return; }
-      document.getElementById('newsletterMsg').textContent='Takk for påmeldingen. Vi sender kun relevante oppdateringer.';
-      e.target.reset();
-    });
-
-    // Eksport CSV av filtrert liste
-    document.getElementById('exportCsv').addEventListener('click', ()=>{
-      const items=filtered();
-      const rows=[['Tittel','Dato','Sted','Region','Distanser','Påmelding','Nettside','Premium']];
-      for(const e of items){
-        rows.push([e.title, e.date, e.location||'', e.region||'', (e.distances||[]).join(' '), e.signup_url||'', e.details_url||'', e.premium?'ja':'nei']);
-      }
-      const csv = rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
-      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a'); a.href=url; a.download='runnorway-eksport.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    });
-
-    // Quick distance chips (enkel klient-side filter på tekstfelt)
-    document.getElementById('quick5k').addEventListener('click', ()=>{ state.filters.q='5k'; document.getElementById('q').value='5k'; setView(state.view); });
-    document.getElementById('quick10k').addEventListener('click', ()=>{ state.filters.q='10k'; document.getElementById('q').value='10k'; setView(state.view); });
-    document.getElementById('quick21k').addEventListener('click', ()=>{ state.filters.q='21'; document.getElementById('q').value='21'; setView(state.view); });
-
-    // Init
-    document.addEventListener('DOMContentLoaded',()=>{
-      loadEvents();
-
-      document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; setView(state.view);});
-      document.getElementById('month').addEventListener('change',e=>{state.filters.month=e.target.value; setView(state.view);});
-      document.getElementById('region').addEventListener('change',e=>{state.filters.region=e.target.value; setView(state.view);});
-      document.getElementById('sort').addEventListener('change',e=>{state.filters.sort=e.target.value; setView(state.view);});
-      document.getElementById('resetFilters').addEventListener('click',()=>{
-        state.filters={q:'',month:'',region:'',sort:'date'};
-        q.value=''; month.value=''; region.value=''; sort.value='date'; setView(state.view);
-      });
-      document.getElementById('togglePast').addEventListener('click',e=>{
-        state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast));
-        e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; setView(state.view);
-      });
-
-      document.getElementById('tab-list').addEventListener('click',()=>setView('list'));
-      document.getElementById('tab-cal').addEventListener('click',()=>setView('cal'));
-      document.getElementById('tab-map').addEventListener('click',()=>setView('map'));
-      document.getElementById('calPrev').addEventListener('click',()=>{ state.cal.setMonth(state.cal.getMonth()-1); renderCalendar(); });
-      document.getElementById('calNext').addEventListener('click',()=>{ state.cal.setMonth(state.cal.getMonth()+1); renderCalendar(); });
-    });
-
-    // Tilgjengelighet: lukk med ESC
-    document.addEventListener('keydown', e=>{
-      if(e.key==='Escape'){
-        [document.getElementById('eventModalBackdrop'), document.getElementById('favoritesModal'), document.getElementById('registerModal')]
-          .forEach(m=>{ if(m && m.style.display==='flex') m.style.display='none'; });
-      }
-    });
-  </script>
-</body>
-</html>
+      const local = loadLocalEvents
