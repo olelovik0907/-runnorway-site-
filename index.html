@@ -716,18 +716,7 @@ function renderWeatherBox(container, w, title){
   });
 }
 
-    // Inline weather
-    function showInlineWeather(i){
-      const items = filtered();
-      const ev = items[i]; if(!ev) return;
-      const url = cityToPentUrl(ev.location);
-      const box = document.getElementById(`inline-weather-${i}`);
-      if(!url){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; }
-      else {
-        box.innerHTML = `<h4 class="text-[var(--brand)] font-bold mb-2">Værmelding (${ev.location})</h4>
-                         <iframe src="${url}" width="100%" height="520" style="border:none; border-radius:10px;"></iframe>`;
-      }
-      box.classList.remove('hidden'); box.scrollIntoView({behavior:'smooth', block:'start'});
+showInlineWeather(i)
     }
 
     // Calendar
