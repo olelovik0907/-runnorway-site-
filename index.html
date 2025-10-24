@@ -11,28 +11,36 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <style>
     :root { --brand:#116D6B; --accent:#F3C316; }
-    html,body{ background:#fff; color:#0f172a; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+
+    html,body{
+      background:#fff; color:#0f172a;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
     .btn-brand{ background:var(--accent); color:#111827; }
     .btn-brand:hover{ background:#d6aa10; }
     .btn-ghost{ background:rgba(255,255,255,.9); color:var(--brand); }
     .btn-ghost:hover{ background:#fff; }
     .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; }
+    .card p { line-height: 1.55; }
     .link-brand{ color:var(--brand); }
     .link-brand:hover{ text-decoration:underline; }
+
     .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:60; }
     .modal{ background:#fff; width:min(960px,92vw); max-height:88vh; border-radius:16px; overflow:auto; }
     .modal-header{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e7eb; z-index:1; }
+
     .pill{ border:1px solid #e5e7eb; border-radius:9999px; padding:.5rem .9rem; font-weight:600; }
     .badge-premium{ background:rgba(243,195,22,.18); color:#7a5a00; border:1px solid rgba(243,195,22,.5); border-radius:9999px; padding:.15rem .5rem; font-size:.72rem; font-weight:700; }
     .icon-btn{ display:inline-flex; align-items:center; gap:.4rem; }
     .heart{ width:18px; height:18px; display:inline-block; vertical-align:-2px; }
-    .card p { line-height: 1.55; }
 
-    /* Kompakt vær */
+    /* Kompakt vær-komponent */
     .wx { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
-    .wx-chip { display:flex; align-items:center; gap:.4rem; padding:.35rem .55rem; border:1px solid #e5e7eb; border-radius:9999px; font-size:.8rem; background:#fff; }
+    .wx-chip { display:flex; align-items:center; gap:.4rem; padding:.35rem .55rem; border:1px solid #e5e7eb; border-radius:9999px; font-size:.85rem; background:#fff; }
     .wx-day { font-weight:600; }
     .wx-temp { font-variant-numeric: tabular-nums; }
     .wx-icon { width:18px; height:18px; }
@@ -82,7 +90,6 @@
         <a href="#resultater" class="btn-ghost px-6 py-3 rounded-full font-semibold">Finn ditt resultat</a>
       </div>
 
-      <!-- Neste løp + Nedtelling -->
       <div class="max-w-3xl mx-auto mt-12 flex items-center justify-center gap-3 flex-wrap">
         <p id="nextRaceLabel" class="text-white/95 text-lg font-semibold"></p>
         <a id="nextRaceCta" href="#arrangementer" class="btn-brand px-4 py-2 rounded-full font-semibold">Meld deg på</a>
@@ -200,25 +207,17 @@
     </div>
   </section>
 
-  <!-- Vær (kompakt) -->
+  <!-- Kompakt værseksjon for Oslo (for å støtte Vær-lenken i menyen) -->
   <section id="vaer" class="py-16 bg-slate-50">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-3">Vær</h2>
-      <p class="text-slate-600 mb-4">Kompakt femdagersvarsel for utvalgte byer, eller neste løpssted om tilgjengelig.</p>
-
-      <div class="card p-4 sm:p-6">
-        <div class="flex flex-wrap items-end gap-3">
-          <label>
-            <span class="text-sm font-semibold">By</span>
-            <select id="wxCity" class="mt-1 w-full rounded-xl border px-3 py-2"></select>
-          </label>
-          <button id="wxUseNext" class="pill">Bruk neste løp</button>
-        </div>
-
-        <div id="wxBox" class="mt-4">
-          <p class="text-sm text-slate-600">Velg en by, eller trykk “Bruk neste løp”.</p>
-        </div>
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-2">Værutsikt</h2>
+      <p class="text-slate-600 mb-4">Rask femdagers for Oslo. Klikk «Se vær» på hvert arrangement for stedsspesifikk visning.</p>
+      <div id="wxOslo" class="card p-4">
+        <p class="text-slate-600">Laster værdata…</p>
       </div>
+      <p class="wx-more text-center mt-3">
+        <a href="https://www.pent.no/Oslo" target="_blank" rel="noopener" class="link-brand">Se full værmelding på Pent.no</a>
+      </p>
     </div>
   </section>
 
@@ -254,13 +253,15 @@
   </footer>
 
   <!-- Modal: Løpsdetaljer -->
-  <div id="eventModalBackdrop" class="modal-backdrop">
-    <div class="modal">
+  <div id="eventModalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 id="modalTitle" class="text-xl font-bold text-[var(--brand)]">Løpsnavn</h3>
         <div class="flex items-center gap-2">
           <button id="modalShare" class="rounded-full border px-3 py-1 icon-btn">Del</button>
-          <button id="modalFav" class="rounded-full border px-3 py-1 icon-btn"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt</button>
+          <button id="modalFav" class="rounded-full border px-3 py-1 icon-btn">
+            <svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt
+          </button>
           <button id="modalClose" class="rounded-full border px-3 py-1">Lukk</button>
         </div>
       </div>
@@ -269,8 +270,8 @@
   </div>
 
   <!-- Modal: Favoritter -->
-  <div id="favoritesModal" class="modal-backdrop">
-    <div class="modal">
+  <div id="favoritesModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 class="text-xl font-bold text-[var(--brand)]">Dine favoritter</h3>
         <button id="favoritesClose" class="rounded-full border px-3 py-1">Lukk</button>
@@ -279,9 +280,9 @@
     </div>
   </div>
 
-  <!-- Modal: Registrer løp (wizard light) -->
-  <div id="registerModal" class="modal-backdrop">
-    <div class="modal">
+  <!-- Modal: Registrer løp -->
+  <div id="registerModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 class="text-xl font-bold text-[var(--brand)]">Registrer løp</h3>
         <button id="registerClose" class="rounded-full border px-3 py-1">Lukk</button>
@@ -308,8 +309,8 @@
   </div>
 
   <!-- Modal: Profil -->
-  <div id="profileModal" class="modal-backdrop">
-    <div class="modal">
+  <div id="profileModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 class="text-xl font-bold text-[var(--brand)]">Din profil</h3>
         <button id="profileClose" class="rounded-full border px-3 py-1">Lukk</button>
@@ -360,6 +361,7 @@
     // Utils og global state
     document.getElementById("year").textContent = new Date().getFullYear();
     const fmtDate = iso => new Date(iso).toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
+
     const cityToPentUrl = location => {
       if(!location) return null;
       let city = location.split(',')[0].trim();
@@ -367,13 +369,24 @@
       if(map[location]) city = map[location];
       return `https://www.pent.no/${encodeURIComponent(city)}`;
     };
-    const geo={'Oslo':[59.9139,10.7522],'Bygdøy, Oslo':[59.9036,10.6785],'Bergen sentrum':[60.39299,5.32415],'Bymarka, Trondheim':[63.401,10.276],'Trondheim':[63.4305,10.3951],'Stavanger sentrum':[58.9690,5.7331],'Tromsøya':[69.6492,18.9553]};
+
+    const geo={
+      'Oslo':[59.9139,10.7522],
+      'Bygdøy, Oslo':[59.9036,10.6785],
+      'Bergen sentrum':[60.39299,5.32415],
+      'Bymarka, Trondheim':[63.401,10.276],
+      'Trondheim':[63.4305,10.3951],
+      'Stavanger sentrum':[58.9690,5.7331],
+      'Stavanger':[58.9690,5.7331],
+      'Tromsøya':[69.6492,18.9553],
+      'Tromsø':[69.6492,18.9553]
+    };
 
     const LS_EVENTS='rn_events_v1';
     const LS_FAVS='rn_favs_v1';
     const LS_PROFILE='rn_profile_v1';
 
-    const state={all:[],showPast:false,filters:{q:'',month:'',region:'' ,sort:'date'},view:'list',cal:new Date(), nextTarget:null, nextEvent:null, currentModalEvent:null};
+    const state={all:[],showPast:false,filters:{q:'',month:'',region:'',sort:'date'},view:'list',cal:new Date(), nextTarget:null, nextEvent:null, currentModalEvent:null};
 
     const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 
@@ -503,6 +516,10 @@
         const seed = JSON.parse(document.getElementById('events-seed').textContent);
         state.all = dedupe([...local, ...seed]);
       }
+
+      // Sikrer at alle events har bilde videre i appen
+      state.all = state.all.map(e => ({ ...e, image: safeImageForEvent(e) }));
+
       renderFilters();
       setView('list');
       initCountdownToNext();
@@ -613,9 +630,6 @@
               class="h-44 w-full object-cover"
               loading="lazy"
               decoding="async"
-              srcset="${safeImageForEvent(ev)}&w=480 480w, ${safeImageForEvent(ev)}&w=768 768w, ${safeImageForEvent(ev)}&w=1200 1200w"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              fetchpriority="low"
             />
           </div>
           <div class="p-6">
@@ -659,7 +673,7 @@
 
     function getLatLngForEvent(ev){
       return (ev.lat && ev.lng) ? [ev.lat, ev.lng]
-           : geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
+            : geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
     }
 
     async function fetchWeather(lat, lon){
@@ -675,7 +689,7 @@
       return d.toLocaleDateString('no-NO',{weekday:'short'}).replace(/\.$/,'');
     }
 
-    function renderWeatherBox(container, w){
+    function renderWeatherBox(container, w, title){
       const cur = w.current_weather;
       const d = w.daily;
       const days = d.time.slice(0,5).map((date, idx)=>({
@@ -700,7 +714,7 @@
       }).join('');
 
       container.innerHTML = `
-        <div class="wx" role="group" aria-label="Værmelding">
+        <div class="wx" role="group" aria-label="Værmelding ${title?('for '+title):''}">
           <span class="wx-chip" title="${curTxt}">
             <strong>Nå</strong>
             <span class="wx-icon" aria-hidden="true">${curIcon}</span>
@@ -712,7 +726,7 @@
         <div class="wx-more">
           <button class="underline text-[var(--brand)]" type="button" id="wxExpandBtn">Utvid</button>
           <a class="ml-3 underline text-[var(--brand)]" target="_blank" rel="noopener"
-             href="https://www.open-meteo.com/en/docs#api">Kilde</a>
+             href="https://open-meteo.com/">Kilde</a>
         </div>
         <div id="wxExpanded" class="hidden mt-2">
           ${days.map(dy=>{
@@ -736,83 +750,24 @@
       });
     }
 
-    // Inline weather i kort (pent.no-iframe per event)
-    function showInlineWeather(i){
+    async function showInlineWeather(i){
       const items = filtered();
       const ev = items[i]; if(!ev) return;
-      const url = cityToPentUrl(ev.location);
       const box = document.getElementById(`inline-weather-${i}`);
-      if(!url){
-        box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`;
-      } else {
-        box.innerHTML = `<h4 class="text-[var(--brand)] font-bold mb-2">Værmelding (${ev.location})</h4>
-                         <iframe src="${url}" width="100%" height="520" style="border:none; border-radius:10px;"></iframe>`;
+      const latlng = getLatLngForEvent(ev);
+      if(!latlng){
+        box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke posisjon for vær.</p>`;
+        box.classList.remove('hidden'); return;
       }
-      box.classList.remove('hidden'); box.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-
-    // Kompakt vær-seksjon (egen byvelger + "neste løp")
-    const WX_CITIES = [
-      { label:'Oslo',      lat:59.9139, lon:10.7522 },
-      { label:'Bergen',    lat:60.39299, lon:5.32415 },
-      { label:'Trondheim', lat:63.4305, lon:10.3951 },
-      { label:'Stavanger', lat:58.9690, lon:5.7331 },
-      { label:'Tromsø',    lat:69.6492, lon:18.9553 }
-    ];
-
-    async function initCompactWeatherSection(){
-      const sel = document.getElementById('wxCity');
-      const box = document.getElementById('wxBox');
-      const btnNext = document.getElementById('wxUseNext');
-      if(!sel || !box) return;
-
-      // Fyll nedtrekkslisten
-      sel.innerHTML = '';
-      WX_CITIES.forEach(c=>{
-        const o=document.createElement('option');
-        o.value = `${c.lat},${c.lon}`;
-        o.textContent = c.label;
-        sel.appendChild(o);
-      });
-
-      async function loadCity(lat, lon, label){
-        box.innerHTML = `<div class="text-slate-500 text-sm">Henter vær for ${label} …</div>`;
-        try{
-          const w = await fetchWeather(lat, lon);
-          box.innerHTML = `<h4 class="text-[var(--brand)] font-bold mb-2">Vær (${label})</h4>`;
-          const holder = document.createElement('div');
-          box.appendChild(holder);
-          renderWeatherBox(holder, w);
-        }catch(e){
-          box.innerHTML = `<p class="text-sm text-slate-600">Klarte ikke hente vær nå.</p>`;
-        }
+      try{
+        box.innerHTML = `<p class="text-sm text-slate-600">Henter vær…</p>`;
+        const w = await fetchWeather(latlng[0], latlng[1]);
+        renderWeatherBox(box, w, ev.location || ev.title);
+      }catch(e){
+        box.innerHTML = `<p class="text-sm text-slate-600">Kunne ikke hente vær nå.</p>`;
       }
-
-      // Endre by
-      sel.addEventListener('change', ()=>{
-        const [la, lo] = sel.value.split(',').map(Number);
-        const label = sel.options[sel.selectedIndex].textContent;
-        loadCity(la, lo, label);
-      });
-
-      // Bruk "neste løp"
-      btnNext?.addEventListener('click', ()=>{
-        if(!state.nextEvent){
-          alert('Fant ingen kommende løp akkurat nå.');
-          return;
-        }
-        const latlng = getLatLngForEvent(state.nextEvent);
-        if(!latlng){
-          alert('Mangler koordinater for neste løp.');
-          return;
-        }
-        loadCity(latlng[0], latlng[1], state.nextEvent.location || state.nextEvent.title);
-      });
-
-      // Standard: last første by
-      const first = WX_CITIES[0];
-      sel.value = `${first.lat},${first.lon}`;
-      loadCity(first.lat, first.lon, first.label);
+      box.classList.remove('hidden');
+      box.scrollIntoView({behavior:'smooth', block:'start'});
     }
 
     // Calendar
@@ -958,8 +913,9 @@
               <button class="btn-brand rounded-full px-4 py-2 font-semibold" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
               ${ev.details_url?`<a href="${ev.details_url}" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" target="_blank" rel="noopener">Nettside</a>`:''}
             </div>
-            ${pent ? `<h4 class="text-[var(--brand)] font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
-                      <iframe src="${pent}" width="100%" height="420" style="border:none; border-radius:10px;"></iframe>` : ''}
+            <h4 class="text-[var(--brand)] font-bold mt-6 mb-2">Værmelding</h4>
+            <div id="modalWxBox" class="card p-3"></div>
+            ${pent ? `<p class="mt-2 text-sm"><a class="link-brand" href="${pent}" target="_blank" rel="noopener">Se på Pent.no</a></p>`:''}
           </div>
           <div><div id="modalMap" class="h-[380px] rounded-2xl border"></div></div>
         </div>
@@ -967,11 +923,127 @@
       modalBackdrop.style.display='flex';
       modalFav.onclick = ()=> toggleFav(ev.id);
       modalShareBtn.onclick = ()=> shareEvent(ev);
-      setTimeout(()=>{
+      setTimeout(async ()=>{
         const m = L.map('modalMap', { zoomControl: true });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap'}).addTo(m);
         if(g){ m.setView(g, 12); L.marker(g, {keyboard:true}).addTo(m); } else { m.setView([64.5,11.5],5); }
+
+        // hent vær i modal
+        const box = document.getElementById('modalWxBox');
+        const latlng = getLatLngForEvent(ev);
+        if(!latlng){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke posisjon for vær.</p>`; return; }
+        try{
+          box.innerHTML = `<p class="text-sm text-slate-600">Henter vær…</p>`;
+          const w = await fetchWeather(latlng[0], latlng[1]);
+          renderWeatherBox(box, w, ev.location || ev.title);
+        }catch(e){
+          box.innerHTML = `<p class="text-sm text-slate-600">Kunne ikke hente vær nå.</p>`;
+        }
       }, 50);
+    }
+
+    // Profil: UI wiring
+    const profileModal=document.getElementById('profileModal');
+    const profileClose=()=> profileModal.style.display='none';
+    const openProfile=()=>{ hydrateProfileForm(); renderHistory(); renderRegistrations(); profileModal.style.display='flex'; };
+    document.getElementById('openProfile').addEventListener('click', openProfile);
+    document.getElementById('openProfileSmall').addEventListener('click', openProfile);
+    document.getElementById('profileClose').addEventListener('click', profileClose);
+    profileModal.addEventListener('click', e=>{ if(e.target===profileModal) profileClose(); });
+
+    // Profil: form helpers
+    function hydrateProfileForm(){
+      const p = loadProfile() || {};
+      document.getElementById('pr_name').value = p.name || '';
+      document.getElementById('pr_email').value = p.email || '';
+      document.getElementById('pr_club').value = p.club || '';
+      document.getElementById('pr_group').value = p.group || '';
+      document.getElementById('pr_shoes').value = p.shoes || '';
+      document.getElementById('pr_notes').value = p.notes || '';
+    }
+    function collectProfileFromForm(){
+      return {
+        name: document.getElementById('pr_name').value.trim(),
+        email: document.getElementById('pr_email').value.trim(),
+        club: document.getElementById('pr_club').value.trim(),
+        group: document.getElementById('pr_group').value.trim(),
+        shoes: document.getElementById('pr_shoes').value.trim(),
+        notes: document.getElementById('pr_notes').value.trim(),
+        history: (loadProfile()?.history)||[],
+        registrations: (loadProfile()?.registrations)||[]
+      };
+    }
+
+    // Profil: history UI
+    function renderHistory(){
+      const list=document.getElementById('historyList');
+      const p=loadProfile(); const arr=p?.history||[];
+      list.innerHTML='';
+      if(!arr.length){ list.innerHTML='<p class="text-slate-600">Ingen registrert historikk ennå.</p>'; return; }
+      arr.sort((a,b)=> new Date(b.date)-new Date(a.date));
+      arr.forEach((h,idx)=>{
+        const row=document.createElement('div'); row.className='card p-3 flex items-center justify-between gap-3';
+        row.innerHTML=`<div><div class="font-semibold">${h.race}</div><div class="text-sm text-slate-600">${fmtDate(h.date)} • ${h.time||''}</div></div>
+                       <button class="rounded-full border px-3 py-1 text-sm hover:bg-slate-50">Fjern</button>`;
+        row.querySelector('button').onclick=()=>{ const p=loadProfile(); p.history.splice(idx,1); saveProfile(p); renderHistory(); };
+        list.appendChild(row);
+      });
+    }
+    function renderRegistrations(){
+      const list=document.getElementById('registrationsList');
+      const p=loadProfile(); const arr=p?.registrations||[];
+      list.innerHTML='';
+      if(!arr.length){ list.innerHTML='<p class="text-slate-600">Ingen påmeldinger ennå.</p>'; return; }
+      arr.sort((a,b)=> new Date(a.date)-new Date(b.date));
+      arr.forEach((r,idx)=>{
+        const row=document.createElement('div'); row.className='card p-3 flex items-center justify-between gap-3';
+        row.innerHTML=`<div><div class="font-semibold">${r.title}</div><div class="text-sm text-slate-600">${fmtDate(r.date)} • ${r.location||''}</div></div>
+                       <button class="rounded-full border px-3 py-1 text-sm hover:bg-slate-50">Avmeld</button>`;
+        row.querySelector('button').onclick=()=>{ const p=loadProfile(); p.registrations.splice(idx,1); saveProfile(p); renderRegistrations(); };
+        list.appendChild(row);
+      });
+    }
+
+    // Profil: actions
+    document.getElementById('profileSave').addEventListener('click', ()=>{
+      const p=collectProfileFromForm();
+      if(!p.name || !p.email){ alert('Navn og e-post må fylles ut.'); return; }
+      saveProfile(p);
+      alert('Profil lagret');
+      renderRegistrations(); renderHistory();
+      profileModal.style.display='none';
+    });
+    document.getElementById('profileDelete').addEventListener('click', ()=>{
+      if(confirm('Slette profilen og all lokal data?')){ clearProfile(); renderRegistrations(); renderHistory(); profileModal.style.display='none'; }
+    });
+    document.getElementById('addHistoryBtn').addEventListener('click', ()=>{
+      const race = prompt('Løpsnavn');
+      if(!race) return;
+      const date = prompt('Dato (YYYY-MM-DD)');
+      if(!date) return;
+      const time = prompt('Tid/resultat (valgfritt)');
+      const p=loadProfile()||{history:[], registrations:[]};
+      p.history = p.history||[]; p.history.push({race, date, time});
+      saveProfile(p); renderHistory();
+    });
+
+    // Påmelding
+    function attemptRegister(ev){
+      let p = loadProfile();
+      if(!p || !p.name || !p.email){
+        openProfile();
+        alert('Opprett/lagre profil først, så kan du melde deg på.');
+        return;
+      }
+      p.registrations = p.registrations || [];
+      if(p.registrations.some(r=> r.id===ev.id)){
+        alert('Du er allerede registrert på dette løpet i demoen.');
+      } else {
+        p.registrations.push({ id: ev.id, title: ev.title, date: ev.date, location: ev.location });
+        saveProfile(p);
+        alert(`Påmelding registrert i demo: ${ev.title} — ${fmtDate(ev.date)}.`);
+      }
+      renderRegistrations();
     }
 
     // Registrer-løp (arrangør)
@@ -1042,87 +1114,7 @@
       const a=document.createElement('a'); a.href=url; a.download='runnorway-eksport.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
 
-    // Profil: UI wiring
-    const profileModal=document.getElementById('profileModal');
-    const profileClose=()=> profileModal.style.display='none';
-    const openProfile=()=>{ hydrateProfileForm(); renderHistory(); renderRegistrations(); profileModal.style.display='flex'; };
-    document.getElementById('openProfile').addEventListener('click', openProfile);
-    document.getElementById('openProfileSmall').addEventListener('click', openProfile);
-    document.getElementById('profileClose').addEventListener('click', profileClose);
-    profileModal.addEventListener('click', e=>{ if(e.target===profileModal) profileClose(); });
-
-    function hydrateProfileForm(){
-      const p = loadProfile() || {};
-      document.getElementById('pr_name').value = p.name || '';
-      document.getElementById('pr_email').value = p.email || '';
-      document.getElementById('pr_club').value = p.club || '';
-      document.getElementById('pr_group').value = p.group || '';
-      document.getElementById('pr_shoes').value = p.shoes || '';
-      document.getElementById('pr_notes').value = p.notes || '';
-    }
-    function collectProfileFromForm(){
-      return {
-        name: document.getElementById('pr_name').value.trim(),
-        email: document.getElementById('pr_email').value.trim(),
-        club: document.getElementById('pr_club').value.trim(),
-        group: document.getElementById('pr_group').value.trim(),
-        shoes: document.getElementById('pr_shoes').value.trim(),
-        notes: document.getElementById('pr_notes').value.trim(),
-        history: (loadProfile()?.history)||[],
-        registrations: (loadProfile()?.registrations)||[]
-      };
-    }
-    function renderHistory(){
-      const list=document.getElementById('historyList');
-      const p=loadProfile(); const arr=p?.history||[];
-      list.innerHTML='';
-      if(!arr.length){ list.innerHTML='<p class="text-slate-600">Ingen registrert historikk ennå.</p>'; return; }
-      arr.sort((a,b)=> new Date(b.date)-new Date(a.date));
-      arr.forEach((h,idx)=>{
-        const row=document.createElement('div'); row.className='card p-3 flex items-center justify-between gap-3';
-        row.innerHTML=`<div><div class="font-semibold">${h.race}</div><div class="text-sm text-slate-600">${fmtDate(h.date)} • ${h.time||''}</div></div>
-                       <button class="rounded-full border px-3 py-1 text-sm hover:bg-slate-50">Fjern</button>`;
-        row.querySelector('button').onclick=()=>{ const p=loadProfile(); p.history.splice(idx,1); saveProfile(p); renderHistory(); };
-        list.appendChild(row);
-      });
-    }
-    function renderRegistrations(){
-      const list=document.getElementById('registrationsList');
-      const p=loadProfile(); const arr=p?.registrations||[];
-      list.innerHTML='';
-      if(!arr.length){ list.innerHTML='<p class="text-slate-600">Ingen påmeldinger ennå.</p>'; return; }
-      arr.sort((a,b)=> new Date(a.date)-new Date(b.date));
-      arr.forEach((r,idx)=>{
-        const row=document.createElement('div'); row.className='card p-3 flex items-center justify-between gap-3';
-        row.innerHTML=`<div><div class="font-semibold">${r.title}</div><div class="text-sm text-slate-600">${fmtDate(r.date)} • ${r.location||''}</div></div>
-                       <button class="rounded-full border px-3 py-1 text-sm hover:bg-slate-50">Avmeld</button>`;
-        row.querySelector('button').onclick=()=>{ const p=loadProfile(); p.registrations.splice(idx,1); saveProfile(p); renderRegistrations(); };
-        list.appendChild(row);
-      });
-    }
-    document.getElementById('profileSave').addEventListener('click', ()=>{
-      const p=collectProfileFromForm();
-      if(!p.name || !p.email){ alert('Navn og e-post må fylles ut.'); return; }
-      saveProfile(p);
-      alert('Profil lagret');
-      renderRegistrations(); renderHistory();
-      profileModal.style.display='none';
-    });
-    document.getElementById('profileDelete').addEventListener('click', ()=>{
-      if(confirm('Slette profilen og all lokal data?')){ clearProfile(); renderRegistrations(); renderHistory(); profileModal.style.display='none'; }
-    });
-    document.getElementById('addHistoryBtn').addEventListener('click', ()=>{
-      const race = prompt('Løpsnavn');
-      if(!race) return;
-      const date = prompt('Dato (YYYY-MM-DD)');
-      if(!date) return;
-      const time = prompt('Tid/resultat (valgfritt)');
-      const p=loadProfile()||{history:[], registrations:[]};
-      p.history = p.history||[]; p.history.push({race, date, time});
-      saveProfile(p); renderHistory();
-    });
-
-    // Tab-tastaturnavigasjon + init
+    // Tabs og init
     document.addEventListener('DOMContentLoaded',()=>{
       loadEvents();
 
@@ -1153,8 +1145,16 @@
         });
       });
 
-      // Init vær-seksjonen litt etter at nextEvent er satt
-      setTimeout(initCompactWeatherSection, 300);
+      // Hent og vis kompakt vær for Oslo i værseksjonen
+      (async ()=>{
+        const box = document.getElementById('wxOslo');
+        try{
+          const w = await fetchWeather(59.9139, 10.7522);
+          renderWeatherBox(box, w, 'Oslo');
+        }catch(e){
+          box.innerHTML = `<p class="text-slate-600">Kunne ikke hente vær nå.</p>`;
+        }
+      })();
     });
 
     // Tilgjengelighet: ESC for å lukke
