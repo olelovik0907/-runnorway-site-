@@ -29,15 +29,15 @@
     .icon-btn{ display:inline-flex; align-items:center; gap:.4rem; }
     .heart{ width:18px; height:18px; display:inline-block; vertical-align:-2px; }
     .card p { line-height: 1.55; }
+
     /* Kompakt vær */
-.wx { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
-.wx-chip { display:flex; align-items:center; gap:.4rem; padding:.35rem .55rem; border:1px solid #e5e7eb; border-radius:9999px; font-size:.8rem; background:#fff; }
-.wx-day { font-weight:600; }
-.wx-temp { font-variant-numeric: tabular-nums; }
-.wx-icon { width:18px; height:18px; }
-.wx-muted { color:#64748b; }
-.wx-more { margin-top:.5rem; font-size:.8rem; }
-  </style>
+    .wx { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+    .wx-chip { display:flex; align-items:center; gap:.4rem; padding:.35rem .55rem; border:1px solid #e5e7eb; border-radius:9999px; font-size:.8rem; background:#fff; }
+    .wx-day { font-weight:600; }
+    .wx-temp { font-variant-numeric: tabular-nums; }
+    .wx-icon { width:18px; height:18px; }
+    .wx-muted { color:#64748b; }
+    .wx-more { margin-top:.5rem; font-size:.8rem; }
 
     /* Mobilvennlige modaler */
     @media (max-width: 640px){
@@ -256,7 +256,7 @@
     </div>
   </div>
 
-  <!-- Modal: Registrer løp (wizard light) -->
+  <!-- Modal: Registrer løp -->
   <div id="registerModal" class="modal-backdrop">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
@@ -279,7 +279,7 @@
           <button id="reg_saveDraft" class="pill">Lagre utkast</button>
           <button id="reg_publish" class="pill btn-brand">Publiser</button>
         </div>
-        <p class="text-sm text-slate-600">Demo: data lagres lokalt i nettleseren. I produksjon kan dette sendes til et API/GitHub-workflow.</p>
+        <p class="text-sm text-slate-600">Demo: data lagres lokalt i nettleseren. I produksjon kan dette sendes til et API eller GitHub workflow.</p>
       </div>
     </div>
   </div>
@@ -297,8 +297,8 @@
           <label><span class="text-sm font-semibold">E-post</span><input id="pr_email" type="email" class="mt-1 w-full rounded-xl border px-3 py-2" required/></label>
           <label><span class="text-sm font-semibold">Klubb</span><input id="pr_club" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="f.eks. SK Vidar"/></label>
           <label><span class="text-sm font-semibold">Treningsgruppe</span><input id="pr_group" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="f.eks. Torsdagsjoggen"/></label>
-          <label class="sm:col-span-2"><span class="text-sm font-semibold">Løpesko</span><input id="pr_shoes" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Merke/modell"/></label>
-          <label class="sm:col-span-2"><span class="text-sm font-semibold">Om deg (valgfritt)</span><textarea id="pr_notes" rows="3" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Mål, styrker, skadehistorikk…"></textarea></label>
+          <label class="sm:col-span-2"><span class="text-sm font-semibold">Løpesko</span><input id="pr_shoes" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Merke eller modell"/></label>
+          <label class="sm:col-span-2"><span class="text-sm font-semibold">Om deg</span><textarea id="pr_notes" rows="3" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Mål, styrker, skadehistorikk…"></textarea></label>
         </div>
 
         <div>
@@ -318,12 +318,12 @@
           <button id="profileDelete" class="pill">Slett profil</button>
           <button id="profileSave" class="pill btn-brand">Lagre</button>
         </div>
-        <p class="text-sm text-slate-600">Data lagres lokalt i nettleseren (localStorage) i demo.</p>
+        <p class="text-sm text-slate-600">Data lagres lokalt i nettleseren i denne demoen.</p>
       </div>
     </div>
   </div>
 
-  <!-- Seed-data (fallback) -->
+  <!-- Seed-data -->
   <script id="events-seed" type="application/json">[
     {"title":"Bergen City Mile","date":"2026-04-12","location":"Bergen sentrum","region":"Vestland","distances":["5K","10K","Familie"],"image":"https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
     {"title":"Oslo FjordRun 10K","date":"2026-05-03","location":"Bygdøy, Oslo","region":"Oslo","distances":["10K"],"image":"https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
@@ -354,7 +354,7 @@
 
     const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 
-    // Bilder (sikre defaults)
+    // Bilder
     const CITY_IMAGES = {
       'Oslo': 'https://images.unsplash.com/photo-1551462147-ff29053f1972?q=80&w=1200&auto=format&fit=crop',
       'Bergen': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop',
@@ -362,7 +362,6 @@
       'Stavanger': 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
       'Tromsø': 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop'
     };
-
     const DIST_IMAGES = {
       'trail': 'https://images.unsplash.com/photo-1520975922203-b85e66f2aa64?q=80&w=1200&auto=format&fit=crop',
       'city':  'https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop',
@@ -370,7 +369,6 @@
       '10k':   'https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop',
       '21k':   'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop'
     };
-
     const SEASON_IMAGES = {
       winter: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop',
       spring: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
@@ -380,43 +378,24 @@
 
     function safeImageForEvent(ev) {
       if (ev.image && String(ev.image).trim() !== "") return ev.image;
-
       const title = (ev.title || '').toLowerCase();
       const loc   = (ev.location || '').toLowerCase();
       const reg   = (ev.region || '').toLowerCase();
       const dists = Array.isArray(ev.distances) ? ev.distances.map(x=>String(x).toLowerCase()) : [];
-
       const cityGuess =
         /oslo/.test(loc) || /oslo/.test(reg) ? 'Oslo' :
         /bergen/.test(loc) || /bergen/.test(reg) ? 'Bergen' :
         /trondheim/.test(loc) || /trøndelag/.test(reg) ? 'Trondheim' :
         /stavanger/.test(loc) || /rogaland/.test(reg) ? 'Stavanger' :
         /tromsø/.test(loc) || /troms/.test(reg) ? 'Tromsø' : null;
-
       if (cityGuess && CITY_IMAGES[cityGuess]) return CITY_IMAGES[cityGuess];
-
-      if (dists.some(x=>/trail|terreng|sti/.test(x)) || /trail|terreng|sti/.test(title)) {
-        return DIST_IMAGES.trail;
-      }
-      if (dists.some(x=>/21|halve|half/.test(x)) || /21k|half/.test(title)) {
-        return DIST_IMAGES['21k'];
-      }
-      if (dists.some(x=>/10/.test(x)) || /10k/.test(title)) {
-        return DIST_IMAGES['10k'];
-      }
-      if (dists.some(x=>/5/.test(x)) || /5k/.test(title)) {
-        return DIST_IMAGES['5k'];
-      }
-      if (/sentrum|city|downtown|by/.test(loc)) {
-        return DIST_IMAGES.city;
-      }
-
-      let month = 0;
-      try { month = new Date(ev.date).getMonth(); } catch(e) { month = 0; }
-      const season =
-        (month===11 || month<=1) ? 'winter' :
-        (month<=4) ? 'spring' :
-        (month<=7) ? 'summer' : 'autumn';
+      if (dists.some(x=>/trail|terreng|sti/.test(x)) || /trail|terreng|sti/.test(title)) return DIST_IMAGES.trail;
+      if (dists.some(x=>/21|halve|half/.test(x)) || /21k|half/.test(title)) return DIST_IMAGES['21k'];
+      if (dists.some(x=>/10/.test(x)) || /10k/.test(title)) return DIST_IMAGES['10k'];
+      if (dists.some(x=>/5/.test(x)) || /5k/.test(title)) return DIST_IMAGES['5k'];
+      if (/sentrum|city|downtown|by/.test(loc)) return DIST_IMAGES.city;
+      let month = 0; try { month = new Date(ev.date).getMonth(); } catch(e) { month = 0; }
+      const season = (month===11 || month<=1) ? 'winter' : (month<=4) ? 'spring' : (month<=7) ? 'summer' : 'autumn';
       return SEASON_IMAGES[season];
     }
 
@@ -445,7 +424,7 @@
             id:`${title.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}-${dateIso}`,
             title, date:dateIso, location:city, region,
             distances:Array.isArray(e.Distances)?e.Distances:[],
-            image:e.ImageUrl || e.LogoUrl || '',  // lar være tom så safeImageForEvent tar over
+            image:e.ImageUrl || e.LogoUrl || '',
             signup_url:signup, details_url:website, lat, lng, premium:false, _source:'eqtiming'
           };
         }).filter(e => e.date && !Number.isNaN(new Date(e.date)));
@@ -581,16 +560,17 @@
       items.forEach((ev, idx)=>{
         const fav = isFav(ev.id);
         const el=document.createElement('article'); el.className='card overflow-hidden';
+        const img = safeImageForEvent(ev);
         el.innerHTML=`
           <div class="relative">
             ${ev.premium ? `<div class="absolute top-3 left-3 badge-premium">Premium</div>`:''}
             <img
-              src="${safeImageForEvent(ev)}"
+              src="${img}"
               alt="${ev.title}"
               class="h-44 w-full object-cover"
               loading="lazy"
               decoding="async"
-              srcset="${safeImageForEvent(ev)}&w=480 480w, ${safeImageForEvent(ev)}&w=768 768w, ${safeImageForEvent(ev)}&w=1200 1200w"
+              srcset="${img}&w=480 480w, ${img}&w=768 768w, ${img}&w=1200 1200w"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               fetchpriority="low"
             />
@@ -621,102 +601,111 @@
         grid.appendChild(el);
       });
     }
-// --- VÆR: Open-Meteo (kompakt) ---
-const WMO = {
-  0:  {t:'Klar',        i:'☀️'},
-  1:  {t:'Lettskyet',   i:'🌤️'},
-  2:  {t:'Delvis',      i:'⛅'},
-  3:  {t:'Overskyet',   i:'☁️'},
-  45: {t:'Tåke',        i:'🌫️'}, 48:{t:'Rimtåke', i:'🌫️'},
-  51: {t:'Yr',          i:'🌦️'}, 53:{t:'Yr', i:'🌦️'}, 55:{t:'Yr', i:'🌦️'},
-  61: {t:'Regn',        i:'🌧️'}, 63:{t:'Regn', i:'🌧️'}, 65:{t:'Kraftig regn', i:'🌧️'},
-  66: {t:'Underkjølt',  i:'🌨️'}, 67:{t:'Underkjølt', i:'🌨️'},
-  71: {t:'Snø',         i:'❄️'}, 73:{t:'Snø', i:'❄️'}, 75:{t:'Snø', i:'❄️'},
-  80: {t:'Regnbyger',   i:'🌦️'}, 81:{t:'Regnbyger', i:'🌦️'}, 82:{t:'Kraftige byger', i:'🌧️'},
-  95: {t:'Torden',      i:'⛈️'}, 96:{t:'Torden', i:'⛈️'}, 99:{t:'Torden', i:'⛈️'}
-};
 
-function getLatLngForEvent(ev){
-  // Bruker eksisterende geo-objekt, evt lat/lng fra data
-  return (ev.lat && ev.lng) ? [ev.lat, ev.lng]
-       : geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
-}
+    // Kompakt vær: helper-tabeller og funksjoner
+    const WMO = {
+      0:{t:'Klar',i:'☀️'},1:{t:'Lettskyet',i:'🌤️'},2:{t:'Delvis',i:'⛅'},3:{t:'Overskyet',i:'☁️'},
+      45:{t:'Tåke',i:'🌫️'},48:{t:'Rimtåke',i:'🌫️'},
+      51:{t:'Yr',i:'🌦️'},53:{t:'Yr',i:'🌦️'},55:{t:'Yr',i:'🌦️'},
+      61:{t:'Regn',i:'🌧️'},63:{t:'Regn',i:'🌧️'},65:{t:'Kraftig regn',i:'🌧️'},
+      66:{t:'Underkjølt',i:'🌨️'},67:{t:'Underkjølt',i:'🌨️'},
+      71:{t:'Snø',i:'❄️'},73:{t:'Snø',i:'❄️'},75:{t:'Snø',i:'❄️'},
+      80:{t:'Regnbyger',i:'🌦️'},81:{t:'Regnbyger',i:'🌦️'},82:{t:'Kraftige byger',i:'🌧️'},
+      95:{t:'Torden',i:'⛈️'},96:{t:'Torden',i:'⛈️'},99:{t:'Torden',i:'⛈️'}
+    };
+    function getLatLngForEvent(ev){
+      return (ev.lat && ev.lng) ? [ev.lat, ev.lng]
+           : geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
+    }
+    async function fetchWeather(lat, lon){
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+                  `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&current_weather=true&timezone=auto`;
+      const r = await fetch(url,{headers:{'accept':'application/json'}});
+      if(!r.ok) throw new Error('weather '+r.status);
+      return r.json();
+    }
+    function fmtDayLabel(iso){
+      const d = new Date(iso);
+      return d.toLocaleDateString('no-NO',{weekday:'short'}).replace(/\.$/,'');
+    }
+    function renderWeatherBox(container, w){
+      const cur = w.current_weather;
+      const d = w.daily;
+      const days = d.time.slice(0,5).map((date, idx)=>({
+        date,
+        code: d.weathercode[idx],
+        tmax: Math.round(d.temperature_2m_max[idx]),
+        tmin: Math.round(d.temperature_2m_min[idx]),
+        p: typeof d.precipitation_sum[idx]==='number' ? Math.round(d.precipitation_sum[idx]) : 0
+      }));
+      const curIcon = (WMO[cur.weathercode]||{}).i || 'ℹ️';
+      const curTxt  = (WMO[cur.weathercode]||{}).t || 'Vær';
+      const chips = days.map(day=>{
+        const m = WMO[day.code] || {t:'', i:'ℹ️'};
+        return `<span class="wx-chip" title="${m.t}">
+          <span class="wx-day">${fmtDayLabel(day.date)}</span>
+          <span class="wx-icon" aria-hidden="true">${m.i}</span>
+          <span class="wx-temp">${day.tmax}°/${day.tmin}°</span>
+          <span class="wx-muted">${day.p} mm</span>
+        </span>`;
+      }).join('');
+      container.innerHTML = `
+        <div class="wx" role="group" aria-label="Værmelding">
+          <span class="wx-chip" title="${curTxt}">
+            <strong>Now</strong>
+            <span class="wx-icon" aria-hidden="true">${curIcon}</span>
+            <span class="wx-temp">${Math.round(cur.temperature)}°</span>
+            <span class="wx-muted">${curTxt}</span>
+          </span>
+          ${chips}
+        </div>
+        <div class="wx-more">
+          <button class="underline text-[var(--brand)]" type="button" id="wxExpandBtn">Utvid</button>
+          <a class="ml-3 underline text-[var(--brand)]" target="_blank" rel="noopener" href="https://www.open-meteo.com/en/docs#api">Kilde</a>
+        </div>
+        <div id="wxExpanded" class="hidden mt-2">
+          ${days.map(dy=>{
+            const m = WMO[dy.code] || {t:'', i:'ℹ️'};
+            return `<div class="flex items-center gap-2 text-sm">
+              <span class="w-12 font-semibold">${fmtDayLabel(dy.date)}</span>
+              <span class="wx-icon">${m.i}</span>
+              <span class="w-20">${dy.tmax}°/${dy.tmin}°</span>
+              <span class="w-16">${dy.p} mm</span>
+              <span class="text-slate-600">${m.t}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      `;
+      const btn = container.querySelector('#wxExpandBtn');
+      const exp = container.querySelector('#wxExpanded');
+      btn?.addEventListener('click', ()=>{
+        const hid = exp.classList.toggle('hidden');
+        btn.textContent = hid ? 'Utvid' : 'Skjul';
+      });
+    }
 
-async function fetchWeather(lat, lon){
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-              `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&current_weather=true&timezone=auto`;
-  const r = await fetch(url, {headers:{'accept':'application/json'}});
-  if(!r.ok) throw new Error('weather '+r.status);
-  return r.json();
-}
-
-function fmtDayLabel(iso){ // Man, Tir, ...
-  const d = new Date(iso);
-  return d.toLocaleDateString('no-NO',{weekday:'short'}).replace(/\.$/,'');
-}
-
-function renderWeatherBox(container, w, title){
-  const cur = w.current_weather;
-  const d = w.daily;
-  const days = d.time.slice(0,5).map((date, idx)=>({
-    date,
-    code: d.weathercode[idx],
-    tmax: Math.round(d.temperature_2m_max[idx]),
-    tmin: Math.round(d.temperature_2m_min[idx]),
-    p: typeof d.precipitation_sum[idx]==='number' ? Math.round(d.precipitation_sum[idx]) : 0
-  }));
-
-  const curIcon = (WMO[cur.weathercode]||{}).i || 'ℹ️';
-  const curTxt  = (WMO[cur.weathercode]||{}).t || 'Vær';
-
-  const chips = days.map(day=>{
-    const m = WMO[day.code] || {t:'', i:'ℹ️'};
-    return `<span class="wx-chip" title="${m.t}">
-      <span class="wx-day">${fmtDayLabel(day.date)}</span>
-      <span class="wx-icon" aria-hidden="true">${m.i}</span>
-      <span class="wx-temp">${day.tmax}°/${day.tmin}°</span>
-      <span class="wx-muted">${day.p} mm</span>
-    </span>`;
-  }).join('');
-
-  container.innerHTML = `
-    <div class="wx" role="group" aria-label="Værmelding">
-      <span class="wx-chip" title="${curTxt}">
-        <strong>Now</strong>
-        <span class="wx-icon" aria-hidden="true">${curIcon}</span>
-        <span class="wx-temp">${Math.round(cur.temperature)}°</span>
-        <span class="wx-muted">${curTxt}</span>
-      </span>
-      ${chips}
-    </div>
-    <div class="wx-more">
-      <button class="underline text-[var(--brand)]" type="button" id="wxExpandBtn">Utvid</button>
-      <a class="ml-3 underline text-[var(--brand)]" target="_blank" rel="noopener"
-         href="https://www.open-meteo.com/en/docs#api">Kilde</a>
-    </div>
-    <div id="wxExpanded" class="hidden mt-2">
-      ${days.map(dy=>{
-        const m = WMO[dy.code] || {t:'', i:'ℹ️'};
-        return `<div class="flex items-center gap-2 text-sm">
-          <span class="w-12 font-semibold">${fmtDayLabel(dy.date)}</span>
-          <span class="wx-icon">${m.i}</span>
-          <span class="w-20">${dy.tmax}°/${dy.tmin}°</span>
-          <span class="w-16">${dy.p} mm</span>
-          <span class="text-slate-600">${m.t}</span>
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-
-  const btn = container.querySelector('#wxExpandBtn');
-  const exp = container.querySelector('#wxExpanded');
-  btn?.addEventListener('click', ()=>{
-    const hid = exp.classList.toggle('hidden');
-    btn.textContent = hid ? 'Utvid' : 'Skjul';
-  });
-}
-
-showInlineWeather(i)
+    // Kompakt vær i kort-listen
+    async function showInlineWeather(i){
+      const items = filtered();
+      const ev = items[i]; if(!ev) return;
+      const box = document.getElementById(`inline-weather-${i}`);
+      box.classList.remove('hidden');
+      box.innerHTML = `<div class="text-slate-500 text-sm">Henter vær …</div>`;
+      const latlng = getLatLngForEvent(ev);
+      if(!latlng){
+        box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`;
+        return;
+      }
+      try{
+        const w = await fetchWeather(latlng[0], latlng[1]);
+        box.innerHTML = `<h4 class="text-[var(--brand)] font-bold mb-2">Vær (${ev.location})</h4>`;
+        const holder = document.createElement('div');
+        box.appendChild(holder);
+        renderWeatherBox(holder, w);
+        box.scrollIntoView({behavior:'smooth', block:'start'});
+      }catch(e){
+        box.innerHTML = `<p class="text-sm text-slate-600">Klarte ikke hente vær nå.</p>`;
+      }
     }
 
     // Calendar
@@ -878,7 +867,7 @@ showInlineWeather(i)
       }, 50);
     }
 
-    // Profil: UI wiring
+    // Profil
     const profileModal=document.getElementById('profileModal');
     const profileClose=()=> profileModal.style.display='none';
     const openProfile=()=>{ hydrateProfileForm(); renderHistory(); renderRegistrations(); profileModal.style.display='flex'; };
@@ -887,7 +876,6 @@ showInlineWeather(i)
     document.getElementById('profileClose').addEventListener('click', profileClose);
     profileModal.addEventListener('click', e=>{ if(e.target===profileModal) profileClose(); });
 
-    // Profil: form helpers
     function hydrateProfileForm(){
       const p = loadProfile() || {};
       document.getElementById('pr_name').value = p.name || '';
@@ -910,7 +898,6 @@ showInlineWeather(i)
       };
     }
 
-    // Profil: history UI
     function renderHistory(){
       const list=document.getElementById('historyList');
       const p=loadProfile(); const arr=p?.history||[];
@@ -940,7 +927,6 @@ showInlineWeather(i)
       });
     }
 
-    // Profil: actions
     document.getElementById('profileSave').addEventListener('click', ()=>{
       const p=collectProfileFromForm();
       if(!p.name || !p.email){ alert('Navn og e-post må fylles ut.'); return; }
@@ -953,10 +939,8 @@ showInlineWeather(i)
       if(confirm('Slette profilen og all lokal data?')){ clearProfile(); renderRegistrations(); renderHistory(); profileModal.style.display='none'; }
     });
     document.getElementById('addHistoryBtn').addEventListener('click', ()=>{
-      const race = prompt('Løpsnavn');
-      if(!race) return;
-      const date = prompt('Dato (YYYY-MM-DD)');
-      if(!date) return;
+      const race = prompt('Løpsnavn'); if(!race) return;
+      const date = prompt('Dato (YYYY-MM-DD)'); if(!date) return;
       const time = prompt('Tid/resultat (valgfritt)');
       const p=loadProfile()||{history:[], registrations:[]};
       p.history = p.history||[]; p.history.push({race, date, time});
@@ -968,7 +952,7 @@ showInlineWeather(i)
       let p = loadProfile();
       if(!p || !p.name || !p.email){
         openProfile();
-        alert('Opprett/lagre profil først, så kan du melde deg på.');
+        alert('Opprett eller lagre profil først, så kan du melde deg på.');
         return;
       }
       p.registrations = p.registrations || [];
@@ -982,7 +966,7 @@ showInlineWeather(i)
       renderRegistrations();
     }
 
-    // Registrer-løp (arrangør)
+    // Registrer-løp
     const regModal=document.getElementById('registerModal');
     document.getElementById('openRegister').addEventListener('click', ()=> regModal.style.display='flex');
     document.getElementById('registerClose').addEventListener('click', ()=> regModal.style.display='none');
@@ -1055,7 +1039,7 @@ showInlineWeather(i)
     document.getElementById('quick10k').addEventListener('click', ()=>{ state.filters.q='10k'; document.getElementById('q').value='10k'; setView(state.view); });
     document.getElementById('quick21k').addEventListener('click', ()=>{ state.filters.q='21'; document.getElementById('q').value='21'; setView(state.view); });
 
-    // Tab-tastaturnavigasjon
+    // DOMContentLoaded
     document.addEventListener('DOMContentLoaded',()=>{
       loadEvents();
 
@@ -1087,7 +1071,7 @@ showInlineWeather(i)
       });
     });
 
-    // Tilgjengelighet: ESC for å lukke
+    // ESC for å lukke
     document.addEventListener('keydown', e=>{
       if(e.key==='Escape'){
         [document.getElementById('eventModalBackdrop'), document.getElementById('favoritesModal'), document.getElementById('registerModal'), document.getElementById('profileModal')]
