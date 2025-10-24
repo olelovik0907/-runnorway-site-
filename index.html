@@ -1,16 +1,42 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="no" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RunNorway – Finn alle løp i Norge. Ett sted. Én kalender.</title>
+  <meta name="description" content="RunNorway samler løpsarrangementer over hele Norge. Filtrer på måned, region eller distanse, se kart og kalender, og finn resultater."/>
+  <link rel="canonical" href="https://runnorway.no/" />
 
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="RunNorway – Løp i hele Norge" />
+  <meta property="og:description" content="Én kalender for alle løp i Norge. Finn, filtrer, og meld deg på." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://runnorway.no/" />
+  <meta property="og:image" content="https://runnorway.no/assets/og-cover.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- PWA basics (valgfritt, ufarlig uten manifest) -->
+  <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="theme-color" content="#116D6B" />
+
+  <!-- Icons -->
   <link rel="icon" href="assets/logo-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-180.png" />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Performance hints -->
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+  <link rel="preconnect" href="https://api.eqtiming.com" crossorigin>
+  <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
+  <link rel="preconnect" href="https://{s}.tile.openstreetmap.org" crossorigin>
+  <link rel="dns-prefetch" href="//images.unsplash.com">
+  <link rel="dns-prefetch" href="//api.eqtiming.com">
+  <link rel="dns-prefetch" href="//api.open-meteo.com">
+  <link rel="dns-prefetch" href="//tile.openstreetmap.org">
+
+  <script src="https://cdn.tailwindcss.com" defer></script>
+  <link rel="preload" as="style" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/></noscript>
+
   <style>
     :root { --brand:#116D6B; --accent:#F3C316; }
     html,body{ background:#fff; color:#0f172a; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
@@ -44,27 +70,53 @@
       .modal { width: 100vw; height: 92vh; border-radius: 12px; }
       .modal-header { position: sticky; top: 0; }
     }
+
+    /* Skjelett for kort ved lasting */
+    .skeleton{ position:relative; overflow:hidden; background:#e5e7eb; }
+    .skeleton::after{ content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent); transform:translateX(-100%); animation:s 1s infinite; }
+    @keyframes s{ to{ transform:translateX(100%);} }
+    .line-clamp-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+    /* Skip-lenke for tilgjengelighet */
+    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus{ left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; background:#fff; border:2px solid var(--brand); border-radius:.5rem; z-index:100; }
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "RunNorway",
+    "url": "https://runnorway.no/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://runnorway.no/#arrangementer?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
 </head>
 
 <body class="antialiased">
+  <a href="#arrangementer" class="skip-link">Hopp til innhold</a>
+
   <!-- Header -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b" role="banner">
     <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
-      <a href="#home" class="flex items-center gap-2 font-bold text-xl link-brand">
+      <a href="#home" class="flex items-center gap-2 font-bold text-xl link-brand" aria-label="RunNorway hjem">
         <img src="assets/logo-48.png" alt="RunNorway" class="h-8 w-auto" />
         RunNorway
       </a>
-      <nav class="hidden md:flex items-center gap-8 font-semibold link-brand">
+      <nav class="hidden md:flex items-center gap-8 font-semibold link-brand" aria-label="Hovedmeny">
         <a href="#arrangementer">Arrangementer</a>
         <a href="#resultater">Resultater</a>
         <a href="#kontakt">Kontakt</a>
         <a href="#faq">Hjelp</a>
-        <button id="navFavorites" class="font-semibold">Favoritter</button>
+        <button id="navFavorites" class="font-semibold" aria-haspopup="dialog">Favoritter</button>
       </nav>
       <div class="flex items-center gap-2">
         <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
-        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Profil</button>
+        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50" aria-haspopup="dialog">Profil</button>
         <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
       </div>
     </div>
@@ -83,10 +135,10 @@
 
       <!-- Neste løp + Nedtelling -->
       <div class="max-w-3xl mx-auto mt-12 flex items-center justify-center gap-3 flex-wrap">
-        <p id="nextRaceLabel" class="text-white/95 text-lg font-semibold"></p>
+        <p id="nextRaceLabel" class="text-white/95 text-lg font-semibold" aria-live="polite"></p>
         <a id="nextRaceCta" href="#arrangementer" class="btn-brand px-4 py-2 rounded-full font-semibold">Meld deg på</a>
       </div>
-      <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-3">
+      <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-3" aria-label="Nedtelling">
         <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
           <div id="d" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
           <div class="text-sm uppercase tracking-wide text-white mt-1">Dager</div>
@@ -146,8 +198,8 @@
             </select>
           </label>
           <div class="flex gap-2">
-            <button id="openFavorites" class="pill">Favoritter</button>
-            <button id="openProfileSmall" class="pill">Profil</button>
+            <button id="openFavorites" class="pill" aria-haspopup="dialog">Favoritter</button>
+            <button id="openProfileSmall" class="pill" aria-haspopup="dialog">Profil</button>
           </div>
         </div>
         <div class="mt-4 flex flex-wrap gap-3">
@@ -160,7 +212,7 @@
         </div>
       </div>
 
-      <div id="eventsSummary" class="mt-4 text-slate-600"></div>
+      <div id="eventsSummary" class="mt-4 text-slate-600" aria-live="polite"></div>
 
       <div id="panel-list" role="tabpanel" aria-labelledby="tab-list" class="mt-4">
         <div id="eventsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
@@ -177,7 +229,7 @@
       </div>
 
       <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden class="mt-6">
-        <div id="map" class="w-full h-[520px] rounded-2xl overflow-hidden border"></div>
+        <div id="map" class="w-full h-[520px] rounded-2xl overflow-hidden border" role="application" aria-label="Kart over løp"></div>
         <p class="mt-2 text-sm text-slate-600">Tips: klikk på markørene for info og påmeldingslenke.</p>
       </div>
     </div>
@@ -222,16 +274,16 @@
   </section>
 
   <footer class="py-10 bg-[var(--brand)] text-white text-center">
-    <form id="newsletter" class="max-w-xl mx-auto px-4 flex gap-2 justify-center">
+    <form id="newsletter" class="max-w-xl mx-auto px-4 flex gap-2 justify-center" novalidate>
       <input id="newsletterEmail" type="email" required placeholder="din@epost.no" class="w-full max-w-xs px-3 py-2 rounded-lg text-slate-900" />
       <button class="btn-brand rounded-lg px-4 py-2 font-semibold" type="submit">Meld meg på</button>
     </form>
-    <p id="newsletterMsg" class="mt-2 text-white/90"></p>
+    <p id="newsletterMsg" class="mt-2 text-white/90" aria-live="polite"></p>
     <p class="mt-4">© <span id="year"></span> RunNorway</p>
   </footer>
 
   <!-- Modal: Løpsdetaljer -->
-  <div id="eventModalBackdrop" class="modal-backdrop">
+  <div id="eventModalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 id="modalTitle" class="text-xl font-bold text-[var(--brand)]">Løpsnavn</h3>
@@ -246,7 +298,7 @@
   </div>
 
   <!-- Modal: Favoritter -->
-  <div id="favoritesModal" class="modal-backdrop">
+  <div id="favoritesModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 class="text-xl font-bold text-[var(--brand)]">Dine favoritter</h3>
@@ -257,7 +309,7 @@
   </div>
 
   <!-- Modal: Registrer løp (wizard light) -->
-  <div id="registerModal" class="modal-backdrop">
+  <div id="registerModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 class="text-xl font-bold text-[var(--brand)]">Registrer løp</h3>
@@ -285,7 +337,7 @@
   </div>
 
   <!-- Modal: Profil -->
-  <div id="profileModal" class="modal-backdrop">
+  <div id="profileModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 class="text-xl font-bold text-[var(--brand)]">Din profil</h3>
@@ -332,10 +384,12 @@
     {"title":"Midnight Sun Half","date":"2026-06-21","location":"Tromsøya","region":"Troms og Finnmark","distances":["21K","10K"],"image":"https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"}
   ]</script>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
   <script>
     // Utils og global state
-    document.getElementById("year").textContent = new Date().getFullYear();
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById("year").textContent = new Date().getFullYear();
+    });
     const fmtDate = iso => new Date(iso).toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
     const cityToPentUrl = location => {
       if(!location) return null;
@@ -491,6 +545,7 @@
       renderFilters();
       setView('list');
       initCountdownToNext();
+      renderSkeleton(false);
     }
     function dedupe(list){
       const out=[], seen=new Set();
@@ -502,6 +557,17 @@
         out.push({...e, id});
       }
       return out;
+    }
+
+    // Skjelett-kort ved første last
+    function renderSkeleton(show=true){
+      const grid=document.getElementById('eventsGrid');
+      if(!show){ grid.querySelectorAll('.skeleton').forEach(n=>n.remove()); return; }
+      grid.innerHTML='';
+      for(let i=0;i<6;i++){
+        const card=document.createElement('div'); card.className='card overflow-hidden skeleton';
+        card.style.height='280px'; grid.appendChild(card);
+      }
     }
 
     // Countdown
@@ -518,6 +584,19 @@
         label.textContent = `Neste løp: ${state.nextEvent.title} — ${fmtDate(state.nextEvent.date)}`;
         const cta = document.getElementById('nextRaceCta');
         if(cta){ cta.onclick = (e)=>{ e.preventDefault(); openEvent(state.nextEvent); }; }
+        // Dynamisk JSON-LD for neste løp (SEO)
+        try{
+          const ld = {
+            '@context':'https://schema.org', '@type':'SportsEvent',
+            name: state.nextEvent.title,
+            startDate: state.nextEvent.date,
+            eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+            eventStatus: 'https://schema.org/EventScheduled',
+            location: { '@type':'Place', name: state.nextEvent.location||'', address: state.nextEvent.region||'Norge' }
+          };
+          const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld);
+          document.head.appendChild(s);
+        }catch{}
       } else {
         const fallback = new Date(); fallback.setDate(fallback.getDate()+60);
         state.nextTarget = fallback;
@@ -588,7 +667,7 @@
 
       items.forEach((ev, idx)=>{
         const fav = isFav(ev.id);
-        const el=document.createElement('article'); el.className='card overflow-hidden';
+        const el=document.createElement('article'); el.className='card overflow-hidden'; el.setAttribute('aria-label', ev.title);
         const imgJSON = JSON.stringify(ev).replace(/"/g,'&quot;');
         el.innerHTML=`
           <div class="relative">
@@ -612,7 +691,7 @@
           </div>
           <div class="p-6">
             <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
-            <h3 class="text-xl font-semibold mt-1 link-brand">${ev.title}</h3>
+            <h3 class="text-xl font-semibold mt-1 link-brand line-clamp-2" title="${ev.title}">${ev.title}</h3>
             <p class="text-sm text-slate-700 mt-1">${fmtDate(ev.date)} • ${ev.location}</p>
             <p class="text-sm mt-2">${(ev.distances||[]).join(', ')}</p>
 
@@ -633,8 +712,7 @@
 
             <div id='inline-weather-${idx}' class='mt-4 hidden'></div>
           </div>`;
-        // Hack: eval for template's inner IIFE (so pickImageSources gets ev). Replace placeholder with runtime URL.
-        // After insertion, fix the src attribute using current ev:
+        // Fix image src at runtime
         const img = el.querySelector('img');
         const srcs = pickImageSources(ev);
         img.setAttribute('src', srcs.primary || srcs.fallback);
@@ -846,21 +924,23 @@
     }
 
     // Resultater
-    document.getElementById('resSearch')?.addEventListener('click', ()=>{
-      const name = (document.getElementById('resName').value||'').trim();
-      const year = (document.getElementById('resYear').value||'').trim();
-      const q = encodeURIComponent([name, year].filter(Boolean).join(' '));
-      const engines = [
-        { label:'EQ Timing', url:`https://live.eqtiming.com/?search=${q}` },
-        { label:'Google (norsk)', url:`https://www.google.com/search?q=${q}+resultater+løp` },
-        { label:'Bing', url:`https://www.bing.com/search?q=${q}+resultater+løp` },
-        { label:'DuckDuckGo', url:`https://duckduckgo.com/?q=${q}+resultater+løp` }
-      ];
-      const box = document.getElementById('resLinks'); box.innerHTML='';
-      engines.forEach(e=>{
-        const a=document.createElement('a'); a.href=e.url; a.target='_blank'; a.rel='noopener';
-        a.textContent=`Åpne i ${e.label}`; a.className='underline text-[var(--brand)]';
-        const p=document.createElement('p'); p.appendChild(a); box.appendChild(p);
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('resSearch')?.addEventListener('click', ()=>{
+        const name = (document.getElementById('resName').value||'').trim();
+        const year = (document.getElementById('resYear').value||'').trim();
+        const q = encodeURIComponent([name, year].filter(Boolean).join(' '));
+        const engines = [
+          { label:'EQ Timing', url:`https://live.eqtiming.com/?search=${q}` },
+          { label:'Google (norsk)', url:`https://www.google.com/search?q=${q}+resultater+løp` },
+          { label:'Bing', url:`https://www.bing.com/search?q=${q}+resultater+løp` },
+          { label:'DuckDuckGo', url:`https://duckduckgo.com/?q=${q}+resultater+løp` }
+        ];
+        const box = document.getElementById('resLinks'); box.innerHTML='';
+        engines.forEach(e=>{
+          const a=document.createElement('a'); a.href=e.url; a.target='_blank'; a.rel='noopener';
+          a.textContent=`Åpne i ${e.label}`; a.className='underline text-[var(--brand)]';
+          const p=document.createElement('p'); p.appendChild(a); box.appendChild(p);
+        });
       });
     });
 
@@ -891,7 +971,7 @@
               ${ev.details_url?`<a href="${ev.details_url}" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" target="_blank" rel="noopener">Nettside</a>`:''}
             </div>
             ${pent ? `<h4 class="text-[var(--brand)] font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
-                      <iframe src="${pent}" width="100%" height="420" style="border:none; border-radius:10px;"></iframe>` : ''}
+                      <iframe src="${pent}" width="100%" height="420" style="border:none; border-radius:10px;" loading="lazy" referrerpolicy="no-referrer"></iframe>` : ''}
           </div>
           <div><div id="modalMap" class="h-[380px] rounded-2xl border"></div></div>
         </div>
@@ -969,26 +1049,28 @@
     }
 
     // Profil: actions
-    document.getElementById('profileSave').addEventListener('click', ()=>{
-      const p=collectProfileFromForm();
-      if(!p.name || !p.email){ alert('Navn og e-post må fylles ut.'); return; }
-      saveProfile(p);
-      alert('Profil lagret');
-      renderRegistrations(); renderHistory();
-      profileModal.style.display='none';
-    });
-    document.getElementById('profileDelete').addEventListener('click', ()=>{
-      if(confirm('Slette profilen og all lokal data?')){ clearProfile(); renderRegistrations(); renderHistory(); profileModal.style.display='none'; }
-    });
-    document.getElementById('addHistoryBtn').addEventListener('click', ()=>{
-      const race = prompt('Løpsnavn');
-      if(!race) return;
-      const date = prompt('Dato (YYYY-MM-DD)');
-      if(!date) return;
-      const time = prompt('Tid/resultat (valgfritt)');
-      const p=loadProfile()||{history:[], registrations:[]};
-      p.history = p.history||[]; p.history.push({race, date, time});
-      saveProfile(p); renderHistory();
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('profileSave').addEventListener('click', ()=>{
+        const p=collectProfileFromForm();
+        if(!p.name || !p.email){ alert('Navn og e-post må fylles ut.'); return; }
+        saveProfile(p);
+        alert('Profil lagret');
+        renderRegistrations(); renderHistory();
+        profileModal.style.display='none';
+      });
+      document.getElementById('profileDelete').addEventListener('click', ()=>{
+        if(confirm('Slette profilen og all lokal data?')){ clearProfile(); renderRegistrations(); renderHistory(); profileModal.style.display='none'; }
+      });
+      document.getElementById('addHistoryBtn').addEventListener('click', ()=>{
+        const race = prompt('Løpsnavn');
+        if(!race) return;
+        const date = prompt('Dato (YYYY-MM-DD)');
+        if(!date) return;
+        const time = prompt('Tid/resultat (valgfritt)');
+        const p=loadProfile()||{history:[], registrations:[]};
+        p.history = p.history||[]; p.history.push({race, date, time});
+        saveProfile(p); renderHistory();
+      });
     });
 
     // Påmelding
@@ -1012,9 +1094,11 @@
 
     // Registrer-løp (arrangør)
     const regModal=document.getElementById('registerModal');
-    document.getElementById('openRegister').addEventListener('click', ()=> regModal.style.display='flex');
-    document.getElementById('registerClose').addEventListener('click', ()=> regModal.style.display='none');
-    regModal.addEventListener('click', e=>{ if(e.target===regModal) regModal.style.display='none'; });
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('openRegister').addEventListener('click', ()=> regModal.style.display='flex');
+      document.getElementById('registerClose').addEventListener('click', ()=> regModal.style.display='none');
+      regModal.addEventListener('click', e=>{ if(e.target===regModal) regModal.style.display='none'; });
+    });
     function readReg(){
       return {
         title: document.getElementById('reg_name').value.trim(),
@@ -1042,44 +1126,47 @@
       ['reg_name','reg_org','reg_date','reg_region','reg_loc','reg_dist','reg_signup','reg_website'].forEach(id=>document.getElementById(id).value='');
       document.getElementById('reg_premium').checked=false;
     }
-    document.getElementById('reg_saveDraft').addEventListener('click', ()=> saveReg(false));
-    document.getElementById('reg_publish').addEventListener('click', ()=> saveReg(true));
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('reg_saveDraft').addEventListener('click', ()=> saveReg(false));
+      document.getElementById('reg_publish').addEventListener('click', ()=> saveReg(true));
+    });
 
     // Favoritter modal
     const favModal=document.getElementById('favoritesModal');
-    document.getElementById('openFavorites').addEventListener('click', ()=>{ renderFavoritesBody(); favModal.style.display='flex'; });
-    document.getElementById('favoritesClose').addEventListener('click', ()=> favModal.style.display='none');
-    favModal.addEventListener('click', e=>{ if(e.target===favModal) favModal.style.display='none'; });
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('openFavorites').addEventListener('click', ()=>{ renderFavoritesBody(); favModal.style.display='flex'; });
+      document.getElementById('favoritesClose').addEventListener('click', ()=> favModal.style.display='none');
+      favModal.addEventListener('click', e=>{ if(e.target===favModal) favModal.style.display='none'; });
 
-    // Nav-favoritter-knapp
-    document.getElementById('navFavorites')?.addEventListener('click', ()=>{
-      renderFavoritesBody();
-      document.getElementById('favoritesModal').style.display='flex';
-    });
+      // Nav-favoritter-knapp
+      document.getElementById('navFavorites')?.addEventListener('click', ()=>{
+        renderFavoritesBody();
+        document.getElementById('favoritesModal').style.display='flex';
+      });
 
-    // Newsletter dummy
-    document.getElementById('newsletter').addEventListener('submit', e=>{
-      e.preventDefault();
-      const email=document.getElementById('newsletterEmail').value.trim();
-      if(!email){ return; }
-      document.getElementById('newsletterMsg').textContent='Takk for påmeldingen. Vi sender kun relevante oppdateringer.';
-      e.target.reset();
-    });
+      // Newsletter dummy
+      document.getElementById('newsletter').addEventListener('submit', e=>{
+        e.preventDefault();
+        const email=document.getElementById('newsletterEmail').value.trim();
+        if(!email){ return; }
+        document.getElementById('newsletterMsg').textContent='Takk for påmeldingen. Vi sender kun relevante oppdateringer.';
+        e.target.reset();
+      });
 
-    // Eksport CSV
-    document.getElementById('exportCsv').addEventListener('click', ()=>{
-      const items=filtered();
-      const rows=[['Tittel','Dato','Sted','Region','Distanser','Påmelding','Nettside','Premium']];
-      for(const e of items){
-        rows.push([e.title, e.date, e.location||'', e.region||'', (e.distances||[]).join(' '), e.signup_url||'', e.details_url||'', e.premium?'ja':'nei']);
-      }
-      const csv = rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
-      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
-      const a=document.createElement('a'); a.href=url; a.download='runnorway-eksport.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    });
+      // Eksport CSV
+      document.getElementById('exportCsv').addEventListener('click', ()=>{
+        const items=filtered();
+        const rows=[["Tittel","Dato","Sted","Region","Distanser","Påmelding","Nettside","Premium"]];
+        for(const e of items){
+          rows.push([e.title, e.date, e.location||'', e.region||'', (e.distances||[]).join(' '), e.signup_url||'', e.details_url||'', e.premium?'ja':'nei']);
+        }
+        const csv = rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
+        const a=document.createElement('a'); a.href=url; a.download='runnorway-eksport.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      });
 
-    // Init + tab-navigasjon
-    document.addEventListener('DOMContentLoaded',()=>{
+      // Init + tab-navigasjon
+      renderSkeleton(true);
       loadEvents();
 
       document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; setView(state.view);});
@@ -1118,5 +1205,12 @@
       }
     });
   </script>
+
+  <noscript>
+    <div style="max-width:760px;margin:2rem auto;padding:1rem;border:1px solid #e5e7eb;border-radius:12px;">
+      For å bruke RunNorway må JavaScript være aktivert. Du kan fortsatt kontakte oss på
+      <a href="mailto:post@runnorway.no">post@runnorway.no</a>.
+    </div>
+  </noscript>
 </body>
 </html>
