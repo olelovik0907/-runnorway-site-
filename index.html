@@ -621,6 +621,100 @@
         grid.appendChild(el);
       });
     }
+// --- VÆR: Open-Meteo (kompakt) ---
+const WMO = {
+  0:  {t:'Klar',        i:'☀️'},
+  1:  {t:'Lettskyet',   i:'🌤️'},
+  2:  {t:'Delvis',      i:'⛅'},
+  3:  {t:'Overskyet',   i:'☁️'},
+  45: {t:'Tåke',        i:'🌫️'}, 48:{t:'Rimtåke', i:'🌫️'},
+  51: {t:'Yr',          i:'🌦️'}, 53:{t:'Yr', i:'🌦️'}, 55:{t:'Yr', i:'🌦️'},
+  61: {t:'Regn',        i:'🌧️'}, 63:{t:'Regn', i:'🌧️'}, 65:{t:'Kraftig regn', i:'🌧️'},
+  66: {t:'Underkjølt',  i:'🌨️'}, 67:{t:'Underkjølt', i:'🌨️'},
+  71: {t:'Snø',         i:'❄️'}, 73:{t:'Snø', i:'❄️'}, 75:{t:'Snø', i:'❄️'},
+  80: {t:'Regnbyger',   i:'🌦️'}, 81:{t:'Regnbyger', i:'🌦️'}, 82:{t:'Kraftige byger', i:'🌧️'},
+  95: {t:'Torden',      i:'⛈️'}, 96:{t:'Torden', i:'⛈️'}, 99:{t:'Torden', i:'⛈️'}
+};
+
+function getLatLngForEvent(ev){
+  // Bruker eksisterende geo-objekt, evt lat/lng fra data
+  return (ev.lat && ev.lng) ? [ev.lat, ev.lng]
+       : geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
+}
+
+async function fetchWeather(lat, lon){
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+              `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&current_weather=true&timezone=auto`;
+  const r = await fetch(url, {headers:{'accept':'application/json'}});
+  if(!r.ok) throw new Error('weather '+r.status);
+  return r.json();
+}
+
+function fmtDayLabel(iso){ // Man, Tir, ...
+  const d = new Date(iso);
+  return d.toLocaleDateString('no-NO',{weekday:'short'}).replace(/\.$/,'');
+}
+
+function renderWeatherBox(container, w, title){
+  const cur = w.current_weather;
+  const d = w.daily;
+  const days = d.time.slice(0,5).map((date, idx)=>({
+    date,
+    code: d.weathercode[idx],
+    tmax: Math.round(d.temperature_2m_max[idx]),
+    tmin: Math.round(d.temperature_2m_min[idx]),
+    p: typeof d.precipitation_sum[idx]==='number' ? Math.round(d.precipitation_sum[idx]) : 0
+  }));
+
+  const curIcon = (WMO[cur.weathercode]||{}).i || 'ℹ️';
+  const curTxt  = (WMO[cur.weathercode]||{}).t || 'Vær';
+
+  const chips = days.map(day=>{
+    const m = WMO[day.code] || {t:'', i:'ℹ️'};
+    return `<span class="wx-chip" title="${m.t}">
+      <span class="wx-day">${fmtDayLabel(day.date)}</span>
+      <span class="wx-icon" aria-hidden="true">${m.i}</span>
+      <span class="wx-temp">${day.tmax}°/${day.tmin}°</span>
+      <span class="wx-muted">${day.p} mm</span>
+    </span>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="wx" role="group" aria-label="Værmelding">
+      <span class="wx-chip" title="${curTxt}">
+        <strong>Now</strong>
+        <span class="wx-icon" aria-hidden="true">${curIcon}</span>
+        <span class="wx-temp">${Math.round(cur.temperature)}°</span>
+        <span class="wx-muted">${curTxt}</span>
+      </span>
+      ${chips}
+    </div>
+    <div class="wx-more">
+      <button class="underline text-[var(--brand)]" type="button" id="wxExpandBtn">Utvid</button>
+      <a class="ml-3 underline text-[var(--brand)]" target="_blank" rel="noopener"
+         href="https://www.open-meteo.com/en/docs#api">Kilde</a>
+    </div>
+    <div id="wxExpanded" class="hidden mt-2">
+      ${days.map(dy=>{
+        const m = WMO[dy.code] || {t:'', i:'ℹ️'};
+        return `<div class="flex items-center gap-2 text-sm">
+          <span class="w-12 font-semibold">${fmtDayLabel(dy.date)}</span>
+          <span class="wx-icon">${m.i}</span>
+          <span class="w-20">${dy.tmax}°/${dy.tmin}°</span>
+          <span class="w-16">${dy.p} mm</span>
+          <span class="text-slate-600">${m.t}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+
+  const btn = container.querySelector('#wxExpandBtn');
+  const exp = container.querySelector('#wxExpanded');
+  btn?.addEventListener('click', ()=>{
+    const hid = exp.classList.toggle('hidden');
+    btn.textContent = hid ? 'Utvid' : 'Skjul';
+  });
+}
 
     // Inline weather
     function showInlineWeather(i){
