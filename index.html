@@ -7,7 +7,6 @@
   <meta name="description" content="RunNorway samler løpsarrangementer over hele Norge. Filtrer på måned, region eller distanse, se kart og kalender, og finn resultater."/>
   <link rel="canonical" href="https://runnorway.no/" />
 
-  <!-- Open Graph / Twitter -->
   <meta property="og:title" content="RunNorway – Løp i hele Norge" />
   <meta property="og:description" content="Én kalender for alle løp i Norge. Finn, filtrer, og meld deg på." />
   <meta property="og:type" content="website" />
@@ -15,15 +14,12 @@
   <meta property="og:image" content="https://runnorway.no/assets/og-cover.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- PWA basics (valgfritt, ufarlig uten manifest) -->
   <link rel="manifest" href="/manifest.webmanifest" />
-  <meta name="theme-color" content="#116D6B" />
+  <meta name="theme-color" content="#0A5C52" />
 
-  <!-- Icons -->
   <link rel="icon" href="assets/logo-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-180.png" />
 
-  <!-- Performance hints -->
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
   <link rel="preconnect" href="https://api.eqtiming.com" crossorigin>
   <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
@@ -38,52 +34,6 @@
   <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/></noscript>
 
   <style>
-    :root { --brand:#116D6B; --accent:#F3C316; }
-    html,body{ background:#fff; color:#0f172a; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
-    .btn-brand{ background:var(--accent); color:#111827; }
-    .btn-brand:hover{ background:#d6aa10; }
-    .btn-ghost{ background:rgba(255,255,255,.9); color:var(--brand); }
-    .btn-ghost:hover{ background:#fff; }
-    .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; }
-    .link-brand{ color:var(--brand); }
-    .link-brand:hover{ text-decoration:underline; }
-    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:60; }
-    .modal{ background:#fff; width:min(960px,92vw); max-height:88vh; border-radius:16px; overflow:auto; }
-    .modal-header{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e7eb; z-index:1; }
-    .pill{ border:1px solid #e5e7eb; border-radius:9999px; padding:.5rem .9rem; font-weight:600; }
-    .badge-premium{ background:rgba(243,195,22,.18); color:#7a5a00; border:1px solid rgba(243,195,22,.5); border-radius:9999px; padding:.15rem .5rem; font-size:.72rem; font-weight:700; }
-    .icon-btn{ display:inline-flex; align-items:center; gap:.4rem; }
-    .heart{ width:18px; height:18px; display:inline-block; vertical-align:-2px; }
-    .card p { line-height: 1.55; }
-
-    /* Kompakt vær */
-    .wx { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
-    .wx-chip { display:flex; align-items:center; gap:.4rem; padding:.35rem .55rem; border:1px solid #e5e7eb; border-radius:9999px; font-size:.8rem; background:#fff; }
-    .wx-day { font-weight:600; }
-    .wx-temp { font-variant-numeric: tabular-nums; }
-    .wx-icon { width:18px; height:18px; }
-    .wx-muted { color:#64748b; }
-    .wx-more { margin-top:.5rem; font-size:.8rem; }
-
-    /* Mobilvennlige modaler */
-    @media (max-width: 640px){
-      .modal { width: 100vw; height: 92vh; border-radius: 12px; }
-      .modal-header { position: sticky; top: 0; }
-    }
-
-    /* Skjelett for kort ved lasting */
-    .skeleton{ position:relative; overflow:hidden; background:#e5e7eb; }
-    .skeleton::after{ content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent); transform:translateX(-100%); animation:s 1s infinite; }
-    @keyframes s{ to{ transform:translateX(100%);} }
-    .line-clamp-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-
-    /* Skip-lenke for tilgjengelighet */
-    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-    .skip-link:focus{ left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; background:#fff; border:2px solid var(--brand); border-radius:.5rem; z-index:100; }
-  </style>
-
-  <!-- Aston Martin-inspirert tema som overstyrer det gamle. Lagt etter for å vinne ved lik spesifisitet. -->
-  <style>
     :root{
       --rn-green:#0A5C52;
       --rn-green-deep:#07443D;
@@ -93,94 +43,123 @@
       --rn-lime:#C8E000;
       --rn-text:#1F2326;
       --rn-text-inv:#F3F4F6;
-      --rn-radius:14px;
-      --rn-shadow:0 8px 24px rgba(10,92,82,.08), 0 2px 6px rgba(18,19,20,.12);
     }
 
-    html,body{
-      background: var(--rn-bg);
-      color: var(--rn-text);
-    }
+    html,body{ background:var(--rn-bg); color:var(--rn-text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
 
-    /* Header og toppnav, bruk klassen site-header på header-elementet */
-    .site-header{
-      background: linear-gradient(180deg, var(--rn-graphite), #181A1B);
-      color: var(--rn-text-inv);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .site-header a{ color: var(--rn-text-inv); }
-    .site-header a:hover{ color: var(--rn-lime); }
-
-    /* Hero: beholder din struktur, men gir subtil grafitt-til-panel overgang */
-    #home{
-      background:
-        radial-gradient(1200px 300px at 20% -20%, rgba(10,92,82,.25), transparent 60%),
-        linear-gradient(180deg, #0d0f10 0%, #121314 12%, var(--rn-panel) 12.5%, var(--rn-panel) 100%);
-      color: var(--rn-text);
-    }
-    #home h1, #home h2{ color: var(--rn-green-deep); }
-    #home .btn-ghost{ background:#fff; color: var(--rn-green); }
-    #home .btn-ghost:hover{ background:#fff; filter:brightness(.98); }
-
-    /* Kort, paneler, tabeller */
-    .card, .table{
-      background: var(--rn-panel);
-      border: 1px solid rgba(7,68,61,.14);
-      border-radius: var(--rn-radius);
-      box-shadow: var(--rn-shadow);
-    }
-
-    /* Primærknapp til AM-grønn med lime-hover */
     .btn-brand{
       background: var(--rn-green);
       color: #fff;
-      border: 1px solid rgba(200,224,0,.45);
-      transition: transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+      border: 1px solid rgba(200,224,0,.35);
+      border-radius: 9999px;
+      padding: .75rem 1.25rem;
+      font-weight: 700;
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
     }
     .btn-brand:hover{
       background: var(--rn-lime);
       color: var(--rn-graphite);
-      border-color: var(--rn-lime);
-      box-shadow: 0 10px 28px rgba(200,224,0,.25);
+      box-shadow: 0 10px 28px rgba(200,224,0,.22);
       transform: translateY(-1px);
     }
 
-    /* Sekundær knapper og filtre */
-    .pill{
-      background: #fff;
-      color: var(--rn-text);
-      border: 1px solid rgba(18,19,20,.12);
+    .btn-ghost{
+      background: #ffffff;
+      color: var(--rn-green-deep);
+      border-radius: 9999px;
+      padding: .75rem 1.25rem;
+      font-weight: 700;
+      border: 1px solid rgba(7,68,61,.18);
     }
-    .pill.btn-brand{
-      background: var(--rn-green);
-      color:#fff;
-      border:1px solid rgba(200,224,0,.45);
+    .btn-ghost:hover{ filter:brightness(.98); }
+
+    .card{ background:var(--rn-panel); border:1px solid rgba(7,68,61,.14); border-radius:16px; box-shadow: 0 6px 18px rgba(7,68,61,.08); }
+    .pill{ background:#fff; color:var(--rn-text); border:1px solid rgba(18,19,20,.12); border-radius:9999px; padding:.5rem .9rem; font-weight:600; }
+
+    .link-brand{ color: var(--rn-text-inv); }
+    .site-header .link-brand{ color: var(--rn-text-inv); }
+    .site-header .link-brand:hover{ color: var(--rn-lime); text-decoration: none; }
+    a.link-green{ color: var(--rn-green); }
+    a.link-green:hover{ color: var(--rn-lime); text-decoration: underline; }
+
+    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:60; }
+    .modal{ background:#fff; width:min(960px,92vw); max-height:88vh; border-radius:16px; overflow:auto; }
+    .modal-header{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e7eb; z-index:1; }
+
+    .wx{ display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+    .wx-chip{ display:flex; align-items:center; gap:.4rem; padding:.35rem .55rem; border:1px solid #e5e7eb; border-radius:9999px; font-size:.8rem; background:#fff; }
+    .wx-day{ font-weight:600; }
+    .wx-temp{ font-variant-numeric: tabular-nums; }
+    .wx-icon{ width:18px; height:18px; }
+    .wx-muted{ color:#64748b; }
+    .wx-more{ margin-top:.5rem; font-size:.8rem; }
+
+    .skeleton{ position:relative; overflow:hidden; background:#e5e7eb; }
+    .skeleton::after{ content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent); transform:translateX(-100%); animation:s 1s infinite; }
+    @keyframes s{ to{ transform:translateX(100%);} }
+    .line-clamp-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus{ left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; background:#fff; border:2px solid var(--rn-green); border-radius:.5rem; z-index:100; }
+
+    .site-header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(180deg, var(--rn-green-deep), var(--rn-green));
+      color: var(--rn-text-inv);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(6px);
     }
 
-    /* Lenker og interaksjoner */
-    .link-brand{ color: var(--rn-green); text-underline-offset: 3px; }
-    .link-brand:hover{ color: var(--rn-lime); text-decoration: underline; }
+    #home{
+      background:
+        radial-gradient(1200px 320px at 20% -20%, rgba(200,224,0,.18), transparent 60%),
+        linear-gradient(180deg, var(--rn-green) 0%, var(--rn-green) 65%, var(--rn-panel) 65.5%, var(--rn-panel) 100%);
+      color: var(--rn-text-inv);
+      --accent: var(--rn-lime);
+      text-shadow: 0 1px 0 rgba(0,0,0,.12);
+    }
+    #home h1{ color:#fff; }
+    #home p{ color:#F0FFF9; }
+    #home .metric{ background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); }
 
-    /* Smalt mørkt kontrastbånd */
     .section-contrast{
-      background: linear-gradient(180deg,#141516,#0f1011);
+      background: linear-gradient(180deg, #151617, var(--rn-graphite));
       color: var(--rn-text-inv);
       padding: 2.5rem 0;
     }
-    .section-contrast .button,
     .section-contrast .btn-brand{
       background: var(--rn-lime);
       color: var(--rn-graphite);
       border-color: var(--rn-lime);
     }
 
-    /* Tabellheader i dyp grønn */
-    #panel-cal thead, #arrangementer thead, #resultater thead{
+    .view-switch{ background:#fff; border:1px solid rgba(18,19,20,.1); border-radius:12px; }
+    .view-switch .active{ background: var(--rn-green); color: var(--rn-text-inv); }
+
+    footer.site-footer{
       background: linear-gradient(180deg, var(--rn-green-deep), var(--rn-green));
       color: var(--rn-text-inv);
+      border-top: 1px solid rgba(255,255,255,.12);
     }
 
-    /* Inputs fokusstil */
+    .badge-premium{
+      background: linear-gradient(180deg, var(--rn-lime), #E7F28C);
+      color: var(--rn-graphite);
+      border: 1px solid rgba(18,19,20,.12);
+      border-radius:9999px;
+      padding:.15rem .5rem;
+      font-size:.72rem;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    table{ border-collapse:separate; border-spacing:0; background:var(--rn-panel); border:1px solid rgba(18,19,20,.08); border-radius:14px; overflow:hidden; }
+    thead{ background: linear-gradient(180deg, var(--rn-green-deep), var(--rn-green)); color: var(--rn-text-inv); }
+    tbody tr + tr td{ border-top:1px solid rgba(18,19,20,.08); }
+    tbody tr:hover{ background: rgba(10,92,82,.06); }
+
     input, select{
       background: white;
       border: 1px solid rgba(18,19,20,.18);
@@ -192,34 +171,6 @@
       border-color: var(--rn-green);
       box-shadow: 0 0 0 3px rgba(10,92,82,.18);
     }
-
-    /* Kart-/listebryter */
-    .view-switch{
-      background: #fff;
-      border: 1px solid rgba(18,19,20,.1);
-      border-radius: 12px;
-    }
-    .view-switch .active{
-      background: var(--rn-green);
-      color: var(--rn-text-inv);
-    }
-
-    /* Footer, bruk klassen site-footer på footer-elementet */
-    .site-footer{
-      background: linear-gradient(180deg, #0f1011, var(--rn-graphite));
-      color: var(--rn-text-inv);
-      border-top: 1px solid rgba(255,255,255,.06);
-    }
-
-    /* Premium-merke i lime-gradient */
-    .badge-premium{
-      background: linear-gradient(180deg, var(--rn-lime), #E7F28C);
-      color: var(--rn-graphite);
-      border: 1px solid rgba(18,19,20,.12);
-    }
-
-    /* Lesbar tekst på mørkt */
-    .text-on-dark{ color: var(--rn-text-inv) !important; }
   </style>
 
   <script type="application/ld+json">
@@ -240,79 +191,74 @@
 <body class="antialiased">
   <a href="#arrangementer" class="skip-link">Hopp til innhold</a>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-50 backdrop-blur border-b site-header" role="banner">
+  <header class="site-header" role="banner">
     <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
       <a href="#home" class="flex items-center gap-2 font-bold text-xl link-brand" aria-label="RunNorway hjem">
         <img src="assets/logo-48.png" alt="RunNorway" class="h-8 w-auto" />
         RunNorway
       </a>
-      <nav class="hidden md:flex items-center gap-8 font-semibold link-brand" aria-label="Hovedmeny">
-        <a href="#arrangementer">Arrangementer</a>
-        <a href="#resultater">Resultater</a>
-        <a href="#kontakt">Kontakt</a>
-        <a href="#faq">Hjelp</a>
-        <button id="navFavorites" class="font-semibold" aria-haspopup="dialog">Favoritter</button>
+      <nav class="hidden md:flex items-center gap-8 font-semibold" aria-label="Hovedmeny">
+        <a class="link-brand" href="#arrangementer">Arrangementer</a>
+        <a class="link-brand" href="#resultater">Resultater</a>
+        <a class="link-brand" href="#kontakt">Kontakt</a>
+        <a class="link-brand" href="#faq">Hjelp</a>
+        <button id="navFavorites" class="font-semibold text-[var(--rn-text-inv)]" aria-haspopup="dialog">Favoritter</button>
       </nav>
       <div class="flex items-center gap-2">
-        <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold hover:bg-slate-50">Registrer løp</button>
-        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" aria-haspopup="dialog">Profil</button>
-        <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
+        <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--rn-text-inv)]/90 hover:bg-white/10">Registrer løp</button>
+        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--rn-text-inv)]/90 hover:bg-white/10" aria-haspopup="dialog">Profil</button>
+        <a href="#resultater" class="hidden sm:inline-block btn-brand">Resultater</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
   <section id="home" class="relative">
     <div class="max-w-7xl mx-auto px-4 py-14 sm:py-24 text-center">
       <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-20 mb-6"/>
       <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">RunNorway</h1>
       <p class="mt-4 text-lg sm:text-2xl">Finn alle løp i Norge. Ett sted. Én kalender.</p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href="#arrangementer" class="btn-brand px-6 py-3 rounded-full font-semibold">Se program</a>
-        <a href="#resultater" class="btn-ghost px-6 py-3 rounded-full font-semibold">Finn ditt resultat</a>
+        <a href="#arrangementer" class="btn-brand">Se program</a>
+        <a href="#resultater" class="btn-ghost">Finn ditt resultat</a>
       </div>
 
-      <!-- Neste løp + Nedtelling -->
       <div class="max-w-3xl mx-auto mt-12 flex items-center justify-center gap-3 flex-wrap">
-        <p id="nextRaceLabel" class="text-lg font-semibold" aria-live="polite"></p>
-        <a id="nextRaceCta" href="#arrangementer" class="btn-brand px-4 py-2 rounded-full font-semibold">Meld deg på</a>
+        <p id="nextRaceLabel" class="text-[var(--rn-text-inv)] text-lg font-semibold" aria-live="polite"></p>
+        <a id="nextRaceCta" href="#arrangementer" class="btn-brand">Meld deg på</a>
       </div>
       <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-3" aria-label="Nedtelling">
-        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+        <div class="metric rounded-xl p-4 backdrop-blur-sm">
           <div id="d" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
-          <div class="text-sm uppercase tracking-wide mt-1">Dager</div>
+          <div class="text-sm uppercase tracking-wide text-[var(--rn-text-inv)] mt-1">Dager</div>
         </div>
-        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+        <div class="metric rounded-xl p-4 backdrop-blur-sm">
           <div id="h" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
-          <div class="text-sm uppercase tracking-wide mt-1">Timer</div>
+          <div class="text-sm uppercase tracking-wide text-[var(--rn-text-inv)] mt-1">Timer</div>
         </div>
-        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+        <div class="metric rounded-xl p-4 backdrop-blur-sm">
           <div id="m" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
-          <div class="text-sm uppercase tracking-wide mt-1">Min</div>
+          <div class="text-sm uppercase tracking-wide text-[var(--rn-text-inv)] mt-1">Min</div>
         </div>
-        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+        <div class="metric rounded-xl p-4 backdrop-blur-sm">
           <div id="s" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
-          <div class="text-sm uppercase tracking-wide mt-1">Sek</div>
+          <div class="text-sm uppercase tracking-wide text-[var(--rn-text-inv)] mt-1">Sek</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Smalt kontrastbånd for litt svart uten å gjøre siden tung -->
   <section class="section-contrast">
     <div class="max-w-7xl mx-auto px-4 text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-on-dark">Bli med på neste løp</h2>
-      <p class="mt-2 text-on-dark">Påmelding er åpen nå. Sikre deg plass i dag.</p>
-      <a href="#arrangementer" class="btn-brand mt-4 inline-block px-6 py-3 rounded-full font-semibold">Se program</a>
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Bli med på neste løp</h2>
+      <p class="mt-2">Påmelding er åpen nå. Sikre deg plass i dag.</p>
+      <a href="#arrangementer" class="btn-brand mt-4 inline-block">Se program</a>
     </div>
   </section>
 
-  <!-- Arrangementer -->
   <section id="arrangementer" class="py-16">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold mb-1" style="color:var(--rn-green)">Finn løp</h2>
-      <p class="text-slate-600 mb-4">Filtrer etter måned, region eller distanse.</p>
+      <p class="text-slate-700 mb-4">Filtrer etter måned, region eller distanse.</p>
 
       <div class="inline-flex rounded-2xl bg-white shadow p-1 mb-4 view-switch" role="tablist" aria-label="Visning">
         <button id="tab-list" class="px-4 py-2 rounded-xl font-semibold active" role="tab" aria-selected="true" aria-controls="panel-list">Liste</button>
@@ -384,7 +330,6 @@
     </div>
   </section>
 
-  <!-- Resultater -->
   <section id="resultater" class="py-16">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold mb-4" style="color:var(--rn-green)">Finn ditt resultat</h2>
@@ -392,7 +337,7 @@
         <div class="grid sm:grid-cols-3 gap-3">
           <input id="resName" class="rounded-xl border px-3 py-2" placeholder="Navn på løp eller deltaker" />
           <input id="resYear" class="rounded-xl border px-3 py-2" placeholder="År (valgfritt, f.eks. 2025)" />
-          <button id="resSearch" class="btn-brand rounded-xl px-4 py-2 font-semibold">Søk resultater</button>
+          <button id="resSearch" class="btn-brand">Søk resultater</button>
         </div>
         <p class="text-slate-700 mt-3">Vi søker i kjente resultatportaler i nye faner. Velg en av lenkene under.</p>
         <div id="resLinks" class="mt-4 grid gap-2"></div>
@@ -400,18 +345,16 @@
     </div>
   </section>
 
-  <!-- Kontakt -->
   <section id="kontakt" class="py-16">
     <div class="max-w-4xl mx-auto px-4 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold" style="color:var(--rn-green)">Kontakt oss</h2>
       <p class="mt-2 text-slate-700">Spørsmål om løp, samarbeid eller presse? Send oss e-post.</p>
       <div class="mt-6 flex flex-wrap items-center gap-4 justify-center">
-        <a class="btn-brand rounded-full px-6 py-3 font-semibold" href="mailto:post@runnorway.no">post@runnorway.no</a>
+        <a class="btn-brand" href="mailto:post@runnorway.no">post@runnorway.no</a>
       </div>
     </div>
   </section>
 
-  <!-- FAQ -->
   <section id="faq" class="py-16">
     <div class="max-w-4xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-center" style="color:var(--rn-green)">Ofte stilte spørsmål</h2>
@@ -425,20 +368,19 @@
   <footer class="py-10 text-center site-footer">
     <form id="newsletter" class="max-w-xl mx-auto px-4 flex gap-2 justify-center" novalidate>
       <input id="newsletterEmail" type="email" required placeholder="din@epost.no" class="w-full max-w-xs px-3 py-2 rounded-lg text-slate-900" />
-      <button class="btn-brand rounded-lg px-4 py-2 font-semibold" type="submit">Meld meg på</button>
+      <button class="btn-brand" type="submit">Meld meg på</button>
     </form>
-    <p id="newsletterMsg" class="mt-2 text-on-dark" aria-live="polite"></p>
-    <p class="mt-4 text-on-dark">© <span id="year"></span> RunNorway</p>
+    <p id="newsletterMsg" class="mt-2" style="color:var(--rn-text-inv)" aria-live="polite"></p>
+    <p class="mt-4" style="color:var(--rn-text-inv)">© <span id="year"></span> RunNorway</p>
   </footer>
 
-  <!-- Modal: Løpsdetaljer -->
   <div id="eventModalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
         <h3 id="modalTitle" class="text-xl font-bold" style="color:var(--rn-green)">Løpsnavn</h3>
         <div class="flex items-center gap-2">
-          <button id="modalShare" class="rounded-full border px-3 py-1 icon-btn">Del</button>
-          <button id="modalFav" class="rounded-full border px-3 py-1 icon-btn"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt</button>
+          <button id="modalShare" class="rounded-full border px-3 py-1">Del</button>
+          <button id="modalFav" class="rounded-full border px-3 py-1"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt</button>
           <button id="modalClose" class="rounded-full border px-3 py-1">Lukk</button>
         </div>
       </div>
@@ -446,7 +388,6 @@
     </div>
   </div>
 
-  <!-- Modal: Favoritter -->
   <div id="favoritesModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
@@ -457,7 +398,6 @@
     </div>
   </div>
 
-  <!-- Modal: Registrer løp (wizard light) -->
   <div id="registerModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
@@ -485,7 +425,6 @@
     </div>
   </div>
 
-  <!-- Modal: Profil -->
   <div id="profileModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
@@ -524,40 +463,18 @@
     </div>
   </div>
 
-  <!-- Seed-data (fallback) -->
-  <script id="events-seed" type="application/json">[
-    {"title":"Bergen City Mile","date":"2026-04-12","location":"Bergen sentrum","region":"Vestland","distances":["5K","10K","Familie"],"image":"https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
-    {"title":"Oslo FjordRun 10K","date":"2026-05-03","location":"Bygdøy, Oslo","region":"Oslo","distances":["10K"],"image":"https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
-    {"title":"Trondheim City Trail","date":"2026-05-18","location":"Bymarka, Trondheim","region":"Trøndelag","distances":["8K","16K"],"image":"https://images.unsplash.com/photo-1520975922203-b85e66f2aa64?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
-    {"title":"Stavanger Strand 5K","date":"2026-06-07","location":"Stavanger sentrum","region":"Rogaland","distances":["5K"],"image":"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
-    {"title":"Midnight Sun Half","date":"2026-06-21","location":"Tromsøya","region":"Troms og Finnmark","distances":["21K","10K"],"image":"https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"}
-  ]</script>
-
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
   <script>
-    // Utils og global state
-    document.addEventListener('DOMContentLoaded', ()=>{
-      document.getElementById("year").textContent = new Date().getFullYear();
-    });
+    document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById("year").textContent = new Date().getFullYear(); });
+
     const fmtDate = iso => new Date(iso).toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
-    const cityToPentUrl = location => {
-      if(!location) return null;
-      let city = location.split(',')[0].trim();
-      const map = {'Bergen sentrum':'Bergen','Stavanger sentrum':'Stavanger','Bymarka, Trondheim':'Trondheim','Tromsøya':'Tromsø'};
-      if(map[location]) city = map[location];
-      return `https://www.pent.no/${encodeURIComponent(city)}`;
-    };
+    const cityToPentUrl = location => { if(!location) return null; let city = location.split(',')[0].trim(); const map = {'Bergen sentrum':'Bergen','Stavanger sentrum':'Stavanger','Bymarka, Trondheim':'Trondheim','Tromsøya':'Tromsø'}; if(map[location]) city = map[location]; return `https://www.pent.no/${encodeURIComponent(city)}`; };
     const geo={'Oslo':[59.9139,10.7522],'Bygdøy, Oslo':[59.9036,10.6785],'Bergen sentrum':[60.39299,5.32415],'Bymarka, Trondheim':[63.401,10.276],'Trondheim':[63.4305,10.3951],'Stavanger sentrum':[58.9690,5.7331],'Tromsøya':[69.6492,18.9553]};
 
-    const LS_EVENTS='rn_events_v1';
-    const LS_FAVS='rn_favs_v1';
-    const LS_PROFILE='rn_profile_v1';
-
+    const LS_EVENTS='rn_events_v1', LS_FAVS='rn_favs_v1', LS_PROFILE='rn_profile_v1';
     const state={all:[],showPast:false,filters:{q:'',month:'',region:'',sort:'date'},view:'list',cal:new Date(), nextTarget:null, nextEvent:null, currentModalEvent:null};
-
     const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 
-    // Bilder (sikre defaults)
     const CITY_IMAGES = {
       'Oslo': 'https://images.unsplash.com/photo-1551462147-ff29053f1972?q=80&w=1200&auto=format&fit=crop',
       'Bergen': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop',
@@ -565,7 +482,6 @@
       'Stavanger': 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
       'Tromsø': 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop'
     };
-
     const DIST_IMAGES = {
       'trail': 'https://images.unsplash.com/photo-1520975922203-b85e66f2aa64?q=80&w=1200&auto=format&fit=crop',
       'city':  'https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop',
@@ -573,7 +489,6 @@
       '10k':   'https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop',
       '21k':   'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop'
     };
-
     const SEASON_IMAGES = {
       winter: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop',
       spring: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop',
@@ -583,47 +498,29 @@
 
     function safeImageForEvent(ev) {
       if (ev.image && String(ev.image).trim() !== "") return ev.image;
-
       const title = (ev.title || '').toLowerCase();
       const loc   = (ev.location || '').toLowerCase();
       const reg   = (ev.region || '').toLowerCase();
       const dists = Array.isArray(ev.distances) ? ev.distances.map(x=>String(x).toLowerCase()) : [];
-
       const cityGuess =
         /oslo/.test(loc) || /oslo/.test(reg) ? 'Oslo' :
         /bergen/.test(loc) || /bergen/.test(reg) ? 'Bergen' :
         /trondheim/.test(loc) || /trøndelag/.test(reg) ? 'Trondheim' :
         /stavanger/.test(loc) || /rogaland/.test(reg) ? 'Stavanger' :
         /tromsø/.test(loc) || /troms/.test(reg) ? 'Tromsø' : null;
-
       if (cityGuess && CITY_IMAGES[cityGuess]) return CITY_IMAGES[cityGuess];
-
-      if (dists.some(x=>/trail|terreng|sti/.test(x)) || /trail|terreng|sti/.test(title)) {
-        return DIST_IMAGES.trail;
-      }
-      if (dists.some(x=>/21|halve|half/.test(x)) || /21k|half/.test(title)) {
-        return DIST_IMAGES['21k'];
-      }
-      if (dists.some(x=>/10/.test(x)) || /10k/.test(title)) {
-        return DIST_IMAGES['10k'];
-      }
-      if (dists.some(x=>/5/.test(x)) || /5k/.test(title)) {
-        return DIST_IMAGES['5k'];
-      }
-      if (/sentrum|city|downtown|by/.test(loc)) {
-        return DIST_IMAGES.city;
-      }
-
-      let month = 0;
-      try { month = new Date(ev.date).getMonth(); } catch(e) { month = 0; }
+      if (dists.some(x=>/trail|terreng|sti/.test(x)) || /trail|terreng|sti/.test(title)) return DIST_IMAGES.trail;
+      if (dists.some(x=>/21|halve|half/.test(x)) || /21k|half/.test(title)) return DIST_IMAGES['21k'];
+      if (dists.some(x=>/10/.test(x)) || /10k/.test(title)) return DIST_IMAGES['10k'];
+      if (dists.some(x=>/5/.test(x)) || /5k/.test(title)) return DIST_IMAGES['5k'];
+      if (/sentrum|city|downtown|by/.test(loc)) return DIST_IMAGES.city;
+      let month = 0; try { month = new Date(ev.date).getMonth(); } catch(e) { month = 0; }
       const season =
         (month===11 || month<=1) ? 'winter' :
         (month<=4) ? 'spring' :
         (month<=7) ? 'summer' : 'autumn';
       return SEASON_IMAGES[season];
     }
-
-    // Ny: velg primær + fallback + ekstra fallback
     function pickImageSources(ev){
       const primary = (ev.image && /^https?:\/\//i.test(ev.image)) ? ev.image : null;
       const fallback = safeImageForEvent(ev);
@@ -631,11 +528,9 @@
       return { primary, fallback, extraFallback };
     }
 
-    // EQ Timing
     async function fetchEqTimingDirect(){
       const url='https://api.eqtiming.com/api/v1/Events';
-      const ctrl=new AbortController();
-      const t=setTimeout(()=>ctrl.abort(), 8000);
+      const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(), 8000);
       try{
         const r=await fetch(url,{headers:{accept:'application/json'},mode:'cors',signal:ctrl.signal});
         clearTimeout(t);
@@ -660,8 +555,7 @@
             signup_url:signup, details_url:website, lat, lng, premium:false, _source:'eqtiming'
           };
         }).filter(e => e.date && !Number.isNaN(new Date(e.date)));
-        const key=e=>`${e.title}|${e.date}`;
-        const seen=new Set(); const cleaned=[];
+        const key=e=>`${e.title}|${e.date}`; const seen=new Set(); const cleaned=[];
         for(const e of mapped.sort((a,b)=>new Date(a.date)-new Date(b.date))){
           const k=key(e); if(seen.has(k)) continue; seen.add(k); cleaned.push(e);
         }
@@ -669,32 +563,18 @@
       }catch(err){ return null; }
     }
 
-    // Local storage helpers
-    const loadLocalEvents = () => {
-      try{ const raw=localStorage.getItem(LS_EVENTS); return raw? JSON.parse(raw):[] }catch(e){ return [] }
-    };
-    const saveLocalEvents = arr => { try{ localStorage.setItem(LS_EVENTS, JSON.stringify(arr)); }catch(e){} };
+    const loadLocalEvents = () => { try{ const raw=localStorage.getItem('rn_events_v1'); return raw? JSON.parse(raw):[] }catch(e){ return [] } };
+    const saveLocalEvents = arr => { try{ localStorage.setItem('rn_events_v1', JSON.stringify(arr)); }catch(e){} };
+    const loadProfile = () => { try{ const raw=localStorage.getItem('rn_profile_v1'); return raw? JSON.parse(raw): null }catch(e){ return null } };
+    const saveProfile = obj => { try{ localStorage.setItem('rn_profile_v1', JSON.stringify(obj)); }catch(e){} };
+    const clearProfile = () => { try{ localStorage.removeItem('rn_profile_v1'); }catch(e){} };
 
-    const loadProfile = () => {
-      try{ const raw=localStorage.getItem(LS_PROFILE); return raw? JSON.parse(raw): null }catch(e){ return null }
-    };
-    const saveProfile = obj => { try{ localStorage.setItem(LS_PROFILE, JSON.stringify(obj)); }catch(e){} };
-    const clearProfile = () => { try{ localStorage.removeItem(LS_PROFILE); }catch(e){} };
-
-    // Init events
     async function loadEvents(){
       const local = loadLocalEvents();
       let fromEq = await fetchEqTimingDirect();
-      if(Array.isArray(fromEq) && fromEq.length){
-        state.all = dedupe([...local, ...fromEq]);
-      } else {
-        const seed = JSON.parse(document.getElementById('events-seed').textContent);
-        state.all = dedupe([...local, ...seed]);
-      }
-      renderFilters();
-      setView('list');
-      initCountdownToNext();
-      renderSkeleton(false);
+      if(Array.isArray(fromEq) && fromEq.length){ state.all = dedupe([...local, ...fromEq]); }
+      else { const seed = JSON.parse(document.getElementById('events-seed').textContent); state.all = dedupe([...local, ...seed]); }
+      renderFilters(); setView('list'); initCountdownToNext(); renderSkeleton(false);
     }
     function dedupe(list){
       const out=[], seen=new Set();
@@ -708,48 +588,29 @@
       return out;
     }
 
-    // Skjelett-kort ved første last
     function renderSkeleton(show=true){
       const grid=document.getElementById('eventsGrid');
       if(!show){ grid.querySelectorAll('.skeleton').forEach(n=>n.remove()); return; }
       grid.innerHTML='';
-      for(let i=0;i<6;i++){
-        const card=document.createElement('div'); card.className='card overflow-hidden skeleton';
-        card.style.height='280px'; grid.appendChild(card);
-      }
+      for(let i=0;i<6;i++){ const card=document.createElement('div'); card.className='card overflow-hidden skeleton'; card.style.height='280px'; grid.appendChild(card); }
     }
 
-    // Countdown
     function initCountdownToNext(){
       const today=new Date(); today.setHours(0,0,0,0);
-      const upcoming = state.all
-        .map(e=>({...e,_d:new Date(e.date)}))
-        .filter(e=>!isNaN(e._d) && e._d>=today)
-        .sort((a,b)=>a._d-b._d);
+      const upcoming = state.all.map(e=>({...e,_d:new Date(e.date)})).filter(e=>!isNaN(e._d) && e._d>=today).sort((a,b)=>a._d-b._d);
       state.nextEvent = upcoming[0] || null;
       const label = document.getElementById('nextRaceLabel');
       if(state.nextEvent){
         state.nextTarget = new Date(state.nextEvent.date+'T09:00:00');
         label.textContent = `Neste løp: ${state.nextEvent.title} — ${fmtDate(state.nextEvent.date)}`;
-        const cta = document.getElementById('nextRaceCta');
-        if(cta){ cta.onclick = (e)=>{ e.preventDefault(); openEvent(state.nextEvent); }; }
-        // Dynamisk JSON-LD for neste løp (SEO)
+        const cta = document.getElementById('nextRaceCta'); if(cta){ cta.onclick = (e)=>{ e.preventDefault(); openEvent(state.nextEvent); }; }
         try{
-          const ld = {
-            '@context':'https://schema.org', '@type':'SportsEvent',
-            name: state.nextEvent.title,
-            startDate: state.nextEvent.date,
-            eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-            eventStatus: 'https://schema.org/EventScheduled',
-            location: { '@type':'Place', name: state.nextEvent.location||'', address: state.nextEvent.region||'Norge' }
-          };
-          const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld);
-          document.head.appendChild(s);
+          const ld = { '@context':'https://schema.org', '@type':'SportsEvent', name: state.nextEvent.title, startDate: state.nextEvent.date, eventAttendanceMode:'https://schema.org/OfflineEventAttendanceMode', eventStatus:'https://schema.org/EventScheduled', location:{'@type':'Place', name: state.nextEvent.location||'', address: state.nextEvent.region||'Norge'} };
+          const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
         }catch{}
       } else {
         const fallback = new Date(); fallback.setDate(fallback.getDate()+60);
-        state.nextTarget = fallback;
-        label.textContent = `Neste løp: annonseres snart`;
+        state.nextTarget = fallback; label.textContent = `Neste løp: annonseres snart`;
       }
       tick(); clearInterval(window.__countInt__); window.__countInt__=setInterval(tick,1000);
     }
@@ -766,7 +627,6 @@
       document.getElementById("s").textContent=s;
     }
 
-    // Filters
     function renderFilters(){
       const months=new Set(), regions=new Set();
       for(const ev of state.all){ const dd=new Date(ev.date); if(!isNaN(dd)) months.add(monthKey(dd)); if(ev.region) regions.add(ev.region); }
@@ -785,10 +645,7 @@
       const today=new Date(); today.setHours(0,0,0,0);
       let list=[...state.all];
       if(!state.showPast) list=list.filter(e=>new Date(e.date)>=today);
-      if(state.filters.q){
-        const q=state.filters.q.toLowerCase();
-        list=list.filter(e=>`${e.title} ${e.location}`.toLowerCase().includes(q));
-      }
+      if(state.filters.q){ const q=state.filters.q.toLowerCase(); list=list.filter(e=>`${e.title} ${e.location}`.toLowerCase().includes(q)); }
       if(state.filters.month){ list=list.filter(e=>monthKey(new Date(e.date))===state.filters.month); }
       if(state.filters.region){ list=list.filter(e=>e.region===state.filters.region); }
       if(state.filters.sort==='name'){ list.sort((a,b)=>a.title.localeCompare(b.title)); }
@@ -797,20 +654,13 @@
       return list;
     }
 
-    // List view
     function renderList(){
       const items=filtered(); const grid=document.getElementById('eventsGrid'); const empty=document.getElementById('eventsEmpty');
       grid.innerHTML=''; document.getElementById('eventsSummary').textContent=`Viser ${items.length} arrangementer`;
       if(items.length===0){
         empty.classList.remove('hidden');
-        empty.innerHTML = `
-          Ingen arrangementer matcher filtrene nå.
-          <button class="ml-2 underline" style="color:var(--rn-green)" id="emptyReset">Nullstill filtre</button>`;
-        document.getElementById('emptyReset').onclick = () => {
-          state.filters={q:'',month:'',region:'',sort:'date'};
-          q.value=''; month.value=''; region.value=''; sort.value='date';
-          setView(state.view);
-        };
+        empty.innerHTML = `Ingen arrangementer matcher filtrene nå. <button class="ml-2 underline link-green" id="emptyReset">Nullstill filtre</button>`;
+        document.getElementById('emptyReset').onclick = () => { state.filters={q:'',month:'',region:'',sort:'date'}; q.value=''; month.value=''; region.value=''; sort.value='date'; setView(state.view); };
         return;
       } else empty.classList.add('hidden');
 
@@ -840,13 +690,13 @@
           </div>
           <div class="p-6">
             <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
-            <h3 class="text-xl font-semibold mt-1 link-brand line-clamp-2" title="${ev.title}">${ev.title}</h3>
+            <h3 class="text-xl font-semibold mt-1 a link-green line-clamp-2" title="${ev.title}">${ev.title}</h3>
             <p class="text-sm text-slate-700 mt-1">${fmtDate(ev.date)} • ${ev.location}</p>
             <p class="text-sm mt-2">${(ev.distances||[]).join(', ')}</p>
 
             <div class="mt-3 flex items-center gap-3">
-              <button class="btn-brand rounded-full px-4 py-2 text-sm font-semibold" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
-              <a class="text-sm link-brand" href="javascript:void(0)" onclick='openEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Les mer</a>
+              <button class="btn-brand text-sm" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
+              <a class="text-sm link-green" href="javascript:void(0)" onclick='openEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Les mer</a>
               <button class="p-2 rounded-full border hover:bg-slate-50" aria-label="Del" onclick='shareEvent(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12v-2a4 4 0 0 1 8 0v2"/><path d="M12 12h8"/><path d="M5 12v6a4 4 0 0 0 8 0v-6"/></svg>
               </button>
@@ -861,120 +711,35 @@
 
             <div id='inline-weather-${idx}' class='mt-4 hidden'></div>
           </div>`;
-        // Fix image src at runtime
-        const img = el.querySelector('img');
-        const srcs = pickImageSources(ev);
-        img.setAttribute('src', srcs.primary || srcs.fallback);
-
+        const img = el.querySelector('img'); const srcs = pickImageSources(ev); img.setAttribute('src', srcs.primary || srcs.fallback);
         grid.appendChild(el);
       });
     }
 
-    // --- VÆR: Open-Meteo (kompakt) ---
-    const WMO = {
-      0:{t:'Klar',i:'☀️'},1:{t:'Lettskyet',i:'🌤️'},2:{t:'Delvis',i:'⛅'},3:{t:'Overskyet',i:'☁️'},
-      45:{t:'Tåke',i:'🌫️'},48:{t:'Rimtåke',i:'🌫️'},51:{t:'Yr',i:'🌦️'},53:{t:'Yr',i:'🌦️'},55:{t:'Yr',i:'🌦️'},
-      61:{t:'Regn',i:'🌧️'},63:{t:'Regn',i:'🌧️'},65:{t:'Kraftig regn',i:'🌧️'},66:{t:'Underkjølt',i:'🌨️'},67:{t:'Underkjølt',i:'🌨️'},
-      71:{t:'Snø',i:'❄️'},73:{t:'Snø',i:'❄️'},75:{t:'Snø',i:'❄️'},80:{t:'Regnbyger',i:'🌦️'},81:{t:'Regnbyger',i:'🌦️'},
-      82:{t:'Kraftige byger',i:'🌧️'},95:{t:'Torden',i:'⛈️'},96:{t:'Torden',i:'⛈️'},99:{t:'Torden',i:'⛈️'}
-    };
-
-    function getLatLngForEvent(ev){
-      return (ev.lat && ev.lng) ? [ev.lat, ev.lng]
-           : geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null;
-    }
-
+    const WMO = {0:{t:'Klar',i:'☀️'},1:{t:'Lettskyet',i:'🌤️'},2:{t:'Delvis',i:'⛅'},3:{t:'Overskyet',i:'☁️'},45:{t:'Tåke',i:'🌫️'},48:{t:'Rimtåke',i:'🌫️'},51:{t:'Yr',i:'🌦️'},53:{t:'Yr',i:'🌦️'},55:{t:'Yr',i:'🌦️'},61:{t:'Regn',i:'🌧️'},63:{t:'Regn',i:'🌧️'},65:{t:'Kraftig regn',i:'🌧️'},66:{t:'Underkjølt',i:'🌨️'},67:{t:'Underkjølt',i:'🌨️'},71:{t:'Snø',i:'❄️'},73:{t:'Snø',i:'❄️'},75:{t:'Snø',i:'❄️'},80:{t:'Regnbyger',i:'🌦️'},81:{t:'Regnbyger',i:'🌦️'},82:{t:'Kraftige byger',i:'🌧️'},95:{t:'Torden',i:'⛈️'},96:{t:'Torden',i:'⛈️'},99:{t:'Torden',i:'⛈️'}};
+    function getLatLngForEvent(ev){ return (ev.lat && ev.lng) ? [ev.lat, ev.lng] : geo[ev.location] || geo[(ev.location||'').split(',')[0]] || null; }
     async function fetchWeather(lat, lon){
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`+
-                  `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&current_weather=true&timezone=auto`;
-      const r = await fetch(url, {headers:{'accept':'application/json'}});
-      if(!r.ok) throw new Error('weather '+r.status);
-      return r.json();
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&current_weather=true&timezone=auto`;
+      const r = await fetch(url, {headers:{'accept':'application/json'}}); if(!r.ok) throw new Error('weather '+r.status); return r.json();
     }
-
-    function fmtDayLabel(iso){
-      const d = new Date(iso);
-      return d.toLocaleDateString('no-NO',{weekday:'short'}).replace(/\.$/,'');
-    }
-
+    function fmtDayLabel(iso){ const d = new Date(iso); return d.toLocaleDateString('no-NO',{weekday:'short'}).replace(/\.$/,''); }
     function renderWeatherBox(container, w){
-      const cur = w.current_weather;
-      const d = w.daily;
-      const days = d.time.slice(0,5).map((date, idx)=>({
-        date,
-        code: d.weathercode[idx],
-        tmax: Math.round(d.temperature_2m_max[idx]),
-        tmin: Math.round(d.temperature_2m_min[idx]),
-        p: typeof d.precipitation_sum[idx]==='number' ? Math.round(d.precipitation_sum[idx]) : 0
-      }));
-
-      const curIcon = (WMO[cur.weathercode]||{}).i || 'ℹ️';
-      const curTxt  = (WMO[cur.weathercode]||{}).t || 'Vær';
-
-      const chips = days.map(day=>{
-        const m = WMO[day.code] || {t:'', i:'ℹ️'};
-        return `<span class="wx-chip" title="${m.t}">
-          <span class="wx-day">${fmtDayLabel(day.date)}</span>
-          <span class="wx-icon" aria-hidden="true">${m.i}</span>
-          <span class="wx-temp">${day.tmax}°/${day.tmin}°</span>
-          <span class="wx-muted">${day.p} mm</span>
-        </span>`;
-      }).join('');
-
-      container.innerHTML = `
-        <div class="wx" role="group" aria-label="Værmelding">
-          <span class="wx-chip" title="${curTxt}">
-            <strong>Nå</strong>
-            <span class="wx-icon" aria-hidden="true">${curIcon}</span>
-            <span class="wx-temp">${Math.round(cur.temperature)}°</span>
-            <span class="wx-muted">${curTxt}</span>
-          </span>
-          ${chips}
-        </div>
-        <div class="wx-more">
-          <button class="underline" style="color:var(--rn-green)" type="button" id="wxExpandBtn">Utvid</button>
-          <a class="ml-3 underline" style="color:var(--rn-green)" target="_blank" rel="noopener"
-             href="https://www.open-meteo.com/en/docs#api">Kilde</a>
-        </div>
-        <div id="wxExpanded" class="hidden mt-2">
-          ${days.map(dy=>{
-            const m = WMO[dy.code] || {t:'', i:'ℹ️'};
-            return `<div class="flex items-center gap-2 text-sm">
-              <span class="w-12 font-semibold">${fmtDayLabel(dy.date)}</span>
-              <span class="wx-icon">${m.i}</span>
-              <span class="w-20">${dy.tmax}°/${dy.tmin}°</span>
-              <span class="w-16">${dy.p} mm</span>
-              <span class="text-slate-600">${m.t}</span>
-            </div>`;
-          }).join('')}
-        </div>
-      `;
-
-      const btn = container.querySelector('#wxExpandBtn');
-      const exp = container.querySelector('#wxExpanded');
-      btn?.addEventListener('click', ()=>{
-        const hid = exp.classList.toggle('hidden');
-        btn.textContent = hid ? 'Utvid' : 'Skjul';
-      });
+      const cur=w.current_weather, d=w.daily;
+      const days = d.time.slice(0,5).map((date,i)=>({date,code:d.weathercode[i],tmax:Math.round(d.temperature_2m_max[i]),tmin:Math.round(d.temperature_2m_min[i]),p:Math.round(d.precipitation_sum[i]||0)}));
+      const chips = days.map(day=>{ const m=WMO[day.code]||{t:'',i:'ℹ️'}; return `<span class="wx-chip" title="${m.t}"><span class="wx-day">${fmtDayLabel(day.date)}</span><span class="wx-icon">${m.i}</span><span class="wx-temp">${day.tmax}°/${day.tmin}°</span><span class="wx-muted">${day.p} mm</span></span>`; }).join('');
+      const curIcon=(WMO[cur.weathercode]||{}).i||'ℹ️', curTxt=(WMO[cur.weathercode]||{}).t||'Vær';
+      container.innerHTML=`<div class="wx"><span class="wx-chip" title="${curTxt}"><strong>Nå</strong><span class="wx-icon">${curIcon}</span><span class="wx-temp">${Math.round(cur.temperature)}°</span><span class="wx-muted">${curTxt}</span></span>${chips}</div>
+      <div class="wx-more"><button class="underline link-green" type="button" id="wxExpandBtn">Utvid</button></div>
+      <div id="wxExpanded" class="hidden mt-2">${days.map(dy=>{ const m=WMO[dy.code]||{t:'',i:'ℹ️'}; return `<div class="flex items-center gap-2 text-sm"><span class="w-12 font-semibold">${fmtDayLabel(dy.date)}</span><span class="wx-icon">${m.i}</span><span class="w-20">${dy.tmax}°/${dy.tmin}°</span><span class="w-16">${dy.p} mm</span><span class="text-slate-600">${m.t}</span></div>`; }).join('')}</div>`;
+      const btn = container.querySelector('#wxExpandBtn'); const exp = container.querySelector('#wxExpanded'); btn?.addEventListener('click', ()=>{ const hid=exp.classList.toggle('hidden'); btn.textContent=hid?'Utvid':'Skjul'; });
     }
-
     async function showInlineWeather(i){
-      const items = filtered();
-      const ev = items[i]; if(!ev) return;
-      const box = document.getElementById(`inline-weather-${i}`);
-      box.classList.remove('hidden');
-      box.innerHTML = `<div class="text-sm text-slate-600">Henter vær…</div>`;
-      const ll = getLatLngForEvent(ev);
-      if(!ll){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; return; }
-      try{
-        const w = await fetchWeather(ll[0], ll[1]);
-        renderWeatherBox(box, w);
-      }catch(e){
-        box.innerHTML = `<p class="text-sm text-red-600">Kunne ikke hente vær nå.</p>`;
-      }
+      const items = filtered(); const ev = items[i]; if(!ev) return;
+      const box = document.getElementById(`inline-weather-${i}`); box.classList.remove('hidden'); box.innerHTML = `<div class="text-sm text-slate-600">Henter vær…</div>`;
+      const ll = getLatLngForEvent(ev); if(!ll){ box.innerHTML = `<p class="text-sm text-slate-600">Fant ikke sted for vær.</p>`; return; }
+      try{ const w = await fetchWeather(ll[0], ll[1]); renderWeatherBox(box, w); }catch(e){ box.innerHTML = `<p class="text-sm text-red-600">Kunne ikke hente vær nå.</p>`; }
     }
 
-    // Calendar
     const daysInMonth=(y,m)=> new Date(y,m+1,0).getDate();
     function renderCalendar(){
       const current=new Date(state.cal.getFullYear(), state.cal.getMonth(), 1);
@@ -996,13 +761,8 @@
       }
     }
 
-    // Map
     let map, markersLayer;
-    function ensureMap(){
-      if(map) return;
-      map=L.map('map'); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
-      markersLayer=L.layerGroup().addTo(map);
-    }
+    function ensureMap(){ if(map) return; map=L.map('map'); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map); markersLayer=L.layerGroup().addTo(map); }
     function renderMap(){
       ensureMap(); markersLayer.clearLayers();
       const items=filtered(); const points=[];
@@ -1016,7 +776,6 @@
       setTimeout(()=>map.invalidateSize(),0);
     }
 
-    // View switch
     function setView(v){
       state.view=v;
       ['list','cal','map'].forEach(id=>{
@@ -1028,7 +787,6 @@
       if(v==='map') renderMap();
     }
 
-    // Favoritter
     const getFavs=()=>{ try{ return JSON.parse(localStorage.getItem(LS_FAVS)||'[]'); }catch(e){ return [] } };
     const isFav=id=> getFavs().includes(id);
     function toggleFav(id){
@@ -1040,8 +798,7 @@
     }
     function renderFavoritesBody(){
       const body=document.getElementById('favoritesBody');
-      const favs=getFavs();
-      const map=new Map(state.all.map(e=>[e.id,e]));
+      const favs=getFavs(); const map=new Map(state.all.map(e=>[e.id,e]));
       const items=favs.map(id=>map.get(id)).filter(Boolean).sort((a,b)=>new Date(a.date)-new Date(b.date));
       body.innerHTML='';
       if(!items.length){ body.innerHTML='<p class="text-slate-600">Ingen favoritter ennå.</p>'; return; }
@@ -1054,7 +811,7 @@
             <div class="text-sm text-slate-600">${fmtDate(ev.date)} • ${ev.location||''}</div>
           </div>
           <div class="flex gap-2">
-            <button class="btn-brand rounded-full px-3 py-2 text-sm font-semibold" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
+            <button class="btn-brand text-sm" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
             <button class="rounded-full border px-3 py-2 text-sm font-semibold hover:bg-slate-50" onclick="toggleFav('${ev.id}')">Fjern</button>
           </div>
         `;
@@ -1062,17 +819,12 @@
       });
     }
 
-    // Deling
     async function shareEvent(ev){
       const text = `${ev.title} — ${fmtDate(ev.date)} • ${ev.location}`;
       const url = ev.signup_url || ev.details_url || location.href;
-      try{
-        if(navigator.share){ await navigator.share({title:ev.title, text, url}); }
-        else { await navigator.clipboard.writeText(url); alert('Lenke kopiert'); }
-      }catch(e){}
+      try{ if(navigator.share){ await navigator.share({title:ev.title, text, url}); } else { await navigator.clipboard.writeText(url); alert('Lenke kopiert'); } }catch(e){}
     }
 
-    // Resultater
     document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('resSearch')?.addEventListener('click', ()=>{
         const name = (document.getElementById('resName').value||'').trim();
@@ -1087,13 +839,12 @@
         const box = document.getElementById('resLinks'); box.innerHTML='';
         engines.forEach(e=>{
           const a=document.createElement('a'); a.href=e.url; a.target='_blank'; a.rel='noopener';
-          a.textContent=`Åpne i ${e.label}`; a.className='underline'; a.style.color='var(--rn-green)';
+          a.textContent=`Åpne i ${e.label}`; a.className='underline link-green';
           const p=document.createElement('p'); p.appendChild(a); box.appendChild(p);
         });
       });
     });
 
-    // Modaler
     const modalBackdrop = document.getElementById('eventModalBackdrop');
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
@@ -1116,7 +867,7 @@
             <div class="text-lg font-semibold">${fmtDate(ev.date)} • ${ev.location||''}</div>
             <div class="mt-2 text-slate-700">${(ev.distances||[]).join(', ')}</div>
             <div class="mt-4 flex flex-wrap gap-3">
-              <button class="btn-brand rounded-full px-4 py-2 font-semibold" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
+              <button class="btn-brand" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
               ${ev.details_url?`<a href="${ev.details_url}" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" target="_blank" rel="noopener">Nettside</a>`:''}
             </div>
             ${pent ? `<h4 style="color:var(--rn-green)" class="font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
@@ -1135,7 +886,6 @@
       }, 50);
     }
 
-    // Profil: UI wiring
     const profileModal=document.getElementById('profileModal');
     const profileClose=()=> profileModal.style.display='none';
     const openProfile=()=>{ hydrateProfileForm(); renderHistory(); renderRegistrations(); profileModal.style.display='flex'; };
@@ -1144,7 +894,6 @@
     document.getElementById('profileClose').addEventListener('click', profileClose);
     profileModal.addEventListener('click', e=>{ if(e.target===profileModal) profileClose(); });
 
-    // Profil: form helpers
     function hydrateProfileForm(){
       const p = loadProfile() || {};
       document.getElementById('pr_name').value = p.name || '';
@@ -1166,8 +915,6 @@
         registrations: (loadProfile()?.registrations)||[]
       };
     }
-
-    // Profil: history UI
     function renderHistory(){
       const list=document.getElementById('historyList');
       const p=loadProfile(); const arr=p?.history||[];
@@ -1196,8 +943,6 @@
         list.appendChild(row);
       });
     }
-
-    // Profil: actions
     document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('profileSave').addEventListener('click', ()=>{
         const p=collectProfileFromForm();
@@ -1211,37 +956,25 @@
         if(confirm('Slette profilen og all lokal data?')){ clearProfile(); renderRegistrations(); renderHistory(); profileModal.style.display='none'; }
       });
       document.getElementById('addHistoryBtn').addEventListener('click', ()=>{
-        const race = prompt('Løpsnavn');
-        if(!race) return;
-        const date = prompt('Dato (YYYY-MM-DD)');
-        if(!date) return;
+        const race = prompt('Løpsnavn'); if(!race) return;
+        const date = prompt('Dato (YYYY-MM-DD)'); if(!date) return;
         const time = prompt('Tid/resultat (valgfritt)');
         const p=loadProfile()||{history:[], registrations:[]};
-        p.history = p.history||[]; p.history.push({race, date, time});
-        saveProfile(p); renderHistory();
+        p.history = p.history||[]; p.history.push({race, date, time}); saveProfile(p); renderHistory();
       });
     });
 
-    // Påmelding
     function attemptRegister(ev){
       let p = loadProfile();
       if(!p || !p.name || !p.email){
-        openProfile();
-        alert('Opprett/lagre profil først, så kan du melde deg på.');
-        return;
+        openProfile(); alert('Opprett/lagre profil først, så kan du melde deg på.'); return;
       }
       p.registrations = p.registrations || [];
-      if(p.registrations.some(r=> r.id===ev.id)){
-        alert('Du er allerede registrert på dette løpet i demoen.');
-      } else {
-        p.registrations.push({ id: ev.id, title: ev.title, date: ev.date, location: ev.location });
-        saveProfile(p);
-        alert(`Påmelding registrert i demo: ${ev.title} — ${fmtDate(ev.date)}.`);
-      }
+      if(p.registrations.some(r=> r.id===ev.id)){ alert('Du er allerede registrert på dette løpet i demoen.'); }
+      else { p.registrations.push({ id: ev.id, title: ev.title, date: ev.date, location: ev.location }); saveProfile(p); alert(`Påmelding registrert i demo: ${ev.title} — ${fmtDate(ev.date)}.`); }
       renderRegistrations();
     }
 
-    // Registrer-løp (arrangør)
     const regModal=document.getElementById('registerModal');
     document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('openRegister').addEventListener('click', ()=> regModal.style.display='flex');
@@ -1266,11 +999,9 @@
       const ev=readReg();
       if(!ev.title || !ev.date){ alert('Løpsnavn og dato må fylles ut.'); return; }
       ev.id = `${ev.title}-${ev.date}`.toLowerCase().replace(/[^a-z0-9]+/g,'-');
-      const all = dedupe([...loadLocalEvents().filter(e=>e.id!==ev.id), ev]);
-      saveLocalEvents(all);
+      const all = dedupe([...loadLocalEvents().filter(e=>e.id!==ev.id), ev]); saveLocalEvents(all);
       state.all = dedupe([...all, ...state.all.filter(x=>x._source==='eqtiming')]);
-      setView(state.view);
-      regModal.style.display='none';
+      setView(state.view); regModal.style.display='none';
       alert(publish ? 'Løpet er publisert' : 'Utkast lagret');
       ['reg_name','reg_org','reg_date','reg_region','reg_loc','reg_dist','reg_signup','reg_website'].forEach(id=>document.getElementById(id).value='');
       document.getElementById('reg_premium').checked=false;
@@ -1280,41 +1011,17 @@
       document.getElementById('reg_publish').addEventListener('click', ()=> saveReg(true));
     });
 
-    // Favoritter modal
     const favModal=document.getElementById('favoritesModal');
     document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('openFavorites').addEventListener('click', ()=>{ renderFavoritesBody(); favModal.style.display='flex'; });
       document.getElementById('favoritesClose').addEventListener('click', ()=> favModal.style.display='none');
       favModal.addEventListener('click', e=>{ if(e.target===favModal) favModal.style.display='none'; });
 
-      // Nav-favoritter-knapp
       document.getElementById('navFavorites')?.addEventListener('click', ()=>{
         renderFavoritesBody();
         document.getElementById('favoritesModal').style.display='flex';
       });
 
-      // Newsletter dummy
-      document.getElementById('newsletter').addEventListener('submit', e=>{
-        e.preventDefault();
-        const email=document.getElementById('newsletterEmail').value.trim();
-        if(!email){ return; }
-        document.getElementById('newsletterMsg').textContent='Takk for påmeldingen. Vi sender kun relevante oppdateringer.';
-        e.target.reset();
-      });
-
-      // Eksport CSV
-      document.getElementById('exportCsv').addEventListener('click', ()=>{
-        const items=filtered();
-        const rows=[["Tittel","Dato","Sted","Region","Distanser","Påmelding","Nettside","Premium"]];
-        for(const e of items){
-          rows.push([e.title, e.date, e.location||'', e.region||'', (e.distances||[]).join(' '), e.signup_url||'', e.details_url||'', e.premium?'ja':'nei']);
-        }
-        const csv = rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
-        const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
-        const a=document.createElement('a'); a.href=url; a.download='runnorway-eksport.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-      });
-
-      // Init + tab-navigasjon
       renderSkeleton(true);
       loadEvents();
 
@@ -1346,7 +1053,8 @@
       });
     });
 
-    // Tilgjengelighet: ESC for å lukke
+    function getFavs(){ try{ return JSON.parse(localStorage.getItem(LS_FAVS)||'[]'); }catch(e){ return [] } }
+
     document.addEventListener('keydown', e=>{
       if(e.key==='Escape'){
         [document.getElementById('eventModalBackdrop'), document.getElementById('favoritesModal'), document.getElementById('registerModal'), document.getElementById('profileModal')]
@@ -1354,6 +1062,14 @@
       }
     });
   </script>
+
+  <script id="events-seed" type="application/json">[
+    {"title":"Bergen City Mile","date":"2026-04-12","location":"Bergen sentrum","region":"Vestland","distances":["5K","10K","Familie"],"image":"https://images.unsplash.com/photo-1552674605-db6ffd4facb0?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Oslo FjordRun 10K","date":"2026-05-03","location":"Bygdøy, Oslo","region":"Oslo","distances":["10K"],"image":"https://images.unsplash.com/photo-1541963694-3f4e68f1b7a1?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Trondheim City Trail","date":"2026-05-18","location":"Bymarka, Trondheim","region":"Trøndelag","distances":["8K","16K"],"image":"https://images.unsplash.com/photo-1520975922203-b85e66f2aa64?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Stavanger Strand 5K","date":"2026-06-07","location":"Stavanger sentrum","region":"Rogaland","distances":["5K"],"image":"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"},
+    {"title":"Midnight Sun Half","date":"2026-06-21","location":"Tromsøya","region":"Troms og Finnmark","distances":["21K","10K"],"image":"https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop","signup_url":"#","details_url":"#"}
+  ]</script>
 
   <noscript>
     <div style="max-width:760px;margin:2rem auto;padding:1rem;border:1px solid #e5e7eb;border-radius:12px;">
