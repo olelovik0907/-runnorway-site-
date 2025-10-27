@@ -82,6 +82,146 @@
     .skip-link:focus{ left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; background:#fff; border:2px solid var(--brand); border-radius:.5rem; z-index:100; }
   </style>
 
+  <!-- Aston Martin-inspirert tema som overstyrer det gamle. Lagt etter for å vinne ved lik spesifisitet. -->
+  <style>
+    :root{
+      --rn-green:#0A5C52;
+      --rn-green-deep:#07443D;
+      --rn-graphite:#121314;
+      --rn-bg:#F5F6F7;
+      --rn-panel:#FBFBFC;
+      --rn-lime:#C8E000;
+      --rn-text:#1F2326;
+      --rn-text-inv:#F3F4F6;
+      --rn-radius:14px;
+      --rn-shadow:0 8px 24px rgba(10,92,82,.08), 0 2px 6px rgba(18,19,20,.12);
+    }
+
+    html,body{
+      background: var(--rn-bg);
+      color: var(--rn-text);
+    }
+
+    /* Header og toppnav, bruk klassen site-header på header-elementet */
+    .site-header{
+      background: linear-gradient(180deg, var(--rn-graphite), #181A1B);
+      color: var(--rn-text-inv);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .site-header a{ color: var(--rn-text-inv); }
+    .site-header a:hover{ color: var(--rn-lime); }
+
+    /* Hero: beholder din struktur, men gir subtil grafitt-til-panel overgang */
+    #home{
+      background:
+        radial-gradient(1200px 300px at 20% -20%, rgba(10,92,82,.25), transparent 60%),
+        linear-gradient(180deg, #0d0f10 0%, #121314 12%, var(--rn-panel) 12.5%, var(--rn-panel) 100%);
+      color: var(--rn-text);
+    }
+    #home h1, #home h2{ color: var(--rn-green-deep); }
+    #home .btn-ghost{ background:#fff; color: var(--rn-green); }
+    #home .btn-ghost:hover{ background:#fff; filter:brightness(.98); }
+
+    /* Kort, paneler, tabeller */
+    .card, .table{
+      background: var(--rn-panel);
+      border: 1px solid rgba(7,68,61,.14);
+      border-radius: var(--rn-radius);
+      box-shadow: var(--rn-shadow);
+    }
+
+    /* Primærknapp til AM-grønn med lime-hover */
+    .btn-brand{
+      background: var(--rn-green);
+      color: #fff;
+      border: 1px solid rgba(200,224,0,.45);
+      transition: transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .btn-brand:hover{
+      background: var(--rn-lime);
+      color: var(--rn-graphite);
+      border-color: var(--rn-lime);
+      box-shadow: 0 10px 28px rgba(200,224,0,.25);
+      transform: translateY(-1px);
+    }
+
+    /* Sekundær knapper og filtre */
+    .pill{
+      background: #fff;
+      color: var(--rn-text);
+      border: 1px solid rgba(18,19,20,.12);
+    }
+    .pill.btn-brand{
+      background: var(--rn-green);
+      color:#fff;
+      border:1px solid rgba(200,224,0,.45);
+    }
+
+    /* Lenker og interaksjoner */
+    .link-brand{ color: var(--rn-green); text-underline-offset: 3px; }
+    .link-brand:hover{ color: var(--rn-lime); text-decoration: underline; }
+
+    /* Smalt mørkt kontrastbånd */
+    .section-contrast{
+      background: linear-gradient(180deg,#141516,#0f1011);
+      color: var(--rn-text-inv);
+      padding: 2.5rem 0;
+    }
+    .section-contrast .button,
+    .section-contrast .btn-brand{
+      background: var(--rn-lime);
+      color: var(--rn-graphite);
+      border-color: var(--rn-lime);
+    }
+
+    /* Tabellheader i dyp grønn */
+    #panel-cal thead, #arrangementer thead, #resultater thead{
+      background: linear-gradient(180deg, var(--rn-green-deep), var(--rn-green));
+      color: var(--rn-text-inv);
+    }
+
+    /* Inputs fokusstil */
+    input, select{
+      background: white;
+      border: 1px solid rgba(18,19,20,.18);
+      border-radius: 12px;
+      padding: .6rem .8rem;
+    }
+    input:focus, select:focus{
+      outline: none;
+      border-color: var(--rn-green);
+      box-shadow: 0 0 0 3px rgba(10,92,82,.18);
+    }
+
+    /* Kart-/listebryter */
+    .view-switch{
+      background: #fff;
+      border: 1px solid rgba(18,19,20,.1);
+      border-radius: 12px;
+    }
+    .view-switch .active{
+      background: var(--rn-green);
+      color: var(--rn-text-inv);
+    }
+
+    /* Footer, bruk klassen site-footer på footer-elementet */
+    .site-footer{
+      background: linear-gradient(180deg, #0f1011, var(--rn-graphite));
+      color: var(--rn-text-inv);
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    /* Premium-merke i lime-gradient */
+    .badge-premium{
+      background: linear-gradient(180deg, var(--rn-lime), #E7F28C);
+      color: var(--rn-graphite);
+      border: 1px solid rgba(18,19,20,.12);
+    }
+
+    /* Lesbar tekst på mørkt */
+    .text-on-dark{ color: var(--rn-text-inv) !important; }
+  </style>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -101,7 +241,7 @@
   <a href="#arrangementer" class="skip-link">Hopp til innhold</a>
 
   <!-- Header -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b" role="banner">
+  <header class="sticky top-0 z-50 backdrop-blur border-b site-header" role="banner">
     <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
       <a href="#home" class="flex items-center gap-2 font-bold text-xl link-brand" aria-label="RunNorway hjem">
         <img src="assets/logo-48.png" alt="RunNorway" class="h-8 w-auto" />
@@ -115,15 +255,15 @@
         <button id="navFavorites" class="font-semibold" aria-haspopup="dialog">Favoritter</button>
       </nav>
       <div class="flex items-center gap-2">
-        <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
-        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50" aria-haspopup="dialog">Profil</button>
+        <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold hover:bg-slate-50">Registrer løp</button>
+        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" aria-haspopup="dialog">Profil</button>
         <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
       </div>
     </div>
   </header>
 
   <!-- Hero -->
-  <section id="home" class="relative bg-[var(--brand)] text-white">
+  <section id="home" class="relative">
     <div class="max-w-7xl mx-auto px-4 py-14 sm:py-24 text-center">
       <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-20 mb-6"/>
       <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">RunNorway</h1>
@@ -135,38 +275,47 @@
 
       <!-- Neste løp + Nedtelling -->
       <div class="max-w-3xl mx-auto mt-12 flex items-center justify-center gap-3 flex-wrap">
-        <p id="nextRaceLabel" class="text-white/95 text-lg font-semibold" aria-live="polite"></p>
+        <p id="nextRaceLabel" class="text-lg font-semibold" aria-live="polite"></p>
         <a id="nextRaceCta" href="#arrangementer" class="btn-brand px-4 py-2 rounded-full font-semibold">Meld deg på</a>
       </div>
       <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-3" aria-label="Nedtelling">
-        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
-          <div id="d" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
-          <div class="text-sm uppercase tracking-wide text-white mt-1">Dager</div>
+        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+          <div id="d" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
+          <div class="text-sm uppercase tracking-wide mt-1">Dager</div>
         </div>
-        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
-          <div id="h" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
-          <div class="text-sm uppercase tracking-wide text-white mt-1">Timer</div>
+        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+          <div id="h" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
+          <div class="text-sm uppercase tracking-wide mt-1">Timer</div>
         </div>
-        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
-          <div id="m" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
-          <div class="text-sm uppercase tracking-wide text-white mt-1">Min</div>
+        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+          <div id="m" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
+          <div class="text-sm uppercase tracking-wide mt-1">Min</div>
         </div>
-        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
-          <div id="s" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
-          <div class="text-sm uppercase tracking-wide text-white mt-1">Sek</div>
+        <div class="rounded-xl bg-white border border-white/25 p-4 backdrop-blur-sm">
+          <div id="s" class="text-4xl font-extrabold" style="color:var(--rn-lime)">0</div>
+          <div class="text-sm uppercase tracking-wide mt-1">Sek</div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Smalt kontrastbånd for litt svart uten å gjøre siden tung -->
+  <section class="section-contrast">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-on-dark">Bli med på neste løp</h2>
+      <p class="mt-2 text-on-dark">Påmelding er åpen nå. Sikre deg plass i dag.</p>
+      <a href="#arrangementer" class="btn-brand mt-4 inline-block px-6 py-3 rounded-full font-semibold">Se program</a>
+    </div>
+  </section>
+
   <!-- Arrangementer -->
-  <section id="arrangementer" class="py-16 bg-slate-50">
+  <section id="arrangementer" class="py-16">
     <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-1">Finn løp</h2>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-1" style="color:var(--rn-green)">Finn løp</h2>
       <p class="text-slate-600 mb-4">Filtrer etter måned, region eller distanse.</p>
 
-      <div class="inline-flex rounded-2xl bg-white shadow p-1 mb-4" role="tablist" aria-label="Visning">
-        <button id="tab-list" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="true" aria-controls="panel-list">Liste</button>
+      <div class="inline-flex rounded-2xl bg-white shadow p-1 mb-4 view-switch" role="tablist" aria-label="Visning">
+        <button id="tab-list" class="px-4 py-2 rounded-xl font-semibold active" role="tab" aria-selected="true" aria-controls="panel-list">Liste</button>
         <button id="tab-cal" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-cal">Kalender</button>
         <button id="tab-map" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-map">Kart</button>
       </div>
@@ -238,7 +387,7 @@
   <!-- Resultater -->
   <section id="resultater" class="py-16">
     <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Finn ditt resultat</h2>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4" style="color:var(--rn-green)">Finn ditt resultat</h2>
       <div class="card p-4 sm:p-6">
         <div class="grid sm:grid-cols-3 gap-3">
           <input id="resName" class="rounded-xl border px-3 py-2" placeholder="Navn på løp eller deltaker" />
@@ -254,7 +403,7 @@
   <!-- Kontakt -->
   <section id="kontakt" class="py-16">
     <div class="max-w-4xl mx-auto px-4 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)]">Kontakt oss</h2>
+      <h2 class="text-3xl sm:text-4xl font-bold" style="color:var(--rn-green)">Kontakt oss</h2>
       <p class="mt-2 text-slate-700">Spørsmål om løp, samarbeid eller presse? Send oss e-post.</p>
       <div class="mt-6 flex flex-wrap items-center gap-4 justify-center">
         <a class="btn-brand rounded-full px-6 py-3 font-semibold" href="mailto:post@runnorway.no">post@runnorway.no</a>
@@ -263,30 +412,30 @@
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="py-16 bg-slate-50">
+  <section id="faq" class="py-16">
     <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-6 text-center">Ofte stilte spørsmål</h2>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-center" style="color:var(--rn-green)">Ofte stilte spørsmål</h2>
       <details class="card p-4">
-        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hvordan melder jeg på?</summary>
+        <summary class="cursor-pointer font-semibold" style="color:var(--rn-green)">Hvordan melder jeg på?</summary>
         <p class="mt-2 text-slate-700">Trykk inn på løpet du vil delta på og velg «Delta». Mangler du profil, blir du bedt om å opprette den først.</p>
       </details>
     </div>
   </section>
 
-  <footer class="py-10 bg-[var(--brand)] text-white text-center">
+  <footer class="py-10 text-center site-footer">
     <form id="newsletter" class="max-w-xl mx-auto px-4 flex gap-2 justify-center" novalidate>
       <input id="newsletterEmail" type="email" required placeholder="din@epost.no" class="w-full max-w-xs px-3 py-2 rounded-lg text-slate-900" />
       <button class="btn-brand rounded-lg px-4 py-2 font-semibold" type="submit">Meld meg på</button>
     </form>
-    <p id="newsletterMsg" class="mt-2 text-white/90" aria-live="polite"></p>
-    <p class="mt-4">© <span id="year"></span> RunNorway</p>
+    <p id="newsletterMsg" class="mt-2 text-on-dark" aria-live="polite"></p>
+    <p class="mt-4 text-on-dark">© <span id="year"></span> RunNorway</p>
   </footer>
 
   <!-- Modal: Løpsdetaljer -->
   <div id="eventModalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
-        <h3 id="modalTitle" class="text-xl font-bold text-[var(--brand)]">Løpsnavn</h3>
+        <h3 id="modalTitle" class="text-xl font-bold" style="color:var(--rn-green)">Løpsnavn</h3>
         <div class="flex items-center gap-2">
           <button id="modalShare" class="rounded-full border px-3 py-1 icon-btn">Del</button>
           <button id="modalFav" class="rounded-full border px-3 py-1 icon-btn"><svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6a4.4 4.4 0 0 1 8-2.4 4.4 4.4 0 0 1 8 2.4z"/></svg> Favoritt</button>
@@ -301,7 +450,7 @@
   <div id="favoritesModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
-        <h3 class="text-xl font-bold text-[var(--brand)]">Dine favoritter</h3>
+        <h3 class="text-xl font-bold" style="color:var(--rn-green)">Dine favoritter</h3>
         <button id="favoritesClose" class="rounded-full border px-3 py-1">Lukk</button>
       </div>
       <div id="favoritesBody" class="p-5 grid gap-4"></div>
@@ -312,7 +461,7 @@
   <div id="registerModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
-        <h3 class="text-xl font-bold text-[var(--brand)]">Registrer løp</h3>
+        <h3 class="text-xl font-bold" style="color:var(--rn-green)">Registrer løp</h3>
         <button id="registerClose" class="rounded-full border px-3 py-1">Lukk</button>
       </div>
       <div class="p-5 grid gap-4">
@@ -340,7 +489,7 @@
   <div id="profileModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-header px-5 py-4 flex items-center justify-between">
-        <h3 class="text-xl font-bold text-[var(--brand)]">Din profil</h3>
+        <h3 class="text-xl font-bold" style="color:var(--rn-green)">Din profil</h3>
         <button id="profileClose" class="rounded-full border px-3 py-1">Lukk</button>
       </div>
       <div class="p-5 grid gap-6">
@@ -355,14 +504,14 @@
 
         <div>
           <div class="flex items-center justify-between">
-            <h4 class="text-lg font-bold text-[var(--brand)]">Løpshistorikk</h4>
+            <h4 class="text-lg font-bold" style="color:var(--rn-green)">Løpshistorikk</h4>
             <button id="addHistoryBtn" class="pill">Legg til</button>
           </div>
           <div id="historyList" class="mt-3 grid gap-2"></div>
         </div>
 
         <div>
-          <h4 class="text-lg font-bold text-[var(--brand)]">Dine påmeldinger</h4>
+          <h4 class="text-lg font-bold" style="color:var(--rn-green)">Dine påmeldinger</h4>
           <div id="registrationsList" class="mt-3 grid gap-2"></div>
         </div>
 
@@ -656,7 +805,7 @@
         empty.classList.remove('hidden');
         empty.innerHTML = `
           Ingen arrangementer matcher filtrene nå.
-          <button class="ml-2 underline text-[var(--brand)]" id="emptyReset">Nullstill filtre</button>`;
+          <button class="ml-2 underline" style="color:var(--rn-green)" id="emptyReset">Nullstill filtre</button>`;
         document.getElementById('emptyReset').onclick = () => {
           state.filters={q:'',month:'',region:'',sort:'date'};
           q.value=''; month.value=''; region.value=''; sort.value='date';
@@ -783,8 +932,8 @@
           ${chips}
         </div>
         <div class="wx-more">
-          <button class="underline text-[var(--brand)]" type="button" id="wxExpandBtn">Utvid</button>
-          <a class="ml-3 underline text-[var(--brand)]" target="_blank" rel="noopener"
+          <button class="underline" style="color:var(--rn-green)" type="button" id="wxExpandBtn">Utvid</button>
+          <a class="ml-3 underline" style="color:var(--rn-green)" target="_blank" rel="noopener"
              href="https://www.open-meteo.com/en/docs#api">Kilde</a>
         </div>
         <div id="wxExpanded" class="hidden mt-2">
@@ -902,7 +1051,7 @@
           <div>
             <div class="text-xs uppercase tracking-wide text-slate-500">${ev.region||''}</div>
             <div class="font-semibold">${ev.title}</div>
-            <div class="text-sm text-slate-600">${fmtDate(ev.date)} • ${ev.location}</div>
+            <div class="text-sm text-slate-600">${fmtDate(ev.date)} • ${ev.location||''}</div>
           </div>
           <div class="flex gap-2">
             <button class="btn-brand rounded-full px-3 py-2 text-sm font-semibold" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
@@ -938,7 +1087,7 @@
         const box = document.getElementById('resLinks'); box.innerHTML='';
         engines.forEach(e=>{
           const a=document.createElement('a'); a.href=e.url; a.target='_blank'; a.rel='noopener';
-          a.textContent=`Åpne i ${e.label}`; a.className='underline text-[var(--brand)]';
+          a.textContent=`Åpne i ${e.label}`; a.className='underline'; a.style.color='var(--rn-green)';
           const p=document.createElement('p'); p.appendChild(a); box.appendChild(p);
         });
       });
@@ -970,7 +1119,7 @@
               <button class="btn-brand rounded-full px-4 py-2 font-semibold" onclick='attemptRegister(${JSON.stringify(ev).replace(/'/g,"&#39;")})'>Delta</button>
               ${ev.details_url?`<a href="${ev.details_url}" class="rounded-full border px-4 py-2 font-semibold hover:bg-slate-50" target="_blank" rel="noopener">Nettside</a>`:''}
             </div>
-            ${pent ? `<h4 class="text-[var(--brand)] font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
+            ${pent ? `<h4 style="color:var(--rn-green)" class="font-bold mt-6 mb-2">Værmelding (${ev.location})</h4>
                       <iframe src="${pent}" width="100%" height="420" style="border:none; border-radius:10px;" loading="lazy" referrerpolicy="no-referrer"></iframe>` : ''}
           </div>
           <div><div id="modalMap" class="h-[380px] rounded-2xl border"></div></div>
