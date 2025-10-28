@@ -33,9 +33,33 @@
   <link rel="dns-prefetch" href="//api.open-meteo.com">
   <link rel="dns-prefetch" href="//tile.openstreetmap.org">
 
-  <script src="https://cdn.tailwindcss.com" defer></script>
-  <link rel="preload" as="style" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onload="this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/></noscript>
+<!-- Performance hints -->
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="preconnect" href="https://api.eqtiming.com" crossorigin>
+<link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
+<link rel="preconnect" href="https://{s}.tile.openstreetmap.org" crossorigin>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: '#0A5C52',
+          brandDeep: '#07443D',
+          graphite: '#121314',
+          accent: '#C8E000',
+          panel: '#FBFBFC',
+          bg: '#F5F6F7'
+        }
+      }
+    }
+  }
+</script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="/assets/style.css">
+
 
   <!-- Flyttet all stil til ekstern fil -->
   <link rel="stylesheet" href="/assets/style.css">
