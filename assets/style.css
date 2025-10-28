@@ -41,3 +41,37 @@ html,body{
   padding:.6rem 1.2rem;
   cursor:pointer;
   transition: transform .15s ease, box-shadow .2s eas
+/* ===== QUICK POLISH – HEADER / HERO / KNAPPER / SPACING ===== */
+
+/* Bedre font-rendering og baseline */
+html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Header: høyde, spacing og tydelig container */
+.site-header { background: var(--graphite); }
+.site-header .max-w-7xl { height: 64px; }
+.site-header a, .site-header button { font-weight: 600; }
+.site-header nav a { opacity:.95; border-bottom:2px solid transparent; padding-bottom:2px; }
+.site-header nav a:hover { opacity:1; border-bottom-color: var(--accent); }
+
+/* Header-knapper: samme høyde/typografi */
+.site-header .btn-brand,
+.site-header .btn-ghost {
+  height: 36px; padding: 0 14px; border-radius: 999px; font-weight: 700; line-height: 1;
+}
+.site-header .btn-brand {
+  background: var(--accent); color: var(--graphite);
+  border:1px solid rgba(200,224,0,.35); box-shadow: 0 8px 22px rgba(200,224,0,.22);
+}
+.site-header .btn-brand:hover { background:#D2E833; }
+.site-header .btn-ghost { background: transparent; color: var(--text-inv); border:1px solid rgba(255,255,255,.6); }
+.site-header .btn-ghost:hover { background: rgba(255,255,255,.08); }
+
+/* Hero: mer luft, penere proporsjoner, “glød” */
+#home {
+  background:
+    radial-gradient(900px 220px at 18% -18%, rgba(200,224,0,.16), transparent 60%),
+    linear-gradient(180deg, var(--brand-deep), var(--brand));
+  color: var(--text-inv);
+}
+#home .max-w-7xl { padding-top: 64px; padding-bottom: 80px; }
+#home img { height: 8
