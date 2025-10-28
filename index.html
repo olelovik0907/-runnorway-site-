@@ -1147,51 +1147,79 @@
       });
 
       // Init + tab-navigasjon
+            // Init + tab-navigasjon
       renderSkeleton(true);
       loadEvents();
 
-      document.getElementById('q').addEventListener('input',e=>{state.filters.q=e.target.value; setView(state.view);});
-      document.getElementById('month').addEventListener('change',e=>{state.filters.month=e.target.value; setView(state.view);});
-      document.getElementById('region').addEventListener('change',e=>{state.filters.region=e.target.value; setView(state.view);});
-      document.getElementById('sort').addEventListener('change',e=>{state.filters.sort=e.target.value; setView(state.view);});
-      document.getElementById('resetFilters').addEventListener('click',()=>{
-        state.filters={q:'',month:'',region:'',sort:'date'};
-        q.value=''; month.value=''; region.value=''; sort.value='date'; setView(state.view);
+      document.getElementById('q').addEventListener('input', e => {
+        state.filters.q = e.target.value; setView(state.view);
       });
-      document.getElementById('togglePast').addEventListener('click',e=>{
-        state.showPast=!state.showPast; e.currentTarget.setAttribute('aria-pressed', String(state.showPast));
-        e.currentTarget.textContent= state.showPast? 'Skjul tidligere løp':'Vis tidligere løp'; setView(state.view);
+      document.getElementById('month').addEventListener('change', e => {
+        state.filters.month = e.target.value; setView(state.view);
+      });
+      document.getElementById('region').addEventListener('change', e => {
+        state.filters.region = e.target.value; setView(state.view);
+      });
+      document.getElementById('sort').addEventListener('change', e => {
+        state.filters.sort = e.target.value; setView(state.view);
+      });
+      document.getElementById('resetFilters').addEventListener('click', () => {
+        state.filters = { q:'', month:'', region:'', sort:'date' };
+        q.value = ''; month.value = ''; region.value = ''; sort.value = 'date';
+        setView(state.view);
+      });
+      document.getElementById('togglePast').addEventListener('click', e => {
+        state.showPast = !state.showPast;
+        e.currentTarget.setAttribute('aria-pressed', String(state.showPast));
+        e.currentTarget.textContent = state.showPast ? 'Skjul tidligere løp' : 'Vis tidligere løp';
+        setView(state.view);
       });
 
-      document.getElementById('tab-list').addEventListener('click',()=>setView('list'));
-      document.getElementById('tab-cal').addEventListener('click',()=>setView('cal'));
-      document.getElementById('tab-map').addEventListener('click',()=>setView('map'));
-      document.getElementById('calPrev').addEventListener('click',()=>{ state.cal.setMonth(state.cal.getMonth()-1); renderCalendar(); });
-      document.getElementById('calNext').addEventListener('click',()=>{ state.cal.setMonth(state.cal.getMonth()+1); renderCalendar(); });
+      document.getElementById('tab-list').addEventListener('click', () => setView('list'));
+      document.getElementById('tab-cal').addEventListener('click', () => setView('cal'));
+      document.getElementById('tab-map').addEventListener('click', () => setView('map'));
+      document.getElementById('calPrev').addEventListener('click', () => {
+        state.cal.setMonth(state.cal.getMonth() - 1); renderCalendar();
+      });
+      document.getElementById('calNext').addEventListener('click', () => {
+        state.cal.setMonth(state.cal.getMonth() + 1); renderCalendar();
+      });
 
-      const tabs = ['list','cal','map'].map(id=>document.getElementById(`tab-${id}`));
-      tabs.forEach((btn, i)=>{
-        btn.addEventListener('keydown', e=>{
-          if(e.key==='ArrowRight'){ e.preventDefault(); tabs[(i+1)%tabs.length].focus(); }
-          if(e.key==='ArrowLeft'){ e.preventDefault(); tabs[(i-1+tabs.length)%tabs.length].focus(); }
+      const tabs = ['list','cal','map'].map(id => document.getElementById(`tab-${id}`));
+      tabs.forEach((btn, i) => {
+        btn.addEventListener('keydown', e => {
+          if (e.key === 'ArrowRight') { e.preventDefault(); tabs[(i+1)%tabs.length].focus(); }
+          if (e.key === 'ArrowLeft')  { e.preventDefault(); tabs[(i-1+tabs.length)%tabs.length].focus(); }
         });
       });
-    });
+    }); // <-- slutt på DOMContentLoaded
+
+    /* OVERRIDE: Bruk seed-data nå, så kort vises selv om EQTiming blokkeres */
+    async function loadEvents(){
+      try {
+        const seed = JSON.parse(document.getElementById('events-seed').textContent);
+        state.all = dedupe(seed);
+        renderFilters();
+        setView('list');
+        initCountdownToNext();
+        renderSkeleton(false);
+      } catch(e) {
+        console.error('Seed-feil:', e);
+        renderSkeleton(false);
+        document.getElementById('eventsSummary').textContent = 'Kunne ikke laste data.';
+      }
+    }
 
     // Tilgjengelighet: ESC for å lukke
-    document.addEventListener('keydown', e=>{
-      if(e.key==='Escape'){
-        [document.getElementById('eventModalBackdrop'), document.getElementById('favoritesModal'), document.getElementById('registerModal'), document.getElementById('profileModal')]
-          .forEach(m=>{ if(m && m.style.display==='flex') m.style.display='none'; });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        [
+          document.getElementById('eventModalBackdrop'),
+          document.getElementById('favoritesModal'),
+          document.getElementById('registerModal'),
+          document.getElementById('profileModal')
+        ].forEach(m => { if (m && m.style.display === 'flex') m.style.display = 'none'; });
       }
     });
   </script>
 
-  <noscript>
-    <div style="max-width:760px;margin:2rem auto;padding:1rem;border:1px solid #e5e7eb;border-radius:12px;">
-      For å bruke RunNorway må JavaScript være aktivert. Du kan fortsatt kontakte oss på
-      <a href="mailto:post@runnorway.no">post@runnorway.no</a>.
-    </div>
-  </noscript>
-</body>
-</html>
