@@ -1,14 +1,27 @@
 /* assets/style.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
+/* ===== Globale variabler ===== */
 :root {
+  /* Eksisterende */
   --bg-dark: rgba(0, 0, 0, 0.45);
   --bg-darker: rgba(0, 0, 0, 0.65);
   --text: #ffffff;
   --accent: #00b3ff;
   --accent-dark: #008bcc;
+
+  /* Aston Martin–inspirert palett */
+  --green-primary:#0A5C52;
+  --green-deep:#07443D;
+  --graphite:#121314;
+  --gray-100:#FBFBFC;
+  --gray-200:#F5F6F7;
+  --lime:#C8E000;
+  --text-dark:#1F2326;
+  --text-on-dark:#F3F4F6;
 }
 
+/* ===== Base ===== */
 * { box-sizing: border-box; }
 
 html, body {
@@ -19,6 +32,7 @@ html, body {
   background: #0b0f14;
 }
 
+/* ===== Hero ===== */
 .hero {
   position: relative;
   min-height: 80vh;
@@ -32,30 +46,6 @@ html, body {
   background-position: center;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-
-.header {
-  position: absolute;
-  inset: 0 0 auto 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0));
-}
-
-.brand {
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  font-size: 20px;
-}
-
-.nav a {
-  color: var(--text);
-  text-decoration: none;
-  margin-left: 18px;
-  opacity: 0.9;
-}
-.nav a:hover { opacity: 1; }
 
 .hero-inner {
   padding: 24px;
@@ -73,6 +63,7 @@ h1 {
   margin-bottom: 28px;
 }
 
+/* CTA-knapper i hero (beholder eksisterende uttrykk) */
 .cta {
   display: inline-flex;
   gap: 12px;
@@ -103,6 +94,7 @@ h1 {
 }
 .btn-ghost:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
 
+/* ===== Seksjoner og kort ===== */
 .section {
   margin: 48px auto;
   padding: 0 24px;
@@ -123,6 +115,7 @@ h1 {
   padding: 18px;
 }
 
+/* ===== Footer ===== */
 footer {
   color: #a9b7c6;
   text-align: center;
@@ -130,17 +123,12 @@ footer {
   border-top: 1px solid rgba(255,255,255,0.08);
   background: rgba(0,0,0,0.3);
 }
-/* ========== RunNorway Header Styles (Aston Martin–inspirert) ========== */
-:root{
-  --green-primary:#0A5C52;
-  --green-deep:#07443D;
-  --graphite:#121314;
-  --gray-100:#FBFBFC;
-  --gray-200:#F5F6F7;
-  --lime:#C8E000;
-  --text-dark:#1F2326;
-  --text-on-dark:#F3F4F6;
-}
+
+/* ===================================================================== */
+/* =====================  NY HEADER (sticky, mørk)  ===================== */
+/* ===================================================================== */
+
+/* Viktig: den gamle .header-blokken (absolutt i hero) er fjernet */
 
 .header {
   position: sticky;
@@ -182,12 +170,12 @@ footer {
   font-size: 1.05rem;
 }
 
-/* Nav */
-.nav{
+/* Nav (scopet til header for å unngå konflikt med annet innhold) */
+.header .nav{
   display: flex;
   gap: 26px;
 }
-.nav a{
+.header .nav a{
   color: var(--text-on-dark);
   text-decoration: none;
   font-weight: 600;
@@ -196,21 +184,21 @@ footer {
   border-bottom: 2px solid transparent;
   padding-bottom: 4px;
 }
-.nav a:hover,
-.nav a:focus-visible{
+.header .nav a:hover,
+.header .nav a:focus-visible{
   opacity: 1;
   border-bottom-color: var(--lime);
   outline: none;
 }
 
 /* Actions */
-.actions{
+.header .actions{
   display: flex;
   gap: 12px;
 }
 
-/* Buttons */
-.btn{
+/* Knappestiler KUN i header (forstyrrer ikke hero-CTAene) */
+.header .btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -224,56 +212,55 @@ footer {
   transition: transform .02s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
   border: 1.5px solid transparent;
 }
+.header .btn:active{ transform: translateY(1px); }
 
-.btn:active{ transform: translateY(1px); }
-
-/* Primær handling: fylt lime med mørk tekst */
-.btn-primary{
+/* Primær handling i header: lime fyll med mørk tekst */
+.header .btn-primary{
   background: var(--lime);
   color: var(--text-dark);
   border-color: var(--lime);
   box-shadow: 0 6px 18px rgba(200,224,0,.25);
 }
-.btn-primary:hover,
-.btn-primary:focus-visible{
-  background: #D2E833; /* litt lysere for hover */
+.header .btn-primary:hover,
+.header .btn-primary:focus-visible{
+  background: #D2E833;
   border-color: #D2E833;
   outline: none;
 }
 
-/* Sekundær: outline lys på mørk bakgrunn */
-.btn-outline{
+/* Sekundær i header: lys outline */
+.header .btn-outline{
   background: transparent;
   color: var(--text-on-dark);
   border-color: rgba(243,244,246,.9);
 }
-.btn-outline:hover,
-.btn-outline:focus-visible{
+.header .btn-outline:hover,
+.header .btn-outline:focus-visible{
   background: rgba(255,255,255,.08);
   outline: none;
 }
 
-/* Tertiær: subtile grønn-outline for “Resultater” etc. */
-.btn-ghost{
+/* Tertiær i header: subtil lime-outline */
+.header .btn-ghost{
   background: transparent;
   color: var(--text-on-dark);
   border-color: rgba(200,224,0,.35);
 }
-.btn-ghost:hover,
-.btn-ghost:focus-visible{
+.header .btn-ghost:hover,
+.header .btn-ghost:focus-visible{
   background: rgba(200,224,0,.08);
   outline: none;
 }
 
-/* Tilgjengelig fokus for alle interaktive elementer */
-a:focus-visible,
-button:focus-visible{
+/* Tilgjengelig fokus for interaktive elementer i header */
+.header a:focus-visible,
+.header button:focus-visible{
   box-shadow: 0 0 0 3px rgba(200,224,0,.45);
   border-radius: 10px;
 }
 
 /* Små skjermer */
-.header-toggle{
+.header .header-toggle{
   display: none;
 }
 
@@ -281,10 +268,10 @@ button:focus-visible{
   .header-inner{
     grid-template-columns: 1fr auto;
   }
-  .nav{
+  .header .nav{
     display: none;
   }
-  .header-toggle{
+  .header .header-toggle{
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -296,8 +283,7 @@ button:focus-visible{
     border: 1px solid rgba(255,255,255,.2);
     cursor: pointer;
   }
-  /* Enkel “åpen meny” variant uten JS: vis nav under header når body får en class */
-  body.nav-open .nav{
+  body.nav-open .header .nav{
     display: flex;
     grid-column: 1 / -1;
     overflow-x: auto;
@@ -310,7 +296,7 @@ button:focus-visible{
   }
 }
 
-/* Ekstra: lys sidebakgrunn for resten av innholdet slik at headeren får tydelig kontrast */
+/* Lys bakgrunn på hovedinnhold for bedre kontrast mot mørk header */
 .main{
   background: var(--gray-200);
 }
