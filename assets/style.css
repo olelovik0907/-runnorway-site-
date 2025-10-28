@@ -1,77 +1,77 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
-/* Fargevariabler (Aston Martin-inspirert) */
+/* Aston Martin RunNorway palett */
 :root{
-  --brand:#0A5C52;
-  --brand-deep:#07443D;
+  --green-primary:#0A5C52;
+  --green-deep:#07443D;
   --graphite:#121314;
-  --bg:#F5F6F7;
-  --panel:#FBFBFC;
-  --accent:#C8E000;
-  --text:#1F2326;
-  --text-inv:#F3F4F6;
+  --gray-200:#F5F6F7;
+  --gray-100:#FBFBFC;
+  --lime:#C8E000;
+  --text-dark:#1F2326;
+  --text-on-dark:#F3F4F6;
 }
 
 /* Grunnstil */
-html,body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+html, body{
   margin:0;
+  font-family:Inter, sans-serif;
+  background:var(--gray-200);
+  color:var(--text-dark);
 }
 
 /* Header */
 .site-header{
-  background:var(--brand);
-  color:var(--text-inv);
-  backdrop-filter: blur(6px);
-  border-bottom:1px solid rgba(255,255,255,.12);
+  background:var(--green-primary);
+  color:var(--text-on-dark);
+  border-bottom:1px solid rgba(0,0,0,0.3);
 }
-.site-header a{ color:var(--text-inv); text-decoration:none; font-weight:600; }
-.site-header a:hover{ color:var(--accent); }
+.site-header a{
+  color:var(--text-on-dark);
+  font-weight:600;
+}
+.site-header a:hover{
+  color:var(--lime);
+}
+
+/* Hero */
+#home{
+  background:var(--green-deep);
+  color:var(--text-on-dark);
+  padding-top:80px;
+  padding-bottom:80px;
+  text-align:center;
+}
+#home h1{ color:white; }
+#home p{ color:#E6F1EF; }
 
 /* Knapper */
 .btn-brand{
-  background:var(--brand);
-  color:var(--text-inv);
-  border:1px solid rgba(200,224,0,.28);
-  border-radius:9999px;
-  display:inline-block;
+  background:var(--lime);
+  color:var(--graphite);
+  border-radius:999px;
   font-weight:700;
-  padding:.6rem 1.2rem;
-  cursor:pointer;
-  transition: transform .15s ease, box-shadow .2s eas
-/* ===== QUICK POLISH – HEADER / HERO / KNAPPER / SPACING ===== */
-
-/* Bedre font-rendering og baseline */
-html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-
-/* Header: høyde, spacing og tydelig container */
-.site-header { background: var(--graphite); }
-.site-header .max-w-7xl { height: 64px; }
-.site-header a, .site-header button { font-weight: 600; }
-.site-header nav a { opacity:.95; border-bottom:2px solid transparent; padding-bottom:2px; }
-.site-header nav a:hover { opacity:1; border-bottom-color: var(--accent); }
-
-/* Header-knapper: samme høyde/typografi */
-.site-header .btn-brand,
-.site-header .btn-ghost {
-  height: 36px; padding: 0 14px; border-radius: 999px; font-weight: 700; line-height: 1;
 }
-.site-header .btn-brand {
-  background: var(--accent); color: var(--graphite);
-  border:1px solid rgba(200,224,0,.35); box-shadow: 0 8px 22px rgba(200,224,0,.22);
+.btn-brand:hover{
+  filter:brightness(1.08);
 }
-.site-header .btn-brand:hover { background:#D2E833; }
-.site-header .btn-ghost { background: transparent; color: var(--text-inv); border:1px solid rgba(255,255,255,.6); }
-.site-header .btn-ghost:hover { background: rgba(255,255,255,.08); }
 
-/* Hero: mer luft, penere proporsjoner, “glød” */
-#home {
-  background:
-    radial-gradient(900px 220px at 18% -18%, rgba(200,224,0,.16), transparent 60%),
-    linear-gradient(180deg, var(--brand-deep), var(--brand));
-  color: var(--text-inv);
+/* Kort / paneler */
+.card{
+  background:var(--gray-100);
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.08);
 }
-#home .max-w-7xl { padding-top: 64px; padding-bottom: 80px; }
-#home img { height: 8
+
+/* Seksjoner */
+section{
+  padding:48px 0;
+}
+
+/* Footer */
+footer{
+  background:var(--green-deep);
+  color:var(--text-on-dark);
+  padding:32px;
+  text-align:center;
+}
