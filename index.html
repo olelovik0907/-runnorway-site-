@@ -3,9 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RunNorway – Finn alle løp i Norge. Ett sted. Én kalender.</title>
+  <title>RunNorway – Løpskalender for hele Norge</title>
 
+  <meta name="description" content="RunNorway samler løp i hele Norge i én kalender. Finn mosjonsløp, halvmaraton, maraton og terrengløp – filtrer på sted, dato og distanse, og finn lenker til påmelding og resultater." />
   <meta name="theme-color" content="#116D6B" />
+
+  <!-- Open Graph / deling -->
+  <meta property="og:title" content="RunNorway – Løpskalender for hele Norge" />
+  <meta property="og:description" content="Finn løp i hele Norge, filtrer etter sted, dato og distanse, og finn lenker til påmelding og resultater." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.runnorway.no/" />
+  <meta property="og:image" content="assets/logo-192.png" />
+
+  <!-- Twitter (enkelt oppsett) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="RunNorway – Løpskalender for hele Norge" />
+  <meta name="twitter:description" content="Én kalender for løp i Norge. Finn neste løp og meld deg på." />
+  <meta name="twitter:image" content="assets/logo-192.png" />
+
+  <link rel="canonical" href="https://www.runnorway.no/" />
   <link rel="icon" href="assets/logo-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-180.png" />
 
@@ -30,6 +46,27 @@
     .heart{ width:18px; height:18px; display:inline-block; vertical-align:-2px; }
     .card p { line-height: 1.55; }
 
+    /* Tilgjengelighet: skip-link */
+    .skip-link {
+      position:absolute;
+      left:-9999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+    .skip-link:focus {
+      left:1rem;
+      top:1rem;
+      width:auto;
+      height:auto;
+      padding:.5rem 1rem;
+      background:#ffffff;
+      border-radius:.75rem;
+      box-shadow:0 10px 25px rgba(15,23,42,.25);
+      z-index:100;
+    }
+
     /* Kompakt vær */
     .wx { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
     .wx-chip { display:flex; align-items:center; gap:.4rem; padding:.35rem .55rem; border:1px solid #e5e7eb; border-radius:9999px; font-size:.8rem; background:#fff; }
@@ -45,26 +82,41 @@
       .modal-header { position: sticky; top: 0; }
     }
   </style>
+
+  <!-- Enkel JSON-LD for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "RunNorway",
+    "url": "https://www.runnorway.no/",
+    "description": "Løpskalender som samler løp i hele Norge i én oversikt.",
+    "inLanguage": "nb-NO"
+  }
+  </script>
 </head>
 
 <body class="antialiased">
+  <a href="#om-runnorway" class="skip-link">Hopp til informasjon om RunNorway</a>
+
   <!-- Header -->
   <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
     <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
       <a href="#home" class="flex items-center gap-2 font-bold text-xl link-brand">
-        <img src="assets/logo-48.png" alt="RunNorway" class="h-8 w-auto" />
+        <img src="assets/logo-48.png" alt="RunNorway-logo" class="h-8 w-auto" />
         RunNorway
       </a>
       <nav class="hidden md:flex items-center gap-8 font-semibold link-brand">
         <a href="#arrangementer">Arrangementer</a>
         <a href="#resultater">Resultater</a>
+        <a href="#om-runnorway">Om RunNorway</a>
         <a href="#kontakt">Kontakt</a>
         <a href="#faq">Hjelp</a>
-        <button id="navFavorites" class="font-semibold">Favoritter</button>
+        <button id="navFavorites" class="font-semibold" type="button">Favoritter</button>
       </nav>
       <div class="flex items-center gap-2">
-        <button id="openRegister" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
-        <button id="openProfile" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Profil</button>
+        <button id="openRegister" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
+        <button id="openProfile" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Profil</button>
         <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
       </div>
     </div>
@@ -74,8 +126,13 @@
   <section id="home" class="relative bg-[var(--brand)] text-white">
     <div class="max-w-7xl mx-auto px-4 py-14 sm:py-24 text-center">
       <img src="assets/logo-192.png" alt="RunNorway" class="mx-auto h-20 mb-6"/>
-      <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">RunNorway</h1>
-      <p class="mt-4 text-lg sm:text-2xl">Finn alle løp i Norge. Ett sted. Én kalender.</p>
+      <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">Løpskalender for hele Norge</h1>
+      <p class="mt-4 text-lg sm:text-2xl">
+        RunNorway samler norske løp i én oversikt. Filtrer på sted, dato og distanse – og finn lenker til påmelding og resultater.
+      </p>
+      <p class="mt-2 text-sm sm:text-base text-white/80">
+        Tjenesten er under oppbygging. Vi starter med løp fra EQ Timing og legger fortløpende til flere arrangører.
+      </p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a href="#arrangementer" class="btn-brand px-6 py-3 rounded-full font-semibold">Se program</a>
         <a href="#resultater" class="btn-ghost px-6 py-3 rounded-full font-semibold">Finn ditt resultat</a>
@@ -111,7 +168,9 @@
   <section id="arrangementer" class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-1">Finn løp</h2>
-      <p class="text-slate-600 mb-4">Filtrer etter måned, region eller distanse.</p>
+      <p class="text-slate-600 mb-4">
+        Søk etter løp i hele Norge og filtrer på måned, region og distanse. Klikk deg inn på et løp for å se mer informasjon og lenke til påmelding hos arrangøren.
+      </p>
 
       <div class="inline-flex rounded-2xl bg-white shadow p-1 mb-4" role="tablist" aria-label="Visning">
         <button id="tab-list" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="true" aria-controls="panel-list">Liste</button>
@@ -193,8 +252,51 @@
           <input id="resYear" class="rounded-xl border px-3 py-2" placeholder="År (valgfritt, f.eks. 2025)" />
           <button id="resSearch" class="btn-brand rounded-xl px-4 py-2 font-semibold">Søk resultater</button>
         </div>
-        <p class="text-slate-700 mt-3">Vi søker i kjente resultatportaler i nye faner. Velg en av lenkene under.</p>
+        <p class="text-slate-700 mt-3">
+          RunNorway lagrer ikke egne resultatlister ennå. Når du søker, åpner vi eksterne resultatportaler i nye faner,
+          der du kan finne tidene dine hos arrangør eller tidtakerfirma.
+        </p>
         <div id="resLinks" class="mt-4 grid gap-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Om RunNorway -->
+  <section id="om-runnorway" class="py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-4">Om RunNorway</h2>
+      <p class="text-slate-700 mt-2">
+        RunNorway er en uavhengig løpskalender som har som mål å gjøre det enkelt å finne og sammenligne løp i hele Norge,
+        uansett nivå. Her skal både mosjonister, klubber og arrangører finne det de trenger på ett sted.
+      </p>
+      <p class="text-slate-700 mt-3">
+        I første versjon henter vi løp fra utvalgte tidtaker- og påmeldingssystemer, blant annet EQ Timing. Etter hvert vil vi
+        koble på flere kilder og gi bedre oversikt over lokale løp, mindre arrangementer og nye konsepter.
+      </p>
+      <p class="text-slate-700 mt-3">
+        Data om profil, favoritter og påmeldinger lagres kun lokalt i nettleseren din i denne demoen. Det betyr at ingen sentral
+        server lagrer treningshistorikken eller løpene dine ennå. Når vi lanserer en fullversjon, vil vi være tydelige på hvordan
+        vi håndterer persondata og hvilke funksjoner som synkroniseres på tvers av enheter.
+      </p>
+      <div class="grid sm:grid-cols-3 gap-6 mt-8">
+        <div class="card p-4">
+          <h3 class="font-semibold text-[var(--brand)] mb-2">For løpere</h3>
+          <p class="text-sm text-slate-700">
+            Finn nye løp, lag favoritter og hold oversikt over hva du er påmeldt. Eksporter enkelt løpslista til CSV.
+          </p>
+        </div>
+        <div class="card p-4">
+          <h3 class="font-semibold text-[var(--brand)] mb-2">For arrangører</h3>
+          <p class="text-sm text-slate-700">
+            Registrer løp direkte og få en dedikert side i kalenderen. På sikt vil vi tilby ekstra synlighet for premium-arrangementer.
+          </p>
+        </div>
+        <div class="card p-4">
+          <h3 class="font-semibold text-[var(--brand)] mb-2">Videreutvikling</h3>
+          <p class="text-sm text-slate-700">
+            Planer fremover inkluderer flere datakilder, bedre kartvisning, personlige anbefalinger og integrasjon mot treningsapper.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -214,9 +316,38 @@
   <section id="faq" class="py-16 bg-slate-50">
     <div class="max-w-4xl mx-auto px-4">
       <h2 class="text-3xl sm:text-4xl font-bold text-[var(--brand)] mb-6 text-center">Ofte stilte spørsmål</h2>
+
       <details class="card p-4">
-        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hvordan melder jeg på?</summary>
-        <p class="mt-2 text-slate-700">Trykk inn på løpet du vil delta på og velg «Delta». Mangler du profil, blir du bedt om å opprette den først.</p>
+        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hvordan melder jeg meg på et løp?</summary>
+        <p class="mt-2 text-slate-700">
+          Trykk inn på løpet du vil delta på og velg «Delta». Derfra sendes du videre til arrangørens egen påmelding
+          eller tidtakerfirma. I demoen kan du også legge inn påmeldingen i din lokale profil for å holde oversikt.
+        </p>
+      </details>
+
+      <details class="card p-4 mt-3">
+        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Er alle løp i Norge med i kalenderen?</summary>
+        <p class="mt-2 text-slate-700">
+          Ikke ennå. Vi starter med løp som ligger hos utvalgte tidtaker- og påmeldingssystemer, og bygger gradvis ut med flere
+          arrangører. Mangler ditt løp, kan du bruke «Registrer løp» eller sende oss en e-post.
+        </p>
+      </details>
+
+      <details class="card p-4 mt-3">
+        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Koster det noe å bruke RunNorway?</summary>
+        <p class="mt-2 text-slate-700">
+          For løpere er RunNorway gratis å bruke. På sikt kan vi tilby ekstra synlighet og funksjoner for arrangører som
+          ønsker premium-plassering, men grunnkalenderen vil fortsatt være gratis å søke i.
+        </p>
+      </details>
+
+      <details class="card p-4 mt-3">
+        <summary class="cursor-pointer font-semibold text-[var(--brand)]">Hvor lagres profil og løpshistorikk?</summary>
+        <p class="mt-2 text-slate-700">
+          I denne demoen lagres alt lokalt i nettleseren din via localStorage. Det betyr at kun du har tilgang til det,
+          og at data kan forsvinne hvis du bytter nettleser eller slår av lokal lagring. En fremtidig fullversjon vil
+          ha trygg innlogging og tydelig personvernerklæring.
+        </p>
       </details>
     </div>
   </section>
@@ -668,6 +799,7 @@
     function fmtDayLabel(iso){
       const d = new Date(iso);
       return d.toLocaleDateString('no-NO',{weekday:'short'}).replace(/\.$/,'');
+
     }
 
     function renderWeatherBox(container, w){
@@ -1062,7 +1194,7 @@
       e.preventDefault();
       const email=document.getElementById('newsletterEmail').value.trim();
       if(!email){ return; }
-      document.getElementById('newsletterMsg').textContent='Takk for påmeldingen. Vi sender kun relevante oppdateringer.';
+      document.getElementById('newsletterMsg').textContent='Takk for påmeldingen. Vi lover å kun sende korte oppdateringer om nye løp og funksjoner i RunNorway.';
       e.target.reset();
     });
 
