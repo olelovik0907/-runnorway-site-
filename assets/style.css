@@ -14,22 +14,41 @@
   /* nye aksentfarger */
   --am-pink:#ff2f76;      /* Aston-inspirert rosa */
   --border-soft:rgba(0,0,0,0.08);
+
+  /* mapping til variabler brukt i HTML/Tailwind */
+  --brand:var(--green-primary);
+  --accent:var(--lime);
+}
+
+/* Global box sizing */
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
 }
 
 /* Grunnstil */
 html, body{
   margin:0;
-  font-family:Inter, sans-serif;
+  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background:var(--gray-100);
   color:var(--text-dark);
+}
+
+/* Lenker med brand-farge (brukes utenfor header også) */
+.link-brand{
+  color:var(--green-primary);
+}
+.link-brand:hover{
+  text-decoration:underline;
 }
 
 /* Header – grønn base, lime topp, svart bunn, rosa hover */
 .site-header{
   background:var(--green-primary);
   color:var(--text-on-dark);
-  border-top:2px solid var(--lime);       /* var 4px – litt mer elegant nå */
-  border-bottom:2px solid var(--graphite);/* var 3px */
+  border-top:2px solid var(--lime);
+  border-bottom:2px solid var(--graphite);
 }
 .site-header a{
   color:var(--text-on-dark);
@@ -40,7 +59,7 @@ html, body{
   color:var(--am-pink);
 }
 
-/* Hero – ren, dyp grønn som nå */
+/* Hero – ren, dyp grønn */
 #home{
   background:var(--green-deep);
   color:var(--text-on-dark);
@@ -63,7 +82,7 @@ html, body{
   color:var(--text-on-dark);
   border-radius:999px;
   padding:.25rem .8rem;
-  border:1px solid rgba(255,47,118,0.85); /* rosa kant */
+  border:1px solid rgba(255,47,118,0.85);
   font-weight:600;
   font-size:.85rem;
 }
@@ -76,8 +95,12 @@ html, body{
   font-weight:700;
   padding:.7rem 1.6rem;
   border:none;
-  box-shadow:0 6px 18px rgba(0,0,0,0.18); /* var 0 10px 24px 0.24 – litt mindre hard */
+  box-shadow:0 6px 18px rgba(0,0,0,0.18);
   cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.35rem;
 }
 .btn-brand:hover{
   filter:brightness(1.06);
@@ -91,10 +114,13 @@ html, body{
   border:1px solid transparent;
   font-weight:600;
   cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
 .btn-ghost:hover{
   background:#ffffff;
-  border-color:var(--am-pink); /* subtil rosa kant */
+  border-color:var(--am-pink);
 }
 
 /* Filter-pills / små knapper */
@@ -130,6 +156,9 @@ html, body{
   border:1px solid var(--border-soft);
   box-shadow:0 10px 24px rgba(15,23,42,0.04);
 }
+.card p{
+  line-height:1.55;
+}
 
 /* Seksjoner */
 section{
@@ -161,4 +190,111 @@ footer{
   padding:32px;
   text-align:center;
   border-top:1px solid rgba(0,0,0,0.3);
+}
+
+/* Skip-link for tilgjengelighet */
+.skip-link{
+  position:absolute;
+  left:-9999px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+.skip-link:focus{
+  left:1rem;
+  top:1rem;
+  width:auto;
+  height:auto;
+  padding:.5rem 1rem;
+  background:#ffffff;
+  border-radius:.75rem;
+  box-shadow:0 10px 25px rgba(15,23,42,.25);
+  z-index:100;
+}
+
+/* Modal-stil */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:60;
+}
+.modal{
+  background:#ffffff;
+  width:min(960px,92vw);
+  max-height:88vh;
+  border-radius:16px;
+  overflow:auto;
+}
+.modal-header{
+  position:sticky;
+  top:0;
+  background:#ffffff;
+  border-bottom:1px solid #e5e7eb;
+  z-index:1;
+}
+
+/* Ikonknapp + hjerte */
+.icon-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+}
+.heart{
+  width:18px;
+  height:18px;
+  display:inline-block;
+  vertical-align:-2px;
+}
+
+/* Kompakt vær */
+.wx{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.wx-chip{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+  padding:.35rem .55rem;
+  border:1px solid #e5e7eb;
+  border-radius:9999px;
+  font-size:.8rem;
+  background:#ffffff;
+}
+.wx-day{
+  font-weight:600;
+}
+.wx-temp{
+  font-variant-numeric:tabular-nums;
+}
+.wx-icon{
+  width:18px;
+  height:18px;
+}
+.wx-muted{
+  color:#64748b;
+}
+.wx-more{
+  margin-top:.5rem;
+  font-size:.8rem;
+}
+
+/* Mobilvennlige modaler */
+@media (max-width: 640px){
+  .modal{
+    width:100vw;
+    height:92vh;
+    border-radius:12px;
+  }
+  .modal-header{
+    position:sticky;
+    top:0;
+  }
 }
