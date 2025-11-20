@@ -22,14 +22,28 @@ html, body {
   text-decoration:underline;
 }
 
-/* Hero – teal bakgrunn + hvit tekst, som skjermbildet ditt */
+/* Hero – teal bakgrunn + hvit tekst, med gul stripe nederst */
 #home {
   background:var(--brand);
   color:#ffffff;
   padding-top:80px;
-  padding-bottom:80px;
+  padding-bottom:140px;     /* høyden på det grønne feltet */
   text-align:center;
+  position:relative;        /* nødvendig for stripen */
+  overflow:hidden;
 }
+
+/* Gul stripe nederst på hero-feltet */
+#home::after {
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:12px;              /* tykkelsen på stripen */
+  background:var(--accent); /* gul */
+}
+
 #home h1 {
   color:#ffffff;
 }
