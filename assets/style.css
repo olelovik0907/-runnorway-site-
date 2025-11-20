@@ -1,23 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
-/* Aston Martin RunNorway palett */
+/* Palette – SAMME som i original index.html */
 :root{
-  --green-primary:#0A5C52;
-  --green-deep:#07443D;
-  --graphite:#121314;
-  --gray-200:#F5F6F7;
-  --gray-100:#FBFBFC;
-  --lime:#C8E000;
-  --text-dark:#1F2326;
+  /* Primær RunNorway-farger fra index.html */
+  --brand:#116D6B;     /* tilsvarende bg-[var(--brand)] i hero */
+  --accent:#F3C316;    /* gul knappfarge */
+
+  /* Tekst + bakgrunn som i original */
+  --text-dark:#0f172a;
   --text-on-dark:#F3F4F6;
 
-  /* nye aksentfarger */
-  --am-pink:#ff2f76;      /* Aston-inspirert rosa */
-  --border-soft:rgba(0,0,0,0.08);
+  /* Nøytrale flater */
+  --gray-100:#ffffff;
+  --gray-200:#F5F6F7;
 
-  /* mapping til variabler brukt i HTML/Tailwind */
-  --brand:var(--green-primary);
-  --accent:var(--lime);
+  /* Ekstra aksent (kan brukes senere om du vil) */
+  --am-pink:#ff2f76;
+  --border-soft:rgba(0,0,0,0.08);
 }
 
 /* Global box sizing */
@@ -27,7 +26,7 @@
   box-sizing:border-box;
 }
 
-/* Grunnstil */
+/* Grunnstil – hvit bakgrunn, mørk tekst (som originalt) */
 html, body{
   margin:0;
   font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -35,67 +34,65 @@ html, body{
   color:var(--text-dark);
 }
 
-/* Lenker med brand-farge (brukes utenfor header også) */
+/* Lenker med brand-farge (brukes i cards osv.) */
 .link-brand{
-  color:var(--green-primary);
+  color:var(--brand);
 }
 .link-brand:hover{
   text-decoration:underline;
 }
 
-/* Header – grønn base, lime topp, svart bunn, rosa hover */
+/* Header – hvit som før (ikke mørk grønn) */
 .site-header{
-  background:var(--green-primary);
-  color:var(--text-on-dark);
-  border-top:2px solid var(--lime);
-  border-bottom:2px solid var(--graphite);
+  background:#ffffff;
+  color:var(--text-dark);
+  border-bottom:1px solid #e5e7eb;
 }
 .site-header a{
-  color:var(--text-on-dark);
+  color:var(--brand);
   font-weight:600;
   text-decoration:none;
 }
 .site-header a:hover{
-  color:var(--am-pink);
+  color:#0b4f4d; /* litt mørkere variant av brand */
 }
 
-/* Hero – ren, dyp grønn */
+/* Hero – samme som index: bakgrunn = brand, hvit tekst */
 #home{
-  background:var(--green-deep);
-  color:var(--text-on-dark);
+  background:var(--brand);
+  color:#ffffff;
   padding-top:80px;
   padding-bottom:80px;
   text-align:center;
 }
 #home h1{
   color:#ffffff;
-  letter-spacing:.06em;
-  text-transform:uppercase;
+  letter-spacing:.02em;
 }
 #home p{
-  color:#E6F1EF;
+  color:rgba(255,255,255,0.9);
 }
 
-/* “Neste løp” – mindre, svart plate med rosa kant */
+/* “Neste løp” – liten plate, men vi beholder brand-stilen */
 #nextRaceLabel{
-  background:var(--graphite);
-  color:var(--text-on-dark);
+  background:rgba(15,23,42,0.95);
+  color:#F9FAFB;
   border-radius:999px;
   padding:.25rem .8rem;
-  border:1px solid rgba(255,47,118,0.85);
+  border:1px solid rgba(249,250,251,0.4);
   font-weight:600;
   font-size:.85rem;
 }
 
-/* Knapper */
+/* Knapper – likt index.html (accent-gul primærknapp) */
 .btn-brand{
-  background:var(--lime);
-  color:var(--graphite);
+  background:var(--accent);
+  color:#111827;
   border-radius:999px;
   font-weight:700;
   padding:.7rem 1.6rem;
   border:none;
-  box-shadow:0 6px 18px rgba(0,0,0,0.18);
+  box-shadow:0 10px 24px rgba(15,23,42,0.24);
   cursor:pointer;
   display:inline-flex;
   align-items:center;
@@ -108,7 +105,7 @@ html, body{
 
 .btn-ghost{
   background:rgba(255,255,255,0.94);
-  color:var(--green-primary);
+  color:var(--brand);
   border-radius:999px;
   padding:.7rem 1.6rem;
   border:1px solid transparent;
@@ -120,28 +117,28 @@ html, body{
 }
 .btn-ghost:hover{
   background:#ffffff;
-  border-color:var(--am-pink);
+  border-color:rgba(15,23,42,0.12);
 }
 
-/* Filter-pills / små knapper */
+/* Filter-pills / små knapper – hvite, diskret kant */
 .pill{
   border-radius:999px;
-  border:1px solid var(--border-soft);
+  border:1px solid #e5e7eb;
   padding:.45rem .9rem;
   font-weight:600;
   background:#ffffff;
   font-size:.88rem;
 }
 .pill:hover{
-  border-color:var(--am-pink);
+  border-color:var(--brand);
 }
 
-/* Premium-badge med rosa outline */
+/* Premium-badge */
 .badge-premium{
-  background:#ffffff;
-  color:var(--graphite);
+  background:rgba(243,195,22,.18);
+  color:#7a5a00;
   border-radius:999px;
-  border:1px solid var(--am-pink);
+  border:1px solid rgba(243,195,22,.5);
   padding:.15rem .7rem;
   font-size:.72rem;
   font-weight:700;
@@ -149,11 +146,11 @@ html, body{
   text-transform:uppercase;
 }
 
-/* Kort / paneler */
+/* Kort / paneler – hvit, som originalt */
 .card{
-  background:var(--gray-100);
-  border-radius:12px;
-  border:1px solid var(--border-soft);
+  background:#ffffff;
+  border-radius:16px;
+  border:1px solid #e5e7eb;
   box-shadow:0 10px 24px rgba(15,23,42,0.04);
 }
 .card p{
@@ -165,12 +162,12 @@ section{
   padding:48px 0;
 }
 
-/* Seksjonsoverskrifter med gul→rosa stripe */
+/* Seksjonsoverskrifter – bruk brand-farge med enkel underline */
 section h2{
   position:relative;
   display:inline-block;
   padding-bottom:.25rem;
-  color:var(--green-primary);
+  color:var(--brand);
 }
 section h2::after{
   content:"";
@@ -180,16 +177,16 @@ section h2::after{
   width:56px;
   height:2px;
   border-radius:999px;
-  background:linear-gradient(to right, var(--lime), var(--am-pink));
+  background:var(--accent);
 }
 
-/* Footer */
+/* Footer – mørkere brand-bakgrunn med lys tekst */
 footer{
-  background:var(--green-deep);
-  color:var(--text-on-dark);
+  background:#0b4f4d;
+  color:#F9FAFB;
   padding:32px;
   text-align:center;
-  border-top:1px solid rgba(0,0,0,0.3);
+  border-top:1px solid rgba(15,23,42,0.25);
 }
 
 /* Skip-link for tilgjengelighet */
@@ -213,7 +210,7 @@ footer{
   z-index:100;
 }
 
-/* Modal-stil */
+/* Modal-stil (samme som tidligere inline) */
 .modal-backdrop{
   position:fixed;
   inset:0;
