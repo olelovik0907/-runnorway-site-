@@ -1,176 +1,117 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RunNorway – Løpskalender for hele Norge</title>
 
-/* Samme palette som i original index.html */
-:root {
-  --brand:#116D6B;   /* teal */
-  --accent:#F3C316;  /* gul */
-}
+  <meta name="description" content="RunNorway samler løp i hele Norge i én kalender. Finn mosjonsløp, halvmaraton, maraton og terrengløp – filtrer på sted, dato og distanse, og finn lenker til påmelding og resultater." />
+  <meta name="theme-color" content="#116D6B" />
 
-/* Grunnstil – samme som før */
-html,body{
-  background:#fff;
-  color:#0f172a;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-}
+  <!-- Open Graph / deling -->
+  <meta property="og:title" content="RunNorway – Løpskalender for hele Norge" />
+  <meta property="og:description" content="Finn løp i hele Norge, filtrer etter sted, dato og distanse, og finn lenker til påmelding og resultater." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.runnorway.no/" />
+  <meta property="og:image" content="assets/logo-192.png" />
 
-/* Primærknapp (gul) */
-.btn-brand{
-  background:var(--accent);
-  color:#111827;
-}
-.btn-brand:hover{
-  background:#d6aa10;
-}
+  <!-- Twitter (enkelt oppsett) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="RunNorway – Løpskalender for hele Norge" />
+  <meta name="twitter:description" content="Én kalender for løp i Norge. Finn neste løp og meld deg på." />
+  <meta name="twitter:image" content="assets/logo-192.png" />
 
-/* Sekundær knapp (lys, grønn tekst) */
-.btn-ghost{
-  background:rgba(255,255,255,.9);
-  color:var(--brand);
-}
-.btn-ghost:hover{
-  background:#fff;
-}
+  <link rel="canonical" href="https://www.runnorway.no/" />
+  <link rel="icon" href="assets/logo-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-180.png" />
 
-/* Kort / paneler */
-.card{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:16px;
-}
-.card p{
-  line-height:1.55;
-}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- NY LINJE: all styling ligger nå her -->
+  <link rel="stylesheet" href="style.css" />
 
-/* RunNorway-lenker i brand-farge */
-.link-brand{
-  color:var(--brand);
-}
-.link-brand:hover{
-  text-decoration:underline;
-}
-
-/* Modal */
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:60;
-}
-.modal{
-  background:#fff;
-  width:min(960px,92vw);
-  max-height:88vh;
-  border-radius:16px;
-  overflow:auto;
-}
-.modal-header{
-  position:sticky;
-  top:0;
-  background:#fff;
-  border-bottom:1px solid #e5e7eb;
-  z-index:1;
-}
-
-/* Filter-pills */
-.pill{
-  border:1px solid #e5e7eb;
-  border-radius:9999px;
-  padding:.5rem .9rem;
-  font-weight:600;
-}
-
-/* Premium-badge */
-.badge-premium{
-  background:rgba(243,195,22,.18);
-  color:#7a5a00;
-  border:1px solid rgba(243,195,22,.5);
-  border-radius:9999px;
-  padding:.15rem .5rem;
-  font-size:.72rem;
-  font-weight:700;
-}
-
-/* Ikonknapper + hjerte */
-.icon-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:.4rem;
-}
-.heart{
-  width:18px;
-  height:18px;
-  display:inline-block;
-  vertical-align:-2px;
-}
-
-/* Tilgjengelighet: skip-link */
-.skip-link{
-  position:absolute;
-  left:-9999px;
-  top:auto;
-  width:1px;
-  height:1px;
-  overflow:hidden;
-}
-.skip-link:focus{
-  left:1rem;
-  top:1rem;
-  width:auto;
-  height:auto;
-  padding:.5rem 1rem;
-  background:#ffffff;
-  border-radius:.75rem;
-  box-shadow:0 10px 25px rgba(15,23,42,.25);
-  z-index:100;
-}
-
-/* Kompakt vær */
-.wx{
-  display:flex;
-  gap:.5rem;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.wx-chip{
-  display:flex;
-  align-items:center;
-  gap:.4rem;
-  padding:.35rem .55rem;
-  border:1px solid #e5e7eb;
-  border-radius:9999px;
-  font-size:.8rem;
-  background:#fff;
-}
-.wx-day{
-  font-weight:600;
-}
-.wx-temp{
-  font-variant-numeric:tabular-nums;
-}
-.wx-icon{
-  width:18px;
-  height:18px;
-}
-.wx-muted{
-  color:#64748b;
-}
-.wx-more{
-  margin-top:.5rem;
-  font-size:.8rem;
-}
-
-/* Mobilvennlige modaler */
-@media (max-width: 640px){
-  .modal{
-    width:100vw;
-    height:92vh;
-    border-radius:12px;
+  <!-- Enkel JSON-LD for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "RunNorway",
+    "url": "https://www.runnorway.no/",
+    "description": "Løpskalender som samler løp i hele Norge i én oversikt.",
+    "inLanguage": "nb-NO"
   }
-  .modal-header{
-    position:sticky;
-    top:0;
-  }
-}
+  </script>
+</head>
+
+<body class="antialiased">
+  <a href="#om-runnorway" class="skip-link">Hopp til informasjon om RunNorway</a>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
+    <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-2 font-bold text-xl link-brand">
+        <img src="assets/logo-48.png" alt="RunNorway-logo" class="h-8 w-auto" />
+        RunNorway
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 font-semibold link-brand">
+        <a href="#Finn løp">Finn løp</a>
+        <a href="#resultater">Resultater</a>
+        <a href="#om-runnorway">Om RunNorway</a>
+        <a href="#kontakt">Kontakt</a>
+        <a href="#faq">Hjelp</a>
+        <button id="navFavorites" class="font-semibold" type="button">Favoritter</button>
+      </nav>
+      
+      <div class="flex items-center gap-2">
+        <button id="openRegister" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
+        <button id="openProfile" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Profil</button>
+        <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="relative bg-[var(--brand)] text-white">
+    <div class="max-w-7xl mx-auto px-4 py-14 sm:py-24 text-center">
+      <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight">RunNorway</h1>
+      <p class="mt-4 text-lg sm:text-2xl">Finn alle løp i Norge. Ett sted. Én kalender.</p>
+      <p class="mt-2 text-sm sm:text-base text-white/80"></p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="#arrangementer" class="btn-brand px-6 py-3 rounded-full font-semibold">Se program</a>
+        <a href="#resultater" class="btn-ghost px-6 py-3 rounded-full font-semibold">Finn ditt resultat</a>
+      </div>
+
+      <!-- Neste løp + Nedtelling -->
+      <div class="max-w-3xl mx-auto mt-12 flex items-center justify-center gap-3 flex-wrap">
+        <p id="nextRaceLabel" class="text-white/95 text-lg font-semibold"></p>
+        <a id="nextRaceCta" href="#arrangementer" class="btn-brand px-4 py-2 rounded-full font-semibold">Meld deg på</a>
+      </div>
+      <div class="max-w-3xl mx-auto grid grid-cols-4 gap-4 text-center mt-3">
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="d" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Dager</div>
+        </div>
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="h" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Timer</div>
+        </div>
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="m" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Min</div>
+        </div>
+        <div class="rounded-xl bg-white/15 border border-white/25 p-4 backdrop-blur-sm">
+          <div id="s" class="text-4xl font-extrabold text-[var(--accent)]">0</div>
+          <div class="text-sm uppercase tracking-wide text-white mt-1">Sek</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resten av siden (arrangementer, resultater, om, kontakt, FAQ, modaler, JS) -->
+  <!-- Her kan du beholde nøyaktig den koden du allerede hadde – den trenger ikke endres for fargene. -->
+  <!-- ... (bruk samme som i originalfilen du limte inn tidligere) ... -->
+
+</body>
+</html>
