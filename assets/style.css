@@ -1,40 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
-/* Palette – SAMME som i original index.html */
-:root{
-  /* Primær RunNorway-farger fra index.html */
-  --brand:#116D6B;     /* tilsvarende bg-[var(--brand)] i hero */
-  --accent:#F3C316;    /* gul knappfarge */
-
-  /* Tekst + bakgrunn som i original */
-  --text-dark:#0f172a;
-  --text-on-dark:#F3F4F6;
-
-  /* Nøytrale flater */
-  --gray-100:#ffffff;
-  --gray-200:#F5F6F7;
-
-  /* Ekstra aksent (kan brukes senere om du vil) */
-  --am-pink:#ff2f76;
-  --border-soft:rgba(0,0,0,0.08);
+/* Samme palette som i original index.html */
+:root {
+  --brand:#116D6B;   /* teal */
+  --accent:#F3C316;  /* gul */
 }
 
-/* Global box sizing */
-*,
-*::before,
-*::after{
-  box-sizing:border-box;
+/* Grunnstil – samme som før */
+html,body{
+  background:#fff;
+  color:#0f172a;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
 
-/* Grunnstil – hvit bakgrunn, mørk tekst (som originalt) */
-html, body{
-  margin:0;
-  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:var(--gray-100);
-  color:var(--text-dark);
+/* Primærknapp (gul) */
+.btn-brand{
+  background:var(--accent);
+  color:#111827;
+}
+.btn-brand:hover{
+  background:#d6aa10;
 }
 
-/* Lenker med brand-farge (brukes i cards osv.) */
+/* Sekundær knapp (lys, grønn tekst) */
+.btn-ghost{
+  background:rgba(255,255,255,.9);
+  color:var(--brand);
+}
+.btn-ghost:hover{
+  background:#fff;
+}
+
+/* Kort / paneler */
+.card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+}
+.card p{
+  line-height:1.55;
+}
+
+/* RunNorway-lenker i brand-farge */
 .link-brand{
   color:var(--brand);
 }
@@ -42,154 +49,64 @@ html, body{
   text-decoration:underline;
 }
 
-/* Header – hvit som før (ikke mørk grønn) */
-.site-header{
-  background:#ffffff;
-  color:var(--text-dark);
+/* Modal */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:60;
+}
+.modal{
+  background:#fff;
+  width:min(960px,92vw);
+  max-height:88vh;
+  border-radius:16px;
+  overflow:auto;
+}
+.modal-header{
+  position:sticky;
+  top:0;
+  background:#fff;
   border-bottom:1px solid #e5e7eb;
-}
-.site-header a{
-  color:var(--brand);
-  font-weight:600;
-  text-decoration:none;
-}
-.site-header a:hover{
-  color:#0b4f4d; /* litt mørkere variant av brand */
+  z-index:1;
 }
 
-/* Hero – samme som index: bakgrunn = brand, hvit tekst */
-#home{
-  background:var(--brand);
-  color:#ffffff;
-  padding-top:80px;
-  padding-bottom:80px;
-  text-align:center;
-}
-#home h1{
-  color:#ffffff;
-  letter-spacing:.02em;
-}
-#home p{
-  color:rgba(255,255,255,0.9);
-}
-
-/* “Neste løp” – liten plate, men vi beholder brand-stilen */
-#nextRaceLabel{
-  background:rgba(15,23,42,0.95);
-  color:#F9FAFB;
-  border-radius:999px;
-  padding:.25rem .8rem;
-  border:1px solid rgba(249,250,251,0.4);
-  font-weight:600;
-  font-size:.85rem;
-}
-
-/* Knapper – likt index.html (accent-gul primærknapp) */
-.btn-brand{
-  background:var(--accent);
-  color:#111827;
-  border-radius:999px;
-  font-weight:700;
-  padding:.7rem 1.6rem;
-  border:none;
-  box-shadow:0 10px 24px rgba(15,23,42,0.24);
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:.35rem;
-}
-.btn-brand:hover{
-  filter:brightness(1.06);
-}
-
-.btn-ghost{
-  background:rgba(255,255,255,0.94);
-  color:var(--brand);
-  border-radius:999px;
-  padding:.7rem 1.6rem;
-  border:1px solid transparent;
-  font-weight:600;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-}
-.btn-ghost:hover{
-  background:#ffffff;
-  border-color:rgba(15,23,42,0.12);
-}
-
-/* Filter-pills / små knapper – hvite, diskret kant */
+/* Filter-pills */
 .pill{
-  border-radius:999px;
   border:1px solid #e5e7eb;
-  padding:.45rem .9rem;
+  border-radius:9999px;
+  padding:.5rem .9rem;
   font-weight:600;
-  background:#ffffff;
-  font-size:.88rem;
-}
-.pill:hover{
-  border-color:var(--brand);
 }
 
 /* Premium-badge */
 .badge-premium{
   background:rgba(243,195,22,.18);
   color:#7a5a00;
-  border-radius:999px;
   border:1px solid rgba(243,195,22,.5);
-  padding:.15rem .7rem;
+  border-radius:9999px;
+  padding:.15rem .5rem;
   font-size:.72rem;
   font-weight:700;
-  letter-spacing:.06em;
-  text-transform:uppercase;
 }
 
-/* Kort / paneler – hvit, som originalt */
-.card{
-  background:#ffffff;
-  border-radius:16px;
-  border:1px solid #e5e7eb;
-  box-shadow:0 10px 24px rgba(15,23,42,0.04);
+/* Ikonknapper + hjerte */
+.icon-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
 }
-.card p{
-  line-height:1.55;
-}
-
-/* Seksjoner */
-section{
-  padding:48px 0;
-}
-
-/* Seksjonsoverskrifter – bruk brand-farge med enkel underline */
-section h2{
-  position:relative;
+.heart{
+  width:18px;
+  height:18px;
   display:inline-block;
-  padding-bottom:.25rem;
-  color:var(--brand);
-}
-section h2::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:0;
-  width:56px;
-  height:2px;
-  border-radius:999px;
-  background:var(--accent);
+  vertical-align:-2px;
 }
 
-/* Footer – mørkere brand-bakgrunn med lys tekst */
-footer{
-  background:#0b4f4d;
-  color:#F9FAFB;
-  padding:32px;
-  text-align:center;
-  border-top:1px solid rgba(15,23,42,0.25);
-}
-
-/* Skip-link for tilgjengelighet */
+/* Tilgjengelighet: skip-link */
 .skip-link{
   position:absolute;
   left:-9999px;
@@ -210,44 +127,6 @@ footer{
   z-index:100;
 }
 
-/* Modal-stil (samme som tidligere inline) */
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:60;
-}
-.modal{
-  background:#ffffff;
-  width:min(960px,92vw);
-  max-height:88vh;
-  border-radius:16px;
-  overflow:auto;
-}
-.modal-header{
-  position:sticky;
-  top:0;
-  background:#ffffff;
-  border-bottom:1px solid #e5e7eb;
-  z-index:1;
-}
-
-/* Ikonknapp + hjerte */
-.icon-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:.4rem;
-}
-.heart{
-  width:18px;
-  height:18px;
-  display:inline-block;
-  vertical-align:-2px;
-}
-
 /* Kompakt vær */
 .wx{
   display:flex;
@@ -263,7 +142,7 @@ footer{
   border:1px solid #e5e7eb;
   border-radius:9999px;
   font-size:.8rem;
-  background:#ffffff;
+  background:#fff;
 }
 .wx-day{
   font-weight:600;
