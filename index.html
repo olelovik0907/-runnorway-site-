@@ -50,29 +50,39 @@
   <a href="#om-runnorway" class="skip-link">Hopp til informasjon om RunNorway</a>
 
   <!-- Header -->
-  <header class="site-header sticky top-0 z-50 bg-white/0 backdrop-blur border-b-0">
-    <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
-      <a href="#home" class="flex items-center gap-2 font-bold text-xl link-brand">
-        <img src="assets/logo-48.png" alt="RunNorway-logo" class="h-8 w-auto" />
-        <span>RunNorway</span>
-      </a>
+  <header class="fixed top-0 left-0 w-full bg-white z-50 shadow-sm">
+  <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
+    
+    <a href="#home" class="flex items-center gap-2 font-bold text-xl text-[var(--green-primary)]">
+      <img src="assets/logo-48.png" alt="RunNorway-logo" class="h-8 w-auto" />
+      RunNorway
+    </a>
 
-      <nav class="hidden md:flex items-center gap-8 font-semibold link-brand">
-        <a href="#arrangementer">Finn løp</a>
-        <a href="#resultater">Resultater</a>
-        <a href="#om-runnorway">Om RunNorway</a>
-        <a href="#kontakt">Kontakt</a>
-        <a href="#faq">Hjelp</a>
-        <button id="navFavorites" class="font-semibold" type="button">Favoritter</button>
-      </nav>
+    <nav class="hidden md:flex items-center gap-8 font-semibold text-[var(--green-primary)]">
+      <a href="#arrangementer">Finn løp</a>
+      <a href="#resultater">Resultater</a>
+      <a href="#om-runnorway">Om RunNorway</a>
+      <a href="#kontakt">Kontakt</a>
+      <a href="#faq">Hjelp</a>
+      <a href="#favoritter">Favoritter</a>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <button id="openRegister" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--green-primary)] hover:bg-slate-50">
+        Registrer løp
+      </button>
       
-      <div class="flex items-center gap-2">
-        <button id="openRegister" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Registrer løp</button>
-        <button id="openProfile" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--brand)] hover:bg-slate-50">Profil</button>
-        <a href="#resultater" class="hidden sm:inline-block btn-brand px-4 py-2 rounded-full font-semibold">Resultater</a>
-      </div>
+      <button id="openProfile" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--green-primary)] hover:bg-slate-50">
+        Profil
+      </button>
+
+      <a href="#resultater" class="hidden sm:inline-block bg-[var(--lime)] text-[var(--graphite)] px-4 py-2 rounded-full font-semibold shadow">
+        Resultater
+      </a>
     </div>
-  </header>
+
+  </div>
+</header>
 
   <!-- Hero -->
   <section id="home">
