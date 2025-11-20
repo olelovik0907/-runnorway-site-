@@ -10,6 +10,10 @@
   --lime:#C8E000;
   --text-dark:#1F2326;
   --text-on-dark:#F3F4F6;
+
+  /* nye aksentfarger */
+  --am-pink:#ff2f76;      /* Aston-inspirert rosa */
+  --border-soft:rgba(0,0,0,0.08);
 }
 
 /* Grunnstil */
@@ -20,21 +24,23 @@ html, body{
   color:var(--text-dark);
 }
 
-/* Header */
+/* Header – svart base, lime topp, rosa hover */
 .site-header{
-  background:var(--green-primary);
+  background:var(--graphite);
   color:var(--text-on-dark);
-  border-bottom:1px solid rgba(0,0,0,0.3);
+  border-top:4px solid var(--lime);
+  border-bottom:1px solid rgba(0,0,0,0.55);
 }
 .site-header a{
   color:var(--text-on-dark);
   font-weight:600;
+  text-decoration:none;
 }
 .site-header a:hover{
-  color:var(--lime);
+  color:var(--am-pink);
 }
 
-/* Hero */
+/* Hero – ren, dyp grønn som nå */
 #home{
   background:var(--green-deep);
   color:var(--text-on-dark);
@@ -42,8 +48,24 @@ html, body{
   padding-bottom:80px;
   text-align:center;
 }
-#home h1{ color:white; }
-#home p{ color:#E6F1EF; }
+#home h1{
+  color:#ffffff;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+#home p{
+  color:#E6F1EF;
+}
+
+/* “Neste løp” – svart plate med rosa kant */
+#nextRaceLabel{
+  background:var(--graphite);
+  color:var(--text-on-dark);
+  border-radius:999px;
+  padding:.35rem .9rem;
+  border:1px solid rgba(255,47,118,0.85); /* rosa kant */
+  font-weight:600;
+}
 
 /* Knapper */
 .btn-brand{
@@ -51,27 +73,30 @@ html, body{
   color:var(--graphite);
   border-radius:999px;
   font-weight:700;
+  padding:.7rem 1.6rem;
+  border:none;
+  box-shadow:0 10px 24px rgba(0,0,0,0.28);
+  cursor:pointer;
 }
 .btn-brand:hover{
-  filter:brightness(1.08);
+  filter:brightness(1.06);
 }
 
-/* Kort / paneler */
-.card{
-  background:var(--gray-100);
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,.08);
+.btn-ghost{
+  background:rgba(255,255,255,0.94);
+  color:var(--green-primary);
+  border-radius:999px;
+  padding:.7rem 1.6rem;
+  border:1px solid transparent;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-ghost:hover{
+  background:#ffffff;
+  border-color:var(--am-pink); /* subtil rosa kant */
 }
 
-/* Seksjoner */
-section{
-  padding:48px 0;
-}
-
-/* Footer */
-footer{
-  background:var(--green-deep);
-  color:var(--text-on-dark);
-  padding:32px;
-  text-align:center;
-}
+/* Filter-pills / små knapper */
+.pill{
+  border-radius:999px;
+  border:1px solid var(--b
