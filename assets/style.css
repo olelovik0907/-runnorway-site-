@@ -28,8 +28,8 @@ html, body{
 .site-header{
   background:var(--green-primary);
   color:var(--text-on-dark);
-  border-top:4px solid var(--lime);
-  border-bottom:3px solid var(--graphite);
+  border-top:2px solid var(--lime);       /* var 4px – litt mer elegant nå */
+  border-bottom:2px solid var(--graphite);/* var 3px */
 }
 .site-header a{
   color:var(--text-on-dark);
@@ -76,7 +76,7 @@ html, body{
   font-weight:700;
   padding:.7rem 1.6rem;
   border:none;
-  box-shadow:0 10px 24px rgba(0,0,0,0.24);
+  box-shadow:0 6px 18px rgba(0,0,0,0.18); /* var 0 10px 24px 0.24 – litt mindre hard */
   cursor:pointer;
 }
 .btn-brand:hover{
