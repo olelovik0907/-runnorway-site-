@@ -20,16 +20,16 @@
 html, body{
   margin:0;
   font-family:Inter, sans-serif;
-  background:var(--gray-200);
+  background:var(--gray-100);
   color:var(--text-dark);
 }
 
-/* Header – svart base, lime topp, rosa hover */
+/* Header – grønn base, lime topp, svart bunn, rosa hover */
 .site-header{
-  background:var(--graphite);
+  background:var(--green-primary);
   color:var(--text-on-dark);
   border-top:4px solid var(--lime);
-  border-bottom:1px solid rgba(0,0,0,0.55);
+  border-bottom:3px solid var(--graphite);
 }
 .site-header a{
   color:var(--text-on-dark);
@@ -57,14 +57,15 @@ html, body{
   color:#E6F1EF;
 }
 
-/* “Neste løp” – svart plate med rosa kant */
+/* “Neste løp” – mindre, svart plate med rosa kant */
 #nextRaceLabel{
   background:var(--graphite);
   color:var(--text-on-dark);
   border-radius:999px;
-  padding:.35rem .9rem;
+  padding:.25rem .8rem;
   border:1px solid rgba(255,47,118,0.85); /* rosa kant */
   font-weight:600;
+  font-size:.85rem;
 }
 
 /* Knapper */
@@ -75,7 +76,7 @@ html, body{
   font-weight:700;
   padding:.7rem 1.6rem;
   border:none;
-  box-shadow:0 10px 24px rgba(0,0,0,0.28);
+  box-shadow:0 10px 24px rgba(0,0,0,0.24);
   cursor:pointer;
 }
 .btn-brand:hover{
