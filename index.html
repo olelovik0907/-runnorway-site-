@@ -51,44 +51,58 @@
 
   <!-- Header -->
   <header class="fixed top-0 left-0 w-full bg-white z-50 shadow-sm">
-  <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
     
-    <a href="#home" class="flex items-center gap-2 font-bold text-xl text-[var(--green-primary)]">
-      <img src="assets/logo-48.png" alt="RunNorway-logo" class="h-8 w-auto" />
-      RunNorway
-    </a>
-
-    <nav class="hidden md:flex items-center gap-8 font-semibold text-[var(--green-primary)]">
-      <a href="#arrangementer">Finn løp</a>
-      <a href="#resultater">Resultater</a>
-      <a href="#om-runnorway">Om RunNorway</a>
-      <a href="#kontakt">Kontakt</a>
-      <a href="#faq">Hjelp</a>
-      <a href="#favoritter">Favoritter</a>
-    </nav>
-
-<div class="flex items-center gap-2">
-  <a
-    href="https://docs.google.com/forms/d/15LLdyYqV2__Jyeu-LVcHNlQFMKChW0GLc755VMy0UOc/viewform"
-    target="_blank"
-    rel="noopener"
-    class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--green-primary)] hover:bg-slate-50"
-  >
-    Registrer løp
-  </a>
-</div>
-      
-      <button id="openProfile" type="button" class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--green-primary)] hover:bg-slate-50">
-        Profil
-      </button>
-
-      <a href="#resultater" class="hidden sm:inline-block bg-[var(--lime)] text-[var(--graphite)] px-4 py-2 rounded-full font-semibold shadow">
-        Resultater
+      <a href="#home" class="flex items-center gap-2 font-bold text-xl text-[var(--green-primary)]">
+        <img src="assets/logo-48.png" alt="RunNorway-logo" class="h-8 w-auto" />
+        RunNorway
       </a>
-    </div>
 
-  </div>
-</header>
+      <nav class="hidden md:flex items-center gap-8 font-semibold text-[var(--green-primary)]">
+        <a href="#arrangementer">Finn løp</a>
+        <a href="#resultater">Resultater</a>
+        <a href="#om-runnorway">Om RunNorway</a>
+        <a href="#kontakt">Kontakt</a>
+        <a href="#faq">Hjelp</a>
+        <a href="#favoritter">Favoritter</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a
+          href="https://docs.google.com/forms/d/15LLdyYqV2__Jyeu-LVcHNlQFMKChW0GLc755VMy0UOc/viewform"
+          target="_blank"
+          rel="noopener"
+          class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--green-primary)] hover:bg-slate-50"
+        >
+          Registrer løp
+        </a>
+
+        <!-- Skjult knapp for eksisterende JavaScript som forventer openRegister -->
+        <button
+          id="openRegister"
+          type="button"
+          class="hidden"
+        >
+          Registrer løp
+        </button>
+
+        <button
+          id="openProfile"
+          type="button"
+          class="hidden sm:inline-block rounded-full border px-4 py-2 font-semibold text-[var(--green-primary)] hover:bg-slate-50"
+        >
+          Profil
+        </button>
+
+        <a
+          href="#resultater"
+          class="hidden sm:inline-block bg-[var(--lime)] text-[var(--graphite)] px-4 py-2 rounded-full font-semibold shadow"
+        >
+          Resultater
+        </a>
+      </div>
+    </div>
+  </header>
 
   <!-- Hero -->
   <section id="home" class="pt-24">
@@ -144,6 +158,7 @@
         <button id="tab-cal" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-cal">Kalender</button>
         <button id="tab-map" class="px-4 py-2 rounded-xl font-semibold" role="tab" aria-selected="false" aria-controls="panel-map">Kart</button>
       </div>
+
 
       <div class="card p-4 sm:p-6">
         <div class="grid gap-3 sm:grid-cols-6 items-end">
